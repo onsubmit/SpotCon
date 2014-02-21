@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D1B4C275-E49D-472F-802C-9C1550CC855E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpotCon</RootNamespace>
+    <AssemblyName>SpotCon</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>54C910D1B7AAAC5A757BDC5D3AD5970AB64BA21F</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>SpotCon_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlbumArtViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlbumArtViewer.Designer.cs">
+      <DependentUpon>AlbumArtViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalMouseHandler.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SpotConForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SpotConForm.Designer.cs">
+      <DependentUpon>SpotConForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrackRowComparer.cs" />
+    <EmbeddedResource Include="AlbumArtViewer.resx">
+      <DependentUpon>AlbumArtViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpotConForm.resx">
+      <DependentUpon>SpotConForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="SpotCon_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpotifyWebHelperSharp\SpotifyWebHelperSharp.csproj">
+      <Project>{dffeb5d4-c931-4439-9b40-06e8f107ad55}</Project>
+      <Name>SpotifyWebHelperSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpotifyWebSharp\SpotifyWebSharp.csproj">
+      <Project>{cc443cfe-cd39-475c-9c68-2d8ae8e85046}</Project>
+      <Name>SpotifyWebSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer_link.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\magnifier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="icon.ico" />
+    <None Include="Resources\forward_clicked.png" />
+    <None Include="Resources\back_clicked.png" />
+    <None Include="Resources\forward_hover.png" />
+    <None Include="Resources\back_hover.png" />
+    <None Include="Resources\forward_disabled.png" />
+    <None Include="Resources\forward.png" />
+    <None Include="Resources\back_disabled.png" />
+    <None Include="Resources\back.png" />
+    <None Include="Resources\shuffle_green.png" />
+    <None Include="Resources\shuffle.png" />
+    <None Include="Resources\repeat_green.png" />
+    <None Include="Resources\repeat.png" />
+    <None Include="Resources\volume_knob.png" />
+    <None Include="Resources\volume_right.png" />
+    <None Include="Resources\volume_left.png" />
+    <None Include="Resources\search_focused.png" />
+    <None Include="Resources\search.png" />
+    <None Include="Resources\header_background.png" />
+    <None Include="Resources\play_disabled.png" />
+    <None Include="Resources\prev_pressed.png" />
+    <None Include="Resources\next_pressed.png" />
+    <None Include="Resources\play_pressed.png" />
+    <None Include="Resources\pause_pressed.png" />
+    <None Include="Resources\footer_background.png" />
+    <None Include="Resources\prev_disabled.png" />
+    <None Include="Resources\next.png" />
+    <None Include="Resources\prev.png" />
+    <None Include="Resources\pops20.png" />
+    <None Include="Resources\pops19.png" />
+    <None Include="Resources\pops18.png" />
+    <None Include="Resources\pops17.png" />
+    <None Include="Resources\pops16.png" />
+    <None Include="Resources\pops15.png" />
+    <None Include="Resources\pops14.png" />
+    <None Include="Resources\pops13.png" />
+    <None Include="Resources\pops12.png" />
+    <None Include="Resources\pops11.png" />
+    <None Include="Resources\pops10.png" />
+    <None Include="Resources\pops09.png" />
+    <None Include="Resources\pops08.png" />
+    <None Include="Resources\pops07.png" />
+    <None Include="Resources\pops06.png" />
+    <None Include="Resources\pops05.png" />
+    <None Include="Resources\pops04.png" />
+    <None Include="Resources\pops03.png" />
+    <None Include="Resources\pops02.png" />
+    <None Include="Resources\pops01.png" />
+    <None Include="Resources\pops00.png" />
+    <None Include="Resources\pops22.png" />
+    <None Include="Resources\pops21.png" />
+    <None Include="Resources\pop02.png" />
+    <None Include="Resources\pop01.png" />
+    <None Include="Resources\pop00.png" />
+    <None Include="Resources\pop22.png" />
+    <None Include="Resources\pop21.png" />
+    <None Include="Resources\pop20.png" />
+    <None Include="Resources\pop19.png" />
+    <None Include="Resources\pop18.png" />
+    <None Include="Resources\pop17.png" />
+    <None Include="Resources\pop16.png" />
+    <None Include="Resources\pop15.png" />
+    <None Include="Resources\pop14.png" />
+    <None Include="Resources\pop13.png" />
+    <None Include="Resources\pop12.png" />
+    <None Include="Resources\pop11.png" />
+    <None Include="Resources\pop10.png" />
+    <None Include="Resources\pop09.png" />
+    <None Include="Resources\pop08.png" />
+    <None Include="Resources\pop07.png" />
+    <None Include="Resources\pop06.png" />
+    <None Include="Resources\pop05.png" />
+    <None Include="Resources\pop04.png" />
+    <None Include="Resources\pop03.png" />
+    <None Include="Resources\track_background.png" />
+    <None Include="Resources\computer_go.png" />
+    <None Include="Resources\pause.png" />
+    <None Include="Resources\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

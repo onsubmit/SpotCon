@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotCon", "SpotCon.csproj", "{D1B4C275-E49D-472F-802C-9C1550CC855E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyWebHelperSharp", "..\SpotifyWebHelperSharp\SpotifyWebHelperSharp.csproj", "{DFFEB5D4-C931-4439-9B40-06E8F107AD55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "..\SpotifyWebHelperSharp\Tests\Tests.csproj", "{431760B9-DC3E-4460-9998-A1C81A1D8774}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyWebSharp", "..\SpotifyWebSharp\SpotifyWebSharp.csproj", "{CC443CFE-CD39-475C-9C68-2D8AE8E85046}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1B4C275-E49D-472F-802C-9C1550CC855E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1B4C275-E49D-472F-802C-9C1550CC855E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1B4C275-E49D-472F-802C-9C1550CC855E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1B4C275-E49D-472F-802C-9C1550CC855E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

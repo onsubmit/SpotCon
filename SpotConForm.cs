@@ -18,9 +18,9 @@ namespace SpotCon
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Windows.Forms;
-    using SpotifyWebApi.SpotifyResponses.Lookup;
-    using SpotifyWebApi.SpotifyResponses.Search;
-    using SpotifyWebApi.SpotifyServices;
+    using SpotifyWebSharp.SpotifyResponses.Lookup;
+    using SpotifyWebSharp.SpotifyResponses.Search;
+    using SpotifyWebSharp.SpotifyServices;
     using SpotifyWebHelperSharp;
 
     /// <summary>

@@ -7,21 +7,28 @@ namespace SpotCon
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.DirectoryServices;
     using System.Drawing;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
+    using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Web;
     using System.Windows.Forms;
+    using System.Xml.Linq;
+    using SpotCon.PlaylistImporter;
+    using SpotifyWebHelperSharp;
     using SpotifyWebSharp.SpotifyResponses.Lookup;
     using SpotifyWebSharp.SpotifyResponses.Search;
     using SpotifyWebSharp.SpotifyServices;
-    using SpotifyWebHelperSharp;
 
     /// <summary>
     /// Main form
@@ -182,6 +189,45 @@ namespace SpotCon
         private Dictionary<string, Action<string, string, string>> commands;
 
         /// <summary>
+        /// Maps artist name to a Spotify artist href
+        /// </summary>
+        /// <example>The Naked and Famous|||spotify:artist:0oeUpvxWsC8bWS6SnpU8b9</example>
+        private Dictionary<string, string> cachedArtistHrefs = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Maps artist name input to actual Spotify artist name
+        /// </summary>
+        /// <example>Smashing Pumpkins|||The Smashing Pumpkins</example>
+        private Dictionary<string, string> misspelledArtists = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Maps artist name and track name input to actual Spotify track name
+        /// </summary>
+        /// <example>spotify:artist:4tZwfgrHOc3mvqYlEYSvVi:::Get Lucky (feat. Pharrell Williams &amp; Nile Rodgers)|||Get Lucky</example>
+        private Dictionary<string, string> misspelledTracks = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Maps track ID to Lookup Track
+        /// </summary>
+        private Dictionary<string, Track> cachedLookupTracks = new Dictionary<string, Track>();
+
+        /// <summary>
+        /// Maps artist (href) and track name combination to Spotify Search Track
+        /// </summary>
+        /// <example>spotify:artist:3jOstUTkEu2JkjvRdBA5Gu:::Buddy Holly -> SearchTrack serialized on disk</example>
+        private Dictionary<string, SearchTrack> cachedSearchTracks = new Dictionary<string, SearchTrack>();
+
+        /// <summary>
+        /// Tracks that couldn't be immediately identified by the Search service
+        /// </summary>
+        private Queue<FindNewTracksThreadStatus> unknownTracks = new Queue<FindNewTracksThreadStatus>();
+
+        /// <summary>
+        /// Tracks whose identification process was skipped
+        /// </summary>
+        private List<string> skippedTracks = new List<string>();
+
+        /// <summary>
         /// Used to retrieve status from Spotify
         /// </summary>
         private SpotifyWebHelper webHelper;
@@ -268,7 +314,19 @@ namespace SpotCon
                     "|Play",
                     new Action<string, string, string>((dest, orig, s) =>
                     {
-                        this.webHelper.Play(s);
+                        if (s.StartsWith("http://open.spotify.com/trackset/Spotify/"))
+                        {
+                            Process p = Process.Start(s);
+                            if (p != null)
+                            {
+                                p.Close();
+                                p.WaitForExit();
+                            }
+                        }
+                        else
+                        {
+                            this.webHelper.Play(s);
+                        }
                     })
                 },
                 {
@@ -306,7 +364,7 @@ namespace SpotCon
                             System.Threading.Thread.Sleep(10);
                         }
 
-                        if(dest == this.currentHost)
+                        if (dest == this.currentHost)
                         {
                             success = SetForegroundWindow(this.Handle);
                         }
@@ -748,6 +806,14 @@ namespace SpotCon
             this.popSelectedImages.Images.Add(Properties.Resources.pops21);
             this.popSelectedImages.Images.Add(Properties.Resources.pops22);
 
+            Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup"));
+            Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Search"));
+            this.LoadImportPlugins();
+            this.ReadArtistCache();
+            this.ReadMisspelledArtistCache();
+            this.ReadMisspelledTrackCache();
+            this.ReadCachedTracks();
+
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (bwSender, bwArgs) =>
             {
@@ -771,18 +837,49 @@ namespace SpotCon
 
                     this.currentHost = Dns.GetHostName().ToUpper();
 
-                    DirectoryEntry entry = new DirectoryEntry("WinNT:");
-                    List<string> names = (from DirectoryEntry domains in entry.Children
-                                          from DirectoryEntry pc in domains.Children
-                                          where pc.SchemaClassName.ToLower().Contains("computer")
-                                          select pc.Name.ToUpper()).ToList();
-
-                    if (!names.Any())
+                    List<string> names;
+                    if (Properties.Settings.Default.HostNames == null || Properties.Settings.Default.HostNames.Count == 0)
                     {
-                        names.Add(this.currentHost);
+                        DirectoryEntry entry = new DirectoryEntry("WinNT:");
+                        names = (from DirectoryEntry domains in entry.Children
+                                 from DirectoryEntry pc in domains.Children
+                                 where pc.SchemaClassName.ToLower().Contains("computer")
+                                 select pc.Name.ToUpper()).ToList();
+
+                        if (!names.Any())
+                        {
+                            names.Add(this.currentHost);
+                        }
+
+                        StringCollection sc = new StringCollection();
+                        sc.AddRange(names.ToArray());
+
+                        Properties.Settings.Default.HostNames = sc;
+                        Properties.Settings.Default.Save();
+                        bwArgs.Result = names;
+                    }
+                    else
+                    {
+                        bwArgs.Result = names = Properties.Settings.Default.HostNames.Cast<string>().ToList();
                     }
 
-                    bwArgs.Result = names;
+                    foreach (var name in names)
+                    {
+                        try
+                        {
+                            if (name.Equals(this.currentHost, StringComparison.OrdinalIgnoreCase))
+                            {
+                                this.hostData[name] = new HostData() { IPAddress = Dns.GetHostAddresses(name).FirstOrDefault(i => i.AddressFamily == AddressFamily.InterNetwork) };
+                            }
+                            else
+                            {
+                                this.hostData[name] = null;
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -805,9 +902,15 @@ namespace SpotCon
                     {
                         try
                         {
-                            this.hostData[name] = new HostData() { IPAddress = Dns.GetHostAddresses(name).FirstOrDefault(i => i.AddressFamily == AddressFamily.InterNetwork) };
-                            int index = dataGridViewComputers.Rows.Add(name.Equals(this.currentHost, StringComparison.OrdinalIgnoreCase), hostImages.Images[(int)ClientConnectStatus.Disconnected], name);
-                            this.hostData[name].Row = dataGridViewComputers.Rows[index];
+                            if (this.hostData.ContainsKey(name))
+                            {
+                                int index = dataGridViewComputers.Rows.Add(name.Equals(this.currentHost, StringComparison.OrdinalIgnoreCase), hostImages.Images[(int)ClientConnectStatus.Disconnected], name);
+                                this.hostData[name].Row = dataGridViewComputers.Rows[index];
+                            }
+                            else
+                            {
+                                // TODO: Why is there an empty "else" here?
+                            }
                         }
                         catch
                         {
@@ -857,6 +960,531 @@ namespace SpotCon
         }
 
         /// <summary>
+        /// Loads any playlist import plugins
+        /// </summary>
+        private void LoadImportPlugins()
+        {
+            Type pluginType = typeof(IPlaylistImporter);
+            var plugins = new List<IPlaylistImporter>();
+            foreach (string filename in Directory.GetFiles(".\\Plugins", "*.dll"))
+            {
+                Assembly currentAssembly = Assembly.LoadFrom(filename);
+                foreach (Type type in currentAssembly.GetExportedTypes().Where(t => t.GetInterface(pluginType.FullName) != null))
+                {
+                    try
+                    {
+                        IPlaylistImporter plugin = (IPlaylistImporter)Assembly.GetAssembly(pluginType).CreateInstance(
+                            typeName: type.FullName,
+                            args: null,
+                            ignoreCase: false,
+                            bindingAttr: BindingFlags.CreateInstance,
+                            binder: null,
+                            culture: null,
+                            activationAttributes: null);
+
+                        plugins.Add(plugin);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, ex.ToString(), Properties.Resources.PluginLoadError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+
+            foreach (var plugin in plugins)
+            {
+                ToolStripItem item = toolStripMenuItemImportPlaylist.DropDownItems.Add(plugin.MenuItem);
+                item.Click += (sender, e) =>
+                {
+                    plugin.MainForm.ShowDialog(this);
+                    this.FindNewTracks(plugin);
+                };
+            }
+        }
+
+        /// <summary>
+        /// Finds new tracks from the given playlist import plugin
+        /// </summary>
+        /// <param name="plugin">Playlist import plugin</param>
+        private void FindNewTracks(IPlaylistImporter plugin)
+        {
+            BackgroundWorker bw = new BackgroundWorker()
+            {
+                WorkerReportsProgress = true,
+                WorkerSupportsCancellation = true
+            };
+
+            bw.DoWork += (bwSender, bwArgs) =>
+            {
+                Regex regex = null;
+                try
+                {
+                    regex = new Regex(plugin.ArtistTrackRegex);
+                }
+                catch (ArgumentException aex)
+                {
+                    FindNewTracksThreadStatus status = new FindNewTracksThreadStatus()
+                    {
+                        Message = aex.Message,
+                        Status = FindNewTracksStatus.InvalidRegex
+                    };
+
+                    bw.ReportProgress(0, status);
+                    return;
+                }
+
+                // Distinct tracks only
+                plugin.Tracks = plugin.Tracks.Distinct().ToList();
+                for (int i = 0; !bw.CancellationPending && i < plugin.Tracks.Count; i++)
+                {
+                    bw.ReportProgress(0, new FindNewTracksThreadStatus() { Counter = i, Maximum = plugin.Tracks.Count });
+
+                    Match match = regex.Match(plugin.Tracks[i]);
+                    FindNewTracksThreadStatus status = new FindNewTracksThreadStatus()
+                    {
+                        Counter = i,
+                        Maximum = plugin.Tracks.Count,
+                        Message = plugin.Tracks[i],
+                        Status = FindNewTracksStatus.AddNewTrack
+                    };
+
+                    if (!match.Success)
+                    {
+                        status.Status = FindNewTracksStatus.ParseError;
+                        bw.ReportProgress(0, status);
+                        continue;
+                    }
+
+                    if (!bw.CancellationPending)
+                    {
+                        status.ArtistName = match.Groups["ARTIST"].Value.Trim();
+                        status.TrackName = match.Groups["TRACK"].Value.Trim();
+
+                        this.GetArtist(status);
+                        this.GetTrack(status);
+
+                        bw.ReportProgress(0, status);
+                    }
+                }
+            };
+
+            bw.ProgressChanged += (bwSender, bwArgs) =>
+            {
+                FindNewTracksThreadStatus status = bwArgs.UserState as FindNewTracksThreadStatus;
+
+                this.SetStatus(string.Format("Looking up track {0} of {1}...", status.Counter + 1, status.Maximum));
+                this.SetProgressBar(status.Counter);
+
+                switch (status.Status)
+                {
+                    case FindNewTracksStatus.InvalidRegex:
+                        if (DialogResult.Cancel == MessageBox.Show(status.Message, "Regex error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error))
+                        {
+                            bw.CancelAsync();
+                        }
+
+                        break;
+                    case FindNewTracksStatus.ParseError:
+                        if (DialogResult.Cancel == MessageBox.Show(string.Format("Could not parse song information from <{0}>", status.Message), "Parse error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error))
+                        {
+                            bw.CancelAsync();
+                        }
+
+                        break;
+                    case FindNewTracksStatus.UnknownArtist:
+                    case FindNewTracksStatus.UnknownTrack:
+                        unknownTracks.Enqueue(status);
+                        break;
+                    case FindNewTracksStatus.AddNewTrack:
+                        this.AddNewTrack(status);
+                        break;
+                }
+            };
+
+            bw.RunWorkerCompleted += (bwSender, bwArgs) =>
+            {
+                this.ClearStatus();
+                this.HideProgressBar();
+                this.SetBusyState(false);
+
+                if (this.unknownTracks.Any())
+                {
+                    this.GetUnknownInfo(this.unknownTracks.Dequeue());
+                }
+                else
+                {
+                    this.FindNewTracksEnd();
+                }
+            };
+
+            this.SetBusyState(true);
+            this.unknownTracks.Clear();
+            this.dataGridViewTracks.Rows.Clear();
+            this.SetProgressBar(1, plugin.Tracks.Count);
+            bw.RunWorkerAsync(plugin.Tracks);
+        }
+
+        /// <summary>
+        /// Runs after the user is done finding new tracks
+        /// </summary>
+        private void FindNewTracksEnd()
+        {
+            if (this.skippedTracks.Any() &&
+                DialogResult.Yes == MessageBox.Show(
+                    Properties.Resources.SkippedTracksClipboard,
+                    Properties.Resources.SkippedTracksClipboardCaption,
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning))
+            {
+                Clipboard.SetText(string.Join(Environment.NewLine, this.skippedTracks));
+            }
+
+            this.SaveArtistCache();
+            this.SaveSearchTrackCache();
+            this.SaveMisspelledArtistCache();
+            this.SaveMisspelledTrackCache();
+            this.SetBusyState(false);
+        }
+
+        /// <summary>
+        /// Gets missing info when a search query doesn't return an exact match
+        /// </summary>
+        /// <param name="unknownTrack">FindNewTracks thread status</param>
+        private void GetUnknownInfo(FindNewTracksThreadStatus unknownTrack)
+        {
+            if (unknownTrack.Status == FindNewTracksStatus.UnknownArtist)
+            {
+                this.GetUnknownArtist(unknownTrack);
+            }
+            else if (unknownTrack.Status == FindNewTracksStatus.UnknownTrack)
+            {
+                this.GetUnknownTrackThreadSafe(unknownTrack);
+            }
+        }
+        
+        /// <summary>
+        /// Gets track information when no exact match is found for the track
+        /// </summary>
+        /// <param name="unknownTrack">FindNewTracks thread status</param>
+        private void GetUnknownTrack(FindNewTracksThreadStatus unknownTrack)
+        {
+            List<SearchTrack> trackList = unknownTrack.Tracks.TrackList;
+            var artistQuery = unknownTrack.Tracks.TrackList.Where(t => t.Artist.Href == unknownTrack.ArtistHref);
+            if (artistQuery.Any())
+            {
+                trackList = artistQuery.ToList();
+            }
+
+            string originalTrack = unknownTrack.TrackName;
+            UnknownTrack ut = new UnknownTrack(unknownTrack.ArtistName, unknownTrack.ArtistHref, unknownTrack.TrackName, trackList);
+            if (ut.ShowDialog(this) == DialogResult.Cancel)
+            {
+                unknownTrack.Status = FindNewTracksStatus.Cancel;
+                this.FindNewTracksEnd();
+                return;
+            }
+
+            if (ut.SelectedTrack != null)
+            {
+                unknownTrack.Track = ut.SelectedTrack;
+                string misspelledKey = string.Format("{0}:::{1}", unknownTrack.ArtistHref, originalTrack);
+
+                if (unknownTrack.Track is Track)
+                {
+                    Track track = unknownTrack.Track as Track;
+                    this.misspelledTracks[misspelledKey] = track.Name;
+                    this.cachedLookupTracks.Add(track.Id.Value, track);
+
+                    string path = Path.Combine(Application.UserAppDataPath, "Lookup", track.Href.Replace("spotify:track:", string.Empty) + ".xml");
+                    SpotifyService.Serialize(track, path);
+                }
+                else if (unknownTrack.Track is SearchTrack)
+                {
+                    XDocument doc = new XDocument();
+                    SearchTrack track = unknownTrack.Track as SearchTrack;
+                    this.misspelledTracks[misspelledKey] = track.Name;
+
+                    string path = Path.Combine(Application.UserAppDataPath, "Search", unknownTrack.ArtistHref.Replace("spotify:artist:", string.Empty) + ".xml");
+
+                    XElement trackNode = new XElement(
+                        "Track",
+                        new XAttribute("Query", unknownTrack.TrackName),
+                        HttpUtility.HtmlEncode(SpotifyService.Serialize(track)));
+
+                    if (File.Exists(path))
+                    {
+                        doc = XDocument.Load(path);
+                        doc.Root.Add(trackNode);
+                    }
+                    else
+                    {
+                        doc = new XDocument(new XElement("Tracks", trackNode));
+                    }
+
+                    doc.Save(path);
+                }
+            }
+            else
+            {
+                unknownTrack.Status = FindNewTracksStatus.TrackSkipped;
+                this.skippedTracks.Add(unknownTrack.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets artist information when no exact match is found for the artist
+        /// </summary>
+        /// <param name="unknownTrack">FindNewTracks thread status</param>
+        private void GetUnknownArtist(FindNewTracksThreadStatus unknownTrack)
+        {
+            if (unknownTrack.ArtistHref == null)
+            {
+                string originalArtist = unknownTrack.ArtistName;
+                UnknownArtist ua = new UnknownArtist(unknownTrack.ArtistName, unknownTrack.Artists);
+                if (ua.ShowDialog(this) == DialogResult.Cancel)
+                {
+                    unknownTrack.Status = FindNewTracksStatus.Cancel;
+                    this.FindNewTracksEnd();
+                    return;
+                }
+
+                if (ua.SelectedArtist != null)
+                {
+                    unknownTrack.Artist = ua.SelectedArtist;
+
+                    unknownTrack.ArtistName = unknownTrack.Artist.Name;
+                    unknownTrack.ArtistHref = unknownTrack.Artist.Href;
+                    this.misspelledArtists[originalArtist] = unknownTrack.ArtistName;
+                    this.cachedArtistHrefs[unknownTrack.ArtistName] = unknownTrack.Artist.Href;
+
+                    this.GetUnknownTrackThreadSafe(unknownTrack);
+                }
+                else
+                {
+                    unknownTrack.Status = FindNewTracksStatus.TrackSkipped;
+                    this.skippedTracks.Add(unknownTrack.Message);
+                    if (this.unknownTracks.Any())
+                    {
+                        this.GetUnknownInfo(this.unknownTracks.Dequeue());
+                    }
+                    else
+                    {
+                        this.FindNewTracksEnd();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets track information
+        /// </summary>
+        /// <param name="unknownTrack">FindNewTracks thread status</param>
+        private void GetUnknownTrackThreadSafe(FindNewTracksThreadStatus unknownTrack)
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+
+            bw.DoWork += (bwSender, bwArgs) =>
+            {
+                this.GetTrack(unknownTrack);
+
+                if (unknownTrack.Tracks == null)
+                {
+                    unknownTrack.Tracks = this.search.SearchTracks(unknownTrack.TrackName);
+                }
+            };
+
+            bw.RunWorkerCompleted += (bwSender, bwArgs) =>
+            {
+                if (unknownTrack.Status != FindNewTracksStatus.TrackSkipped)
+                {
+                    this.GetUnknownTrack(unknownTrack);
+                }
+
+                if (unknownTrack.Status == FindNewTracksStatus.Cancel)
+                {
+                    return;
+                }
+
+                if (unknownTrack.Status != FindNewTracksStatus.TrackSkipped)
+                {
+                    this.AddNewTrack(unknownTrack);
+                }
+
+                if (this.unknownTracks.Any())
+                {
+                    this.GetUnknownInfo(this.unknownTracks.Dequeue());
+                }
+                else
+                {
+                    this.FindNewTracksEnd();
+                }
+            };
+
+            bw.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// Adds a new track to the track gird
+        /// </summary>
+        /// <param name="status">FindNewTracks thread status</param>
+        private void AddNewTrack(FindNewTracksThreadStatus status)
+        {
+            double popularity = 0, length = 0;
+            string trackName = null, artistName = null, albumName = null;
+
+            if (status.Track is SearchTrack)
+            {
+                SearchTrack track = status.Track as SearchTrack;
+                trackName = track.Name;
+                artistName = track.Artist.Name;
+                albumName = track.Album.Name;
+                popularity = track.Popularity.Value;
+                length = track.Length.Value;
+            }
+            else if (status.Track is Track)
+            {
+                Track track = status.Track as Track;
+                trackName = track.Name;
+                artistName = track.Artist.Name;
+                albumName = track.Album.Name;
+                popularity = track.Popularity.Value;
+                length = track.Length.Value;
+            }
+
+            DataGridViewRow row = new DataGridViewRow();
+            row.CreateCells(this.dataGridViewTracks, null, trackName, artistName, TimeSpan.FromSeconds((double)length).ToString(@"m\:ss"), this.GetPopularityImage(popularity), albumName);
+            row.Cells[(int)TrackColumns.Popularity].Tag = popularity;
+            row.Cells[(int)TrackColumns.Time].Tag = length;
+            row.Tag = status.Track;
+
+            this.dataGridViewTracks.Rows.Add(row);
+        }
+
+        /// <summary>
+        /// Gets the Spotify artist
+        /// </summary>
+        /// <param name="status">Thread status object</param>
+        private void GetArtist(FindNewTracksThreadStatus status)
+        {
+            string artistName = status.ArtistName;
+            bool artistFound = this.cachedArtistHrefs.ContainsKey(artistName);
+
+            if (!artistFound && this.misspelledArtists.ContainsKey(artistName))
+            {
+                artistName = this.misspelledArtists[artistName];
+                artistFound = this.cachedArtistHrefs.ContainsKey(artistName);
+            }
+
+            if (artistFound)
+            {
+                status.ArtistHref = this.cachedArtistHrefs[artistName];
+            }
+            else
+            {
+                status.Artists = this.search.SearchArtists(artistName);
+                var artistQuery = status.Artists.ArtistList.Where(a => a.Name.Equals(artistName, System.StringComparison.OrdinalIgnoreCase));
+                if (!artistQuery.Any())
+                {
+                    status.Status = FindNewTracksStatus.UnknownArtist;
+                }
+                else
+                {
+                    status.Artist = artistQuery.First();
+                }
+
+                if (status.Artist != null)
+                {
+                    this.cachedArtistHrefs[artistName] = status.Artist.Href;
+                    status.ArtistName = status.Artist.Name;
+                    status.ArtistHref = status.Artist.Href;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the Spotify track
+        /// </summary>
+        /// <param name="status">Thread status object</param>
+        private void GetTrack(FindNewTracksThreadStatus status)
+        {
+            if (status.ArtistHref == null)
+            {
+                return;
+            }
+
+            SearchTrack track = null;
+            string trackName = status.TrackName;
+            string key = string.Format("{0}:::{1}", status.ArtistHref, trackName);
+
+            bool trackFound = this.cachedSearchTracks.ContainsKey(key);
+            if (!trackFound && this.misspelledTracks.ContainsKey(key))
+            {
+                trackName = this.misspelledTracks[key];
+                key = string.Format("{0}:::{1}", status.ArtistHref, trackName);
+                trackFound = this.cachedSearchTracks.ContainsKey(key);
+            }
+
+            if (trackFound && (track = this.cachedSearchTracks[key]) != null)
+            {
+                status.Track = track;
+            }
+            else
+            {
+                XDocument doc = null;
+                string path = Path.Combine(Application.UserAppDataPath, "Search", status.ArtistHref.Replace("spotify:artist:", string.Empty) + ".xml");
+                if (File.Exists(path))
+                {
+                    doc = XDocument.Load(path);
+                    var trackNode = from node in doc.Root.Elements("Track")
+                                    where node.Attribute("Query").Value.Equals(trackName, StringComparison.OrdinalIgnoreCase)
+                                    select node;
+
+                    if (trackNode.Any())
+                    {
+                        track = SpotifyService.Deserialize<SearchTrack>(HttpUtility.HtmlDecode(trackNode.First().Value));
+                        status.Track = track;
+                        this.cachedSearchTracks[key] = track;
+                        return;
+                    }
+                }
+
+                status.Tracks = this.search.SearchTracks(trackName);
+                var trackQuery = status.Tracks.TrackList.Where(t => t.Artist.Href == status.ArtistHref && t.Name.Equals(trackName, StringComparison.OrdinalIgnoreCase));
+
+                if (!trackQuery.Any())
+                {
+                    status.Status = FindNewTracksStatus.UnknownTrack;
+                }
+                else
+                {
+                    track = trackQuery.First();
+                }
+
+                if (track != null)
+                {
+                    status.Track = track;
+                    this.cachedSearchTracks[key] = track;
+
+                    XElement trackNode = new XElement(
+                        "Track",
+                        new XAttribute("Query", trackName),
+                        HttpUtility.HtmlEncode(SpotifyService.Serialize(track)));
+
+                    if (File.Exists(path))
+                    {
+                        doc.Root.Add(trackNode);
+                    }
+                    else
+                    {
+                        doc = new XDocument(new XElement("Tracks", trackNode));
+                    }
+
+                    doc.Save(path);
+                }
+            }
+        }
+
+        /// <summary>
         /// Clears the current status
         /// </summary>
         private void ClearStatus()
@@ -880,7 +1508,7 @@ namespace SpotCon
         /// <param name="message">Message to set</param>
         private void SetStatusError(string message)
         {
-            this.SetStatus(message, Color.Red);
+            this.SetStatus(message, Color.DarkRed);
             this.SetBusyState(false);
         }
 
@@ -922,8 +1550,100 @@ namespace SpotCon
         {
             Cursor.Current = busy ? Cursors.WaitCursor : Cursors.Default;
             this.Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
+            dataGridViewTracks.Cursor = busy ? Cursors.WaitCursor : Cursors.Default; // hack?
             this.UseWaitCursor = busy;
             Application.UseWaitCursor = busy;
+        }
+
+        /// <summary>
+        /// Saves the artist cache
+        /// </summary>
+        private void SaveArtistCache()
+        {
+            StringCollection sc = new StringCollection();
+            sc.AddRange(this.cachedArtistHrefs.Select(kvp => string.Format("{0}|||{1}", kvp.Key, kvp.Value)).ToArray());
+            Properties.Settings.Default.CachedArtistHrefs = sc;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Saves the misspelled artist cache
+        /// </summary>
+        private void SaveMisspelledArtistCache()
+        {
+            StringCollection sc = new StringCollection();
+            sc.AddRange(this.misspelledArtists.Select(kvp => string.Format("{0}|||{1}", kvp.Key, kvp.Value)).ToArray());
+            Properties.Settings.Default.CachedMisspelledArtists = sc;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Saves the misspelled track cache
+        /// </summary>
+        private void SaveMisspelledTrackCache()
+        {
+            StringCollection sc = new StringCollection();
+            sc.AddRange(this.misspelledTracks.Select(kvp => string.Format("{0}|||{1}", kvp.Key, kvp.Value)).ToArray());
+            Properties.Settings.Default.CachedMisspelledTracks = sc;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Reads the artist href cache
+        /// </summary>
+        private void ReadArtistCache()
+        {
+            foreach (string cachedArtistHrefLine in Properties.Settings.Default.CachedArtistHrefs)
+            {
+                string[] split = cachedArtistHrefLine.Split(new string[] { "|||" }, StringSplitOptions.None);
+                this.cachedArtistHrefs[split[0]] = split[1];
+            }
+        }
+
+        /// <summary>
+        /// Reads the cached list of misspelled artists
+        /// </summary>
+        private void ReadMisspelledArtistCache()
+        {
+            foreach (string artist in Properties.Settings.Default.CachedMisspelledArtists)
+            {
+                string[] split = artist.Split(new string[] { "|||" }, StringSplitOptions.None);
+                this.misspelledArtists[split[0]] = split[1];
+            }
+        }
+
+        /// <summary>
+        /// Reads the cached list of misspelled tracks
+        /// </summary>
+        private void ReadMisspelledTrackCache()
+        {
+            foreach (string track in Properties.Settings.Default.CachedMisspelledTracks)
+            {
+                string[] split = track.Split(new string[] { "|||" }, StringSplitOptions.None);
+                this.misspelledTracks[split[0]] = split[1];
+            }
+        }
+
+        /// <summary>
+        /// Reads the track cache
+        /// </summary>
+        private void ReadCachedTracks()
+        {
+            foreach (string cachedTrackUrlLine in Properties.Settings.Default.CachedSearchTracks)
+            {
+                this.cachedSearchTracks.Add(cachedTrackUrlLine, null);
+            }
+        }
+
+        /// <summary>
+        /// Saves the track cache
+        /// </summary>
+        private void SaveSearchTrackCache()
+        {
+            StringCollection sc = new StringCollection();
+            sc.AddRange(this.cachedSearchTracks.Select(kvp => kvp.Key).ToArray());
+            Properties.Settings.Default.CachedSearchTracks = sc;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
@@ -948,7 +1668,7 @@ namespace SpotCon
 
             foreach (var item in this.hostData.Values)
             {
-                if (item.Socket != null)
+                if (item != null && item.Socket != null)
                 {
                     item.Socket.Close();
                 }
@@ -1111,7 +1831,7 @@ namespace SpotCon
 
             if (!isChecked)
             {
-                if (this.hostData.ContainsKey(host) && this.hostData[host].Socket != null && this.hostData[host].Socket.Connected)
+                if (this.hostData.ContainsKey(host) && this.hostData[host] != null && this.hostData[host].Socket != null && this.hostData[host].Socket.Connected)
                 {
                     this.hostData[host].Timer.Stop();
                     this.hostData[host].Socket.Close();
@@ -1139,36 +1859,44 @@ namespace SpotCon
             BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
             bw.DoWork += (bwSender, bwArgs) =>
             {
-                try
+                if (!this.hostData.ContainsKey(server) || this.hostData[server] == null)
                 {
-                    Socket socket = this.hostData.ContainsKey(server) && this.hostData[server].Socket != null && this.hostData[server].Socket.Connected ? this.hostData[server].Socket : new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                    IPEndPoint remoteEndPoint = new IPEndPoint(this.hostData[server].IPAddress, Port);
-                    IAsyncResult result = socket.BeginConnect(remoteEP: remoteEndPoint, callback: null, state: null);
-
-                    bw.ReportProgress(0, string.Format(Properties.Resources.ConnectingToClient, server));
-                    bool success = result.AsyncWaitHandle.WaitOne(millisecondsTimeout: 3000, exitContext: true);
-                    if (success)
-                    {
-                        this.hostData[server].Socket = socket;
-                        this.hostData[server].ConnectionStatus = socket.Connected ? ClientConnectStatus.Connected : ClientConnectStatus.ConnectionFailure;
-
-                        if (socket.Connected)
-                        {
-                            this.SendToServer("|Connected");
-                        }
-                    }
-                    else
-                    {
-                        socket.Close();
-                        this.hostData[server].ConnectionStatus = ClientConnectStatus.ConnectionFailure;
-                    }
-
-                    bwArgs.Result = success;
+                    bwArgs.Result = false;
                 }
-                catch (Exception ex)
+                else
                 {
-                    bwArgs.Result = ex;
+                    try
+                    {
+                        Socket socket = this.hostData[server].Socket != null &&
+                                        this.hostData[server].Socket.Connected ? this.hostData[server].Socket : new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+                        IPEndPoint remoteEndPoint = new IPEndPoint(this.hostData[server].IPAddress, Port);
+                        IAsyncResult result = socket.BeginConnect(remoteEP: remoteEndPoint, callback: null, state: null);
+
+                        bw.ReportProgress(0, string.Format(Properties.Resources.ConnectingToClient, server));
+                        bool success = result.AsyncWaitHandle.WaitOne(millisecondsTimeout: 3000, exitContext: true);
+                        if (success)
+                        {
+                            this.hostData[server].Socket = socket;
+                            this.hostData[server].ConnectionStatus = socket.Connected ? ClientConnectStatus.Connected : ClientConnectStatus.ConnectionFailure;
+
+                            if (socket.Connected)
+                            {
+                                this.SendToServer("|Connected");
+                            }
+                        }
+                        else
+                        {
+                            socket.Close();
+                            this.hostData[server].ConnectionStatus = ClientConnectStatus.ConnectionFailure;
+                        }
+
+                        bwArgs.Result = success;
+                    }
+                    catch (Exception ex)
+                    {
+                        bwArgs.Result = ex;
+                    }
                 }
             };
 
@@ -1189,7 +1917,7 @@ namespace SpotCon
                 else if (bwArgs.Result is bool)
                 {
                     bool success = (bool)bwArgs.Result;
-                    ClientConnectStatus status = this.hostData[server].ConnectionStatus;
+                    ClientConnectStatus status = this.hostData[server] == null ? ClientConnectStatus.ConnectionFailure : this.hostData[server].ConnectionStatus;
                     dataGridViewComputers[(int)HostColumns.ConnectionStatus, rowIndex].Value = hostImages.Images[(int)status];
                     switch (status)
                     {
@@ -1219,7 +1947,7 @@ namespace SpotCon
                                 timer = this.hostData[server].Timer;
                             }
 
-                            foreach (var ip in this.hostData.Values.Where(i => i.Timer != null && i.Timer.Enabled))
+                            foreach (var ip in this.hostData.Values.Where(i => i != null && i.Timer != null && i.Timer.Enabled))
                             {
                                 ip.Timer.Stop();
                             }
@@ -1237,7 +1965,7 @@ namespace SpotCon
                             break;
                     }
 
-                    if (success)
+                    if (success && this.hostData[server].Socket.Connected)
                     {
                         this.WaitForDataClient(this.hostData[server].Socket);
                     }
@@ -1261,23 +1989,37 @@ namespace SpotCon
 
             this.selectedHost = dataGridViewComputers.SelectedRows[0].Cells[(int)HostColumns.Name].Value.ToString();
 
-            int selectedRowIndex = dataGridViewComputers.SelectedRows[0].Index;
-            for (int i = 0; i < dataGridViewComputers.Rows.Count; i++)
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += (bwSender, bwArgs) =>
             {
-                DataGridViewCellStyle style = dataGridViewComputers.Rows[i].InheritedStyle;
-                style.Font = new Font(style.Font, i == selectedRowIndex ? FontStyle.Bold : FontStyle.Regular);
-                dataGridViewComputers.Rows[i].DefaultCellStyle = style;
-            }
+                if (this.hostData[this.selectedHost] == null)
+                {
+                    this.hostData[this.selectedHost] = new HostData() { IPAddress = Dns.GetHostAddresses(this.selectedHost).FirstOrDefault(i => i.AddressFamily == AddressFamily.InterNetwork) };
+                }
+            };
 
-            foreach (var ip in this.hostData.Values.Where(i => i.Timer != null && i.Timer.Enabled))
+            bw.RunWorkerCompleted += (bwSender, bwArgs) =>
             {
-                ip.Timer.Stop();
-            }
+                int selectedRowIndex = dataGridViewComputers.SelectedRows[0].Index;
+                for (int i = 0; i < dataGridViewComputers.Rows.Count; i++)
+                {
+                    DataGridViewCellStyle style = dataGridViewComputers.Rows[i].InheritedStyle;
+                    style.Font = new Font(style.Font, i == selectedRowIndex ? FontStyle.Bold : FontStyle.Regular);
+                    dataGridViewComputers.Rows[i].DefaultCellStyle = style;
+                }
 
-            if (this.hostData[this.selectedHost].Timer != null)
-            {
-                this.hostData[this.selectedHost].Timer.Start();
-            }
+                foreach (var ip in this.hostData.Values.Where(i => i != null && i.Timer != null && i.Timer.Enabled))
+                {
+                    ip.Timer.Stop();
+                }
+
+                if (this.hostData[this.selectedHost] != null && this.hostData[this.selectedHost].Timer != null)
+                {
+                    this.hostData[this.selectedHost].Timer.Start();
+                }
+            };
+
+            bw.RunWorkerAsync();
         }
 
         /// <summary>
@@ -1574,8 +2316,8 @@ namespace SpotCon
                 return;
             }
 
-            string href = this.GetTrackHrefFromTag(this.dataGridViewTracks.Rows[e.RowIndex].Tag);
-            this.SendToServer(href + "|Play");
+            string track = this.GetTrackHrefFromTag(this.dataGridViewTracks.Rows[e.RowIndex].Tag);
+            this.SendToServer(track + "|Play");
         }
 
         /// <summary>
@@ -1593,6 +2335,10 @@ namespace SpotCon
             else if (tag is ArtistTrack)
             {
                 href = ((ArtistTrack)tag).Href;
+            }
+            else if (tag is Track)
+            {
+                href = ((Track)tag).Href;
             }
 
             return href;
@@ -1654,16 +2400,6 @@ namespace SpotCon
                 AlbumArtViewer arv = new AlbumArtViewer(this.currentStatus.Track.AlbumResource.ToString(), pictureBox.Image);
                 arv.Show();
             }
-        }
-
-        /// <summary>
-        /// toolStripSplitButtonSendTo ButtonClick event
-        /// </summary>
-        /// <param name="sender">What raised the event</param>
-        /// <param name="e">Event arguments</param>
-        private void toolStripSplitButtonSendTo_ButtonClick(object sender, EventArgs e)
-        {
-            // TODO
         }
 
         /// <summary>
@@ -2281,6 +3017,227 @@ namespace SpotCon
                     this.panelForward.Tag = false;
                     this.panelForward.BackgroundImage = Properties.Resources.ForwardDisabled;
                 }
+            }
+        }
+
+        /// <summary>
+        /// dataGridViewTracks DragEnter event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewTracks_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        /// <summary>
+        /// dataGridViewTracks DragDrop event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewTracks_DragDrop(object sender, DragEventArgs e)
+        {
+            string contents = e.Data.GetData(DataFormats.Text).ToString();
+            IEnumerable<string> trackList = contents.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            trackList = trackList.Where(l => l.StartsWith("http://open.spotify.com/track/")).Select(l => l.Replace("http://open.spotify.com/track/", string.Empty));
+
+            BackgroundWorker bw = new BackgroundWorker()
+            {
+                WorkerReportsProgress = true,
+                WorkerSupportsCancellation = true
+            };
+
+            List<Track> tracks = new List<Track>();
+            bw.DoWork += (bwSender, bwArgs) =>
+            {
+                int i = 0;
+                foreach (string href in trackList)
+                {
+                    if (bw.CancellationPending)
+                    {
+                        return;
+                    }
+
+                    bw.ReportProgress(0, new Tuple<int, int>(++i, trackList.Count()));
+
+                    Track track = null;
+                    if (cachedLookupTracks.ContainsKey(href))
+                    {
+                        track = cachedLookupTracks[href];
+                    }
+                    else
+                    {
+                        string path = Path.Combine(Application.UserAppDataPath, "Lookup", href + ".xml");
+                        if (File.Exists(path))
+                        {
+                            track = SpotifyService.Deserialize<Track>(File.ReadAllText(path));
+                            track.Href = "spotify:track:" + href;
+                        }
+                        else
+                        {
+                            track = lookup.LookupTrack(href);
+                            SpotifyService.Serialize(track, path);
+                            track.Href = "spotify:track:" + href;
+                        }
+
+                        this.cachedLookupTracks[href] = track;
+                    }
+
+                    tracks.Add(track);
+                    bw.ReportProgress(0, track);
+                }
+            };
+
+            bw.ProgressChanged += (bwSender, bwArgs) =>
+            {
+                if (bwArgs.UserState is Tuple<int, int>)
+                {
+                    Tuple<int, int> status = bwArgs.UserState as Tuple<int, int>;
+                    this.SetStatus(string.Format(Properties.Resources.GatheringTrackInfo, status.Item1, status.Item2));
+                    this.SetProgressBar(status.Item1);
+                }
+                else if (bwArgs.UserState is Track)
+                {
+                    Track t = bwArgs.UserState as Track;
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewTracks, null, t.Name, t.Artist.Name, TimeSpan.FromSeconds((double)t.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(t.Popularity), t.Album.Name);
+                    row.Cells[(int)TrackColumns.Popularity].Tag = t.Popularity;
+                    row.Cells[(int)TrackColumns.Time].Tag = t.Length.Value;
+                    row.Tag = t;
+                    this.dataGridViewTracks.Rows.Add(row);
+                }
+            };
+
+            bw.RunWorkerCompleted += (bwSender, bwArgs) =>
+            {
+                this.HideProgressBar();
+                this.ClearStatus();
+            };
+
+            if (trackList.Any())
+            {
+                this.dataGridViewTracks.Rows.Clear();
+                this.SetProgressBar(0, trackList.Count());
+                bw.RunWorkerAsync();
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the progress bar
+        /// </summary>
+        /// <param name="valueToSet">Value to set</param>
+        /// <param name="maxValueToSet">Maximum value to set</param>
+        private void SetProgressBar(int valueToSet, int maxValueToSet = -1)
+        {
+            if (maxValueToSet >= 0)
+            {
+                this.progressBar.Maximum = maxValueToSet;
+                this.progressBar.Visible = true;
+            }
+
+            this.progressBar.Value = valueToSet;
+        }
+
+        /// <summary>
+        /// Hides the progress bar
+        /// </summary>
+        private void HideProgressBar()
+        {
+            this.progressBar.Visible = false;
+        }
+
+        /// <summary>
+        /// toolStripMenuItemFindDuplicates Click event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void toolStripMenuItemFindDuplicates_Click(object sender, EventArgs e)
+        {
+            var tuples = new List<Tuple<double, DataGridViewRow, DataGridViewRow>>();
+            BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
+            bw.DoWork += (bwSender, bwArgs) =>
+            {
+                for (int i = 0; i < this.dataGridViewTracks.Rows.Count - 1; i++)
+                {
+                    bw.ReportProgress(0, i);
+                    for (int j = i + 1; j < this.dataGridViewTracks.Rows.Count; j++)
+                    {
+                        object track1 = this.dataGridViewTracks.Rows[i].Tag;
+                        object track2 = this.dataGridViewTracks.Rows[j].Tag;
+                        double similarity = TrackComparer.Compare(track1, track2);
+                        tuples.Add(new Tuple<double, DataGridViewRow, DataGridViewRow>(similarity, this.dataGridViewTracks.Rows[i], this.dataGridViewTracks.Rows[j]));
+                    }
+                }
+            };
+
+            bw.ProgressChanged += (bwSender, bwArgs) =>
+            {
+                int count = (int)bwArgs.UserState + 1;
+                this.SetProgressBar(count, this.dataGridViewTracks.Rows.Count);
+                this.SetStatus(string.Format(Properties.Resources.FindingDuplicates, count, this.dataGridViewTracks.Rows.Count));
+            };
+
+            bw.RunWorkerCompleted += (bwSender, bwArgs) =>
+            {
+                this.ClearStatus();
+                this.HideProgressBar();
+                this.SetBusyState(false);
+
+                tuples = tuples.Where(t => t.Item1 > 80).OrderBy(t => t.Item1).Reverse().ToList();
+
+                if (tuples.Any())
+                {
+                    this.dataGridViewTracks.Rows.Clear();
+                    foreach (var tuple in tuples)
+                    {
+                        if (!this.dataGridViewTracks.Rows.Contains(tuple.Item2))
+                        {
+                            this.dataGridViewTracks.Rows.Add(tuple.Item2);
+                        }
+
+                        if (!this.dataGridViewTracks.Rows.Contains(tuple.Item3))
+                        {
+                            this.dataGridViewTracks.Rows.Add(tuple.Item3);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Properties.Resources.NoDuplicatesFound, Properties.Resources.NoDuplicatesFoundCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            };
+
+            this.SetBusyState(true);
+            bw.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// toolStripMenuItemPlay Click event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void toolStripMenuItemPlay_Click(object sender, EventArgs e)
+        {
+            if (this.dataGridViewTracks.SelectedRows.Count == 0)
+            {
+                return;
+            }
+
+            if (this.dataGridViewTracks.SelectedRows.Count == 1)
+            {
+                string track = this.GetTrackHrefFromTag(this.dataGridViewTracks.SelectedRows[0].Tag);
+                this.SendToServer(track + "|Play");
+            }
+            else
+            {
+                List<string> tracks = new List<string>();
+                for (int i = this.dataGridViewTracks.SelectedRows.Count; i > 0; i--)
+                {
+                    tracks.Add(this.GetTrackHrefFromTag(this.dataGridViewTracks.SelectedRows[i - 1].Tag).Replace("spotify:track:", string.Empty));
+                }
+
+                string trackset = "http://open.spotify.com/trackset/Spotify/" + string.Join(",", tracks);
+                this.SendToServer(trackset + "|Play");
             }
         }
 

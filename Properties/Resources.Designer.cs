@@ -205,6 +205,25 @@ namespace SpotCon.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FindDuplicates {
+            get {
+                object obj = ResourceManager.GetObject("FindDuplicates", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finding duplicates for track {0} of {1}....
+        /// </summary>
+        internal static string FindingDuplicates {
+            get {
+                return ResourceManager.GetString("FindingDuplicates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap FooterBackground {
             get {
                 object obj = ResourceManager.GetObject("FooterBackground", resourceCulture);
@@ -253,11 +272,30 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gathering info for track {0} of {1}....
+        /// </summary>
+        internal static string GatheringTrackInfo {
+            get {
+                return ResourceManager.GetString("GatheringTrackInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap HeaderBackground {
             get {
                 object obj = ResourceManager.GetObject("HeaderBackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImportPlaylist {
+            get {
+                object obj = ResourceManager.GetObject("ImportPlaylist", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -279,6 +317,24 @@ namespace SpotCon.Properties {
             get {
                 object obj = ResourceManager.GetObject("NextPressed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No tracks appear to be duplicated.
+        /// </summary>
+        internal static string NoDuplicatesFound {
+            get {
+                return ResourceManager.GetString("NoDuplicatesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No duplicates!.
+        /// </summary>
+        internal static string NoDuplicatesFoundCaption {
+            get {
+                return ResourceManager.GetString("NoDuplicatesFoundCaption", resourceCulture);
             }
         }
         
@@ -329,6 +385,15 @@ namespace SpotCon.Properties {
             get {
                 object obj = ResourceManager.GetObject("PlayPressed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to load plugin.
+        /// </summary>
+        internal static string PluginLoadError {
+            get {
+                return ResourceManager.GetString("PluginLoadError", resourceCulture);
             }
         }
         
@@ -929,6 +994,24 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy list of skipped tracks to the clipboard?.
+        /// </summary>
+        internal static string SkippedTracksClipboard {
+            get {
+                return ResourceManager.GetString("SkippedTracksClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipped tracks encountered.
+        /// </summary>
+        internal static string SkippedTracksClipboardCaption {
+            get {
+                return ResourceManager.GetString("SkippedTracksClipboardCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please open Spotify and try again..
         /// </summary>
         internal static string SpotifyNotFound {
@@ -961,6 +1044,16 @@ namespace SpotCon.Properties {
         internal static string StatusGetting {
             get {
                 return ResourceManager.GetString("StatusGetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TrackActions {
+            get {
+                object obj = ResourceManager.GetObject("TrackActions", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpotConForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -46,6 +47,7 @@
             this.panelPlayPause = new System.Windows.Forms.Panel();
             this.panelPrevious = new System.Windows.Forms.Panel();
             this.panelHeader = new System.Windows.Forms.Panel();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.panelSearch = new System.Windows.Forms.Panel();
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.panelForward = new System.Windows.Forms.Panel();
@@ -59,6 +61,11 @@
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPopularity = new System.Windows.Forms.DataGridViewImageColumn();
             this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemImportPlaylist = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemFindDuplicates = new System.Windows.Forms.ToolStripMenuItem();
             this.splitterMain = new System.Windows.Forms.Splitter();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.panelPicture = new System.Windows.Forms.Panel();
@@ -78,6 +85,7 @@
             this.panelSearch.SuspendLayout();
             this.panelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTracks)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.panelLeft.SuspendLayout();
             this.panelPicture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -253,6 +261,7 @@
             // panelHeader
             // 
             this.panelHeader.BackgroundImage = global::SpotCon.Properties.Resources.HeaderBackground;
+            this.panelHeader.Controls.Add(this.progressBar);
             this.panelHeader.Controls.Add(this.panelSearch);
             this.panelHeader.Controls.Add(this.panelForward);
             this.panelHeader.Controls.Add(this.panelBack);
@@ -264,6 +273,14 @@
             this.panelHeader.Padding = new System.Windows.Forms.Padding(7, 0, 5, 0);
             this.panelHeader.Size = new System.Drawing.Size(984, 40);
             this.panelHeader.TabIndex = 2;
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(303, 8);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(100, 23);
+            this.progressBar.TabIndex = 10;
+            this.progressBar.Visible = false;
             // 
             // panelSearch
             // 
@@ -328,9 +345,9 @@
             this.labelStatus.BackColor = System.Drawing.Color.Transparent;
             this.labelStatus.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelStatus.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelStatus.Location = new System.Drawing.Point(739, 0);
+            this.labelStatus.Location = new System.Drawing.Point(579, 0);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(240, 40);
+            this.labelStatus.Size = new System.Drawing.Size(400, 40);
             this.labelStatus.TabIndex = 14;
             this.labelStatus.Text = "Status";
             this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -350,6 +367,7 @@
             // 
             // dataGridViewTracks
             // 
+            this.dataGridViewTracks.AllowDrop = true;
             this.dataGridViewTracks.AllowUserToAddRows = false;
             this.dataGridViewTracks.AllowUserToDeleteRows = false;
             this.dataGridViewTracks.AllowUserToResizeRows = false;
@@ -376,6 +394,7 @@
             this.ColumnTime,
             this.ColumnPopularity,
             this.ColumnAlbum});
+            this.dataGridViewTracks.ContextMenuStrip = this.contextMenuStrip;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(253)))), ((int)(((byte)(251)))));
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -400,6 +419,8 @@
             this.dataGridViewTracks.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTracks_RowLeave);
             this.dataGridViewTracks.SelectionChanged += new System.EventHandler(this.dataGridViewTracks_SelectionChanged);
             this.dataGridViewTracks.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTracks_SortCompare);
+            this.dataGridViewTracks.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragDrop);
+            this.dataGridViewTracks.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragEnter);
             // 
             // ColumnEmpty
             // 
@@ -468,6 +489,44 @@
             this.ColumnAlbum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ColumnAlbum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.ColumnAlbum.TrackVisitedState = false;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemPlay,
+            this.toolStripSeparator1,
+            this.toolStripMenuItemImportPlaylist,
+            this.toolStripMenuItemFindDuplicates});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(156, 76);
+            // 
+            // toolStripMenuItemPlay
+            // 
+            this.toolStripMenuItemPlay.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItemPlay.Name = "toolStripMenuItemPlay";
+            this.toolStripMenuItemPlay.Size = new System.Drawing.Size(155, 22);
+            this.toolStripMenuItemPlay.Text = "Play";
+            this.toolStripMenuItemPlay.Click += new System.EventHandler(this.toolStripMenuItemPlay_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+            // 
+            // toolStripMenuItemImportPlaylist
+            // 
+            this.toolStripMenuItemImportPlaylist.Image = global::SpotCon.Properties.Resources.ImportPlaylist;
+            this.toolStripMenuItemImportPlaylist.Name = "toolStripMenuItemImportPlaylist";
+            this.toolStripMenuItemImportPlaylist.Size = new System.Drawing.Size(155, 22);
+            this.toolStripMenuItemImportPlaylist.Text = "Import Playlist";
+            // 
+            // toolStripMenuItemFindDuplicates
+            // 
+            this.toolStripMenuItemFindDuplicates.Image = global::SpotCon.Properties.Resources.FindDuplicates;
+            this.toolStripMenuItemFindDuplicates.Name = "toolStripMenuItemFindDuplicates";
+            this.toolStripMenuItemFindDuplicates.Size = new System.Drawing.Size(155, 22);
+            this.toolStripMenuItemFindDuplicates.Text = "Find Duplicates";
+            this.toolStripMenuItemFindDuplicates.Click += new System.EventHandler(this.toolStripMenuItemFindDuplicates_Click);
             // 
             // splitterMain
             // 
@@ -647,7 +706,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 546);
             this.Controls.Add(this.tableLayoutPanelMain);
-            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 410);
             this.Name = "SpotConForm";
@@ -664,6 +722,7 @@
             this.panelSearch.PerformLayout();
             this.panelMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTracks)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.panelLeft.ResumeLayout(false);
             this.panelPicture.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -715,6 +774,12 @@
         private System.Windows.Forms.Panel panelSpacer;
         private System.Windows.Forms.Panel panelForward;
         private System.Windows.Forms.Panel panelBack;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFindDuplicates;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlay;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImportPlaylist;
 
     }
 }

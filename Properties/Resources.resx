@@ -403,4 +403,34 @@
   <data name="SpotifyNotFoundHeader" xml:space="preserve">
     <value>Spotify not running!</value>
   </data>
+  <data name="FindDuplicates" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\table_multiple.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FindingDuplicates" xml:space="preserve">
+    <value>Finding duplicates for track {0} of {1}...</value>
+  </data>
+  <data name="GatheringTrackInfo" xml:space="preserve">
+    <value>Gathering info for track {0} of {1}...</value>
+  </data>
+  <data name="TrackActions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\table_lightning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportPlaylist" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\table_add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NoDuplicatesFound" xml:space="preserve">
+    <value>No tracks appear to be duplicated</value>
+  </data>
+  <data name="NoDuplicatesFoundCaption" xml:space="preserve">
+    <value>No duplicates!</value>
+  </data>
+  <data name="PluginLoadError" xml:space="preserve">
+    <value>Unable to load plugin</value>
+  </data>
+  <data name="SkippedTracksClipboard" xml:space="preserve">
+    <value>Copy list of skipped tracks to the clipboard?</value>
+  </data>
+  <data name="SkippedTracksClipboardCaption" xml:space="preserve">
+    <value>Skipped tracks encountered</value>
+  </data>
 </root>

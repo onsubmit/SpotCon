@@ -121,6 +121,35 @@ namespace SpotCon.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Collection {
+            get {
+                object obj = ResourceManager.GetObject("Collection", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CollectionAdd {
+            get {
+                object obj = ResourceManager.GetObject("CollectionAdd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A collection named &quot;{0}&quot; already exists..
+        /// </summary>
+        internal static string CollectionAlreadyExists {
+            get {
+                return ResourceManager.GetString("CollectionAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Computer {
             get {
                 object obj = ResourceManager.GetObject("Computer", resourceCulture);
@@ -326,15 +355,6 @@ namespace SpotCon.Properties {
         internal static string NoDuplicatesFound {
             get {
                 return ResourceManager.GetString("NoDuplicatesFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No duplicates!.
-        /// </summary>
-        internal static string NoDuplicatesFoundCaption {
-            get {
-                return ResourceManager.GetString("NoDuplicatesFoundCaption", resourceCulture);
             }
         }
         
@@ -1017,15 +1037,6 @@ namespace SpotCon.Properties {
         internal static string SpotifyNotFound {
             get {
                 return ResourceManager.GetString("SpotifyNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Spotify not running!.
-        /// </summary>
-        internal static string SpotifyNotFoundHeader {
-            get {
-                return ResourceManager.GetString("SpotifyNotFoundHeader", resourceCulture);
             }
         }
         

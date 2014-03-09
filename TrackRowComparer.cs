@@ -94,6 +94,17 @@ namespace SpotCon
                     double doubleB = (double)row2.Cells[this.column].Tag;
                     return doubleA.CompareTo(doubleB) * this.sortOrderModifier;
                 }
+                else if (this.type == typeof(int))
+                {
+                    int intA = 0;
+                    int intB = 0;
+
+                    if (int.TryParse(row1.Cells[this.column].Value.ToString(), out intA) &&
+                        int.TryParse(row2.Cells[this.column].Value.ToString(), out intB))
+                    {
+                        return intA.CompareTo(intB) * this.sortOrderModifier;
+                    }
+                }
 
                 return string.Compare(row1.Cells[this.column].Value.ToString(), row2.Cells[this.column].Value.ToString()) * this.sortOrderModifier;
             }

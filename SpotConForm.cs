@@ -196,7 +196,7 @@ namespace SpotCon
         /// <summary>
         /// List of collections and their corresponding tracks
         /// </summary>
-        private Dictionary<string, List<string>> collections = new Dictionary<string, List<string>>();
+        private Dictionary<string, HashSet<string>> collections = new Dictionary<string, HashSet<string>>();
 
         /// <summary>
         /// Maps artist name to a Spotify artist href
@@ -415,7 +415,7 @@ namespace SpotCon
                     {
                         Responses.Status status = webHelper.Value.Deserialize<Responses.Status>(s);
                         bool success = this.UpdateStatus(status);
-                        string currentAlbumUri = this.currentStatus == null ? null : this.currentStatus.Track.AlbumResource.Uri;
+                        string currentAlbumUri = this.currentStatus == null || this.currentStatus.Track == null ? null : this.currentStatus.Track.AlbumResource.Uri;
                         this.currentStatus = status;
 
                         if (success && status.Track.AlbumResource.Uri != currentAlbumUri)
@@ -861,7 +861,7 @@ namespace SpotCon
             this.dataGridViewCollections.AlternatingRowsDefaultCellStyle =
             this.dataGridViewArtists.AlternatingRowsDefaultCellStyle =
             this.dataGridViewAlbums.AlternatingRowsDefaultCellStyle =
-            this.dataGridViewTracks.AlternatingRowsDefaultCellStyle = 
+            this.dataGridViewTracks.AlternatingRowsDefaultCellStyle =
             this.alternateStyle;
 
             this.collectionPercentage = (double)this.dataGridViewCollections.Width / (double)this.dataGridViewTracks.Width;
@@ -978,7 +978,7 @@ namespace SpotCon
                             break;
                         }
 
-                        if (DialogResult.Cancel == MessageBox.Show(this, Properties.Resources.SpotifyNotFound, this.Name, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1))
+                        if (DialogResult.Cancel == MessageBox.Show(this, Properties.Resources.SpotifyNotFound, this.Text, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1))
                         {
                             exit = true;
                         }
@@ -1015,13 +1015,18 @@ namespace SpotCon
         private void DisplayCollectionTracks(List<string> specificCollections = null)
         {
             BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
+            var tracksToAdd = this.collections.Where(kvp => specificCollections == null || specificCollections.Contains(kvp.Key)).Select(kvp => kvp.Value);
+            int numTracks = tracksToAdd.Sum(h => h.Count);
+
             bw.DoWork += (bwSender, bwArgs) =>
             {
+                int i = 0;
                 List<Track> tracks = new List<Track>();
-                foreach (var hrefs in this.collections.Where(kvp => specificCollections == null || specificCollections.Contains(kvp.Key)).Select(kvp => kvp.Value))
+                foreach (var hrefs in tracksToAdd)
                 {
                     foreach (var href in hrefs)
                     {
+                        bw.ReportProgress(0, ++i);
                         Track track = null;
                         if (cachedLookupTracks.ContainsKey(href))
                         {
@@ -1065,7 +1070,6 @@ namespace SpotCon
                         track.Album.Released = album.Released.Value;
 
                         tracks.Add(track);
-                        bw.ReportProgress(0, track);
                     }
                 }
 
@@ -1074,25 +1078,38 @@ namespace SpotCon
 
             bw.ProgressChanged += (bwSender, bwArgs) =>
             {
-                Track track = bwArgs.UserState as Track;
-                DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(this.dataGridViewTracks, null, track.TrackNumber, track.Name, track.Artist.Name, TimeSpan.FromSeconds((double)track.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(track.Popularity), track.Album.Name);
-                row.Cells[(int)TrackColumns.Popularity].Tag = track.Popularity;
-                row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
-                row.Cells[(int)TrackColumns.Time].Tag = track.Length.Value;
-                row.Tag = track;
-                this.dataGridViewTracks.Rows.Add(row);
+                int count = (int)bwArgs.UserState;
+                this.SetProgressBar(count, numTracks);
             };
 
             bw.RunWorkerCompleted += (bwSender, bwArgs) =>
             {
                 List<Track> tracks = bwArgs.Result as List<Track>;
+                foreach (Track track in tracks)
+                {
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewTracks, null, track.TrackNumber, track.Name, track.Artist.Name, TimeSpan.FromSeconds((double)track.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(track.Popularity), track.Album.Name);
+                    row.Cells[(int)TrackColumns.Popularity].Tag = track.Popularity;
+                    row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
+                    row.Cells[(int)TrackColumns.Time].Tag = track.Length.Value;
+                    row.Tag = track;
+                    this.dataGridViewTracks.Rows.Add(row);
+                }
+
                 this.PopulateArtistsAndAlbumFilters(tracks);
+
+                this.ClearStatus();
+                this.HideProgressBar();
+                this.SetBusyState(false);
             };
 
             this.dataGridViewTracks.Rows.Clear();
             this.dataGridViewArtists.Rows.Clear();
             this.dataGridViewAlbums.Rows.Clear();
+
+            this.SetBusyState(true);
+            this.SetProgressBar(0, numTracks);
+            this.SetStatus(Properties.Resources.LoadingCollection);
             bw.RunWorkerAsync();
         }
 
@@ -1104,13 +1121,24 @@ namespace SpotCon
             if (this.collections.Any())
             {
                 this.dataGridViewCollections.Rows.Add("(All)");
+                this.dataGridViewCollections.Rows.Add("(Search)");
+                addToCollectionToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+
+                foreach (var kvp in this.collections)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem(kvp.Key);
+                    item.Click += (sender, e) =>
+                    {
+                        this.AddTracksToCollection(kvp.Key);
+                    };
+
+                    this.dataGridViewCollections.Rows.Add(kvp.Key);
+                    this.addToCollectionToolStripMenuItem.DropDownItems.Add(item);
+                }
             }
-
-            this.dataGridViewCollections.Rows.Add("(Search)");
-
-            foreach (var kvp in this.collections)
+            else
             {
-                this.dataGridViewCollections.Rows.Add(kvp.Key);
+                this.dataGridViewCollections.Rows.Add("(Search)");
             }
         }
 
@@ -1316,7 +1344,7 @@ namespace SpotCon
                 this.GetUnknownTrackThreadSafe(unknownTrack);
             }
         }
-        
+
         /// <summary>
         /// Gets track information when no exact match is found for the track
         /// </summary>
@@ -1801,7 +1829,7 @@ namespace SpotCon
             foreach (string collections in Properties.Settings.Default.Collections)
             {
                 string[] split = collections.Split(new string[] { "|||" }, StringSplitOptions.None);
-                this.collections.Add(split[0], split[1].Split(',').ToList());
+                this.collections.Add(split[0], new HashSet<string>(split[1].Split(',').ToList()));
             }
         }
 
@@ -2036,7 +2064,6 @@ namespace SpotCon
         private void ConnectToServer(int colIndex, int rowIndex, string server)
         {
             dataGridViewComputers.Enabled = false;
-            this.SetStatusBusy(Properties.Resources.AttemptingConnections);
             BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
             bw.DoWork += (bwSender, bwArgs) =>
             {
@@ -2054,7 +2081,11 @@ namespace SpotCon
                         IPEndPoint remoteEndPoint = new IPEndPoint(this.hostData[server].IPAddress, Port);
                         IAsyncResult result = socket.BeginConnect(remoteEP: remoteEndPoint, callback: null, state: null);
 
-                        bw.ReportProgress(0, string.Format(Properties.Resources.ConnectingToClient, server));
+                        if (server != this.currentHost)
+                        {
+                            bw.ReportProgress(0, string.Format(Properties.Resources.ConnectingToClient, server));
+                        }
+
                         bool success = result.AsyncWaitHandle.WaitOne(millisecondsTimeout: 3000, exitContext: true);
                         if (success)
                         {
@@ -2103,7 +2134,11 @@ namespace SpotCon
                     switch (status)
                     {
                         case ClientConnectStatus.Connected:
-                            this.SetStatusSuccess(string.Format(Properties.Resources.ConnectingToClientSuccess, server));
+                            if (server != this.currentHost)
+                            {
+                                this.SetStatusSuccess(string.Format(Properties.Resources.ConnectingToClientSuccess, server));
+                            }
+
                             dataGridViewComputers.Rows[rowIndex].Selected = true;
 
                             Timer timer = null;
@@ -2357,7 +2392,7 @@ namespace SpotCon
             this.SetStatus(string.Format(Properties.Resources.Searching, friendlyName));
             this.dataGridViewTracks.Rows.Clear();
             this.dataGridViewArtists.Rows.Clear();
-            this.dataGridViewAlbums.Rows.Clear(); 
+            this.dataGridViewAlbums.Rows.Clear();
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (bwSender, bwArgs) =>
             {
@@ -2417,11 +2452,6 @@ namespace SpotCon
             if (string.IsNullOrEmpty(query))
             {
                 return;
-            }
-
-            foreach (DataGridViewRow row in this.dataGridViewCollections.Rows)
-            {
-                row.Selected = row.Index == 1;
             }
 
             Action action = null;
@@ -2495,6 +2525,18 @@ namespace SpotCon
 
                     this.PopulateArtistsAndAlbumFilters(tracks);
 
+                    if (this.dataGridViewCollections.Rows.Count > 1)
+                    {
+                        this.dataGridViewCollections.Tag = false;
+                        foreach (DataGridViewRow row in this.dataGridViewCollections.Rows)
+                        {
+                            row.Selected = false;
+                        }
+
+                        this.dataGridViewCollections.Rows[1].Selected = true;
+                        this.dataGridViewCollections.Tag = true;
+                    }
+
                     this.SetBusyState(false);
                     this.SetStatus(string.Format(Properties.Resources.DisplayResults, tracks.Count, tracks.Count == 1 ? string.Empty : "s", query));
                 }
@@ -2514,14 +2556,17 @@ namespace SpotCon
                                   group t by t.Artist.Href into T
                                   select T;
 
-            this.dataGridViewArtists.Rows.Add(string.Format("All ({0} artist{1})", distinctArtists.Count(), distinctArtists.Count() == 1 ? string.Empty : "s"));
-            foreach (var distinctArtist in distinctArtists)
+            if (distinctArtists.Count() > 0)
             {
-                SearchTrack track = distinctArtist.First();
-                DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(this.dataGridViewArtists, track.Artist.Name);
-                row.Tag = track;
-                this.dataGridViewArtists.Rows.Add(row);
+                this.dataGridViewArtists.Rows.Add(string.Format("All ({0} artist{1})", distinctArtists.Count(), distinctArtists.Count() == 1 ? string.Empty : "s"));
+                foreach (var distinctArtist in distinctArtists)
+                {
+                    SearchTrack track = distinctArtist.First();
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewArtists, track.Artist.Name);
+                    row.Tag = track;
+                    this.dataGridViewArtists.Rows.Add(row);
+                }
             }
 
             var distinctAlbums = from t in tracks
@@ -2529,14 +2574,17 @@ namespace SpotCon
                                  group t by t.Album.Href into T
                                  select T;
 
-            this.dataGridViewAlbums.Rows.Add(string.Format("All ({0} album{1})", distinctAlbums.Count(), distinctAlbums.Count() == 1 ? string.Empty : "s"));
-            foreach (var distinctAlbum in distinctAlbums)
+            if (distinctAlbums.Count() > 0)
             {
-                SearchTrack track = distinctAlbum.First();
-                DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(this.dataGridViewAlbums, track.Album.Name, track.Album.Released);
-                row.Tag = distinctAlbum.ToList();
-                this.dataGridViewAlbums.Rows.Add(row);
+                this.dataGridViewAlbums.Rows.Add(string.Format("All ({0} album{1})", distinctAlbums.Count(), distinctAlbums.Count() == 1 ? string.Empty : "s"));
+                foreach (var distinctAlbum in distinctAlbums)
+                {
+                    SearchTrack track = distinctAlbum.First();
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewAlbums, track.Album.Name, track.Album.Released);
+                    row.Tag = distinctAlbum.ToList();
+                    this.dataGridViewAlbums.Rows.Add(row);
+                }
             }
         }
 
@@ -2551,14 +2599,17 @@ namespace SpotCon
                                   group t by t.Artist.Href into T
                                   select T;
 
-            this.dataGridViewArtists.Rows.Add(string.Format("All ({0} artist{1})", distinctArtists.Count(), distinctArtists.Count() == 1 ? string.Empty : "s"));
-            foreach (var distinctArtist in distinctArtists)
+            if (distinctArtists.Count() > 0)
             {
-                Track track = distinctArtist.First();
-                DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(this.dataGridViewArtists, track.Artist.Name);
-                row.Tag = track;
-                this.dataGridViewArtists.Rows.Add(row);
+                int index = this.dataGridViewArtists.Rows.Add(string.Format("All ({0} artist{1})", distinctArtists.Count(), distinctArtists.Count() == 1 ? string.Empty : "s"));
+                foreach (var distinctArtist in distinctArtists)
+                {
+                    Track track = distinctArtist.First();
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewArtists, track.Artist.Name);
+                    row.Tag = track;
+                    this.dataGridViewArtists.Rows.Add(row);
+                }
             }
 
             var distinctAlbums = from t in tracks
@@ -2566,14 +2617,19 @@ namespace SpotCon
                                  group t by t.Album.Href into T
                                  select T;
 
-            this.dataGridViewAlbums.Rows.Add(string.Format("All ({0} album{1})", distinctAlbums.Count(), distinctAlbums.Count() == 1 ? string.Empty : "s"));
-            foreach (var distinctAlbum in distinctAlbums)
+            if (distinctAlbums.Count() > 0)
             {
-                Track track = distinctAlbum.First();
-                DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(this.dataGridViewAlbums, track.Album.Name, track.Album.Released);
-                row.Tag = distinctAlbum.ToList();
-                this.dataGridViewAlbums.Rows.Add(row);
+                int count = 0;
+                this.dataGridViewAlbums.Rows.Add(string.Format("All ({0} album{1})", distinctAlbums.Count(), distinctAlbums.Count() == 1 ? string.Empty : "s"));
+                foreach (var distinctAlbum in distinctAlbums)
+                {
+                    Track track = distinctAlbum.First();
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewAlbums, track.Album.Name, track.Album.Released);
+                    row.Tag = distinctAlbum.ToList();
+                    row.DefaultCellStyle = ++count % 2 == 0 ? this.dataGridViewAlbums.DefaultCellStyle : this.alternateStyle;
+                    this.dataGridViewAlbums.Rows.Add(row);
+                }
             }
         }
 
@@ -2588,6 +2644,7 @@ namespace SpotCon
                                   group t by t.Artist.Href into T
                                   select T;
 
+            int count = 0;
             DataGridViewRow row = null;
             this.dataGridViewArtists.Rows.Add(string.Format("All ({0} artist{1})", distinctArtists.Count(), distinctArtists.Count() == 1 ? string.Empty : "s"));
             foreach (var distinctArtist in distinctArtists)
@@ -2597,6 +2654,7 @@ namespace SpotCon
                 row.CreateCells(this.dataGridViewArtists, track.Artist.Name);
                 row.Tag = track;
                 this.dataGridViewArtists.Rows.Add(row);
+                row.DefaultCellStyle = count++ == 0 ? this.dataGridViewArtists.DefaultCellStyle : this.alternateStyle;
             }
 
             this.dataGridViewAlbums.Rows.Add("All (1 album)");
@@ -3542,6 +3600,11 @@ namespace SpotCon
         /// <param name="e">Event arguments</param>
         private void dataGridViewCollections_SelectionChanged(object sender, EventArgs e)
         {
+            if (this.dataGridViewCollections.Tag != null && !(bool)this.dataGridViewCollections.Tag)
+            {
+                return;
+            }
+
             if (this.dataGridViewCollections.SelectedRows.Count > 1 && this.dataGridViewCollections.Rows[1].Selected)
             {
                 this.dataGridViewCollections.Rows[1].Selected = false;
@@ -3557,21 +3620,11 @@ namespace SpotCon
                     }
                 }
 
-                if (this.dataGridViewCollections.Rows.Count == 3)
-                {
-                    return;
-                }
-
                 this.dataGridViewTracks.Rows.Clear();
                 this.DisplayCollectionTracks();
             }
             else
             {
-                if (this.dataGridViewCollections.Rows.Count == 3)
-                {
-                    return;
-                }
-
                 List<string> selectedColletions = new List<string>();
                 foreach (DataGridViewRow row in this.dataGridViewCollections.SelectedRows)
                 {
@@ -3589,13 +3642,22 @@ namespace SpotCon
         /// <param name="e">Event arguments</param>
         private void dataGridViewArtists_SelectionChanged(object sender, EventArgs e)
         {
-            if (dataGridViewArtists.Rows.Count == 2)
+            int visibleRows = 0;
+            foreach (DataGridViewRow row in this.dataGridViewArtists.Rows)
+            {
+                if (row.Visible)
+                {
+                    visibleRows++;
+                }
+            }
+
+            if (visibleRows == 2)
             {
                 // If there's only one artist, switching between "All artists" and the artist will give the same results
                 return;
             }
 
-            if (dataGridViewArtists.Rows[0].Selected)
+            if (this.dataGridViewArtists.Rows[0].Selected)
             {
                 foreach (DataGridViewRow row in this.dataGridViewArtists.SelectedRows)
                 {
@@ -3616,6 +3678,8 @@ namespace SpotCon
                 {
                     // Subtract one for "All albums" row
                     this.dataGridViewAlbums.Rows[0].SetValues(string.Format("All ({0} album{1})", count - 1, count - 1 == 1 ? string.Empty : "s"));
+                    this.dataGridViewAlbums.Rows[0].Selected = false;
+                    this.dataGridViewAlbums.Rows[0].Selected = true;
                 }
 
                 count = 0;
@@ -3626,7 +3690,7 @@ namespace SpotCon
                     row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
                 }
             }
-            else
+            else if (this.dataGridViewArtists.SelectedRows.Count > 0)
             {
                 List<string> selectedArtistHrefs = new List<string>();
                 foreach (DataGridViewRow row in this.dataGridViewArtists.SelectedRows)
@@ -3727,7 +3791,16 @@ namespace SpotCon
         /// <param name="e">Event arguments</param>
         private void dataGridViewAlbums_SelectionChanged(object sender, EventArgs e)
         {
-            if (this.dataGridViewAlbums.Rows.Count <= 2 || this.dataGridViewArtists.Rows.Count < 2)
+            int numVisibleRows = 0;
+            foreach (DataGridViewRow row in this.dataGridViewAlbums.Rows)
+            {
+                if (row.Visible)
+                {
+                    numVisibleRows++;
+                }
+            }
+
+            if (numVisibleRows <= 2 || this.dataGridViewArtists.Rows.Count < 2)
             {
                 // Return if the data grids haven't been fully populated yet or 
                 // if there's only one album, switching between "All albums" and the album will give the same results
@@ -3769,6 +3842,11 @@ namespace SpotCon
                             if (row.Tag is List<SearchTrack>)
                             {
                                 List<SearchTrack> tracks = row.Tag as List<SearchTrack>;
+                                selectedAlbumHrefs.Add(tracks[0].Album.Href);
+                            }
+                            else if (row.Tag is List<Track>)
+                            {
+                                List<Track> tracks = row.Tag as List<Track>;
                                 selectedAlbumHrefs.Add(tracks[0].Album.Href);
                             }
                             else if (row.Tag is Album)
@@ -3858,21 +3936,59 @@ namespace SpotCon
             {
                 if (this.collections.ContainsKey(anc.CollectionName))
                 {
-                    MessageBox.Show(Properties.Resources.CollectionAlreadyExists, this.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Properties.Resources.CollectionAlreadyExists, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    List<string> hrefs = new List<string>();
-                    foreach (DataGridViewRow row in this.dataGridViewTracks.Rows)
-                    {
-                        hrefs.Add(this.GetTrackHrefFromTag(row.Tag).Replace("spotify:track:", string.Empty));
-                    }
-
-                    this.collections[anc.CollectionName] = hrefs;
-                    this.dataGridViewCollections.Rows.Add(anc.CollectionName);
-                    this.SaveCollections();
+                    this.AddTracksToCollection(anc.CollectionName);
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds the selected tracks to the given collection
+        /// </summary>
+        /// <param name="collectionName">Name of collection to add to</param>
+        private void AddTracksToCollection(string collectionName)
+        {
+            HashSet<string> hrefs = new HashSet<string>();
+            foreach (DataGridViewRow row in this.dataGridViewTracks.SelectedRows)
+            {
+                // DataGridView is stupid and selects hidden rows if you shift-click to select multiple rows
+                if (row.Visible)
+                {
+                    hrefs.Add(this.GetTrackHrefFromTag(row.Tag).Replace("spotify:track:", string.Empty));
+                }
+            }
+
+            if (!this.collections.Any())
+            {
+                this.dataGridViewCollections.Rows.Insert(0, "(All)");
+                this.addToCollectionToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+            }
+
+            if (this.collections.ContainsKey(collectionName))
+            {
+                foreach (string href in hrefs)
+                {
+                    this.collections[collectionName].Add(href);
+                }
+            }
+            else
+            {
+                ToolStripMenuItem item = new ToolStripMenuItem(collectionName);
+                item.Click += (iSender, iArgs) =>
+                {
+                    this.AddTracksToCollection(collectionName);
+                };
+
+                this.addToCollectionToolStripMenuItem.DropDownItems.Add(item);
+
+                this.collections[collectionName] = hrefs;
+                this.dataGridViewCollections.Rows.Add(collectionName);
+            }
+
+            this.SaveCollections();
         }
 
         /// <summary>
@@ -3956,7 +4072,7 @@ namespace SpotCon
                 }
                 else
                 {
-                    MessageBox.Show(Properties.Resources.NoDuplicatesFound, this.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Properties.Resources.NoDuplicatesFound, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             };
 

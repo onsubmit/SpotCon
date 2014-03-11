@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpotConForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -39,7 +40,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.panelFooter = new System.Windows.Forms.Panel();
             this.labelTime = new System.Windows.Forms.Label();
@@ -61,6 +61,13 @@
             this.labelStatus = new System.Windows.Forms.Label();
             this.panelMain = new System.Windows.Forms.Panel();
             this.dataGridViewTracks = new System.Windows.Forms.DataGridView();
+            this.ColumnEmpty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTrackNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTrack = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnArtist = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPopularity = new System.Windows.Forms.DataGridViewImageColumn();
+            this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
             this.contextMenuStripTracks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -92,13 +99,6 @@
             this.HeaderConnected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnEmpty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnTrackNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnTrack = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnArtist = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPopularity = new System.Windows.Forms.DataGridViewImageColumn();
-            this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelFooter.SuspendLayout();
             this.panelVolume.SuspendLayout();
@@ -446,6 +446,86 @@
             this.dataGridViewTracks.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTracks_SortCompare);
             this.dataGridViewTracks.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragDrop);
             this.dataGridViewTracks.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragEnter);
+            // 
+            // ColumnEmpty
+            // 
+            this.ColumnEmpty.HeaderText = "";
+            this.ColumnEmpty.MinimumWidth = 20;
+            this.ColumnEmpty.Name = "ColumnEmpty";
+            this.ColumnEmpty.ReadOnly = true;
+            this.ColumnEmpty.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColumnEmpty.Width = 20;
+            // 
+            // ColumnTrackNo
+            // 
+            this.ColumnTrackNo.HeaderText = "#";
+            this.ColumnTrackNo.MinimumWidth = 25;
+            this.ColumnTrackNo.Name = "ColumnTrackNo";
+            this.ColumnTrackNo.ReadOnly = true;
+            this.ColumnTrackNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnTrackNo.Width = 25;
+            // 
+            // ColumnTrack
+            // 
+            this.ColumnTrack.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnTrack.FillWeight = 25F;
+            this.ColumnTrack.HeaderText = "Track";
+            this.ColumnTrack.MinimumWidth = 50;
+            this.ColumnTrack.Name = "ColumnTrack";
+            this.ColumnTrack.ReadOnly = true;
+            this.ColumnTrack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // ColumnArtist
+            // 
+            this.ColumnArtist.ActiveLinkColor = System.Drawing.SystemColors.ControlText;
+            this.ColumnArtist.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnArtist.FillWeight = 25F;
+            this.ColumnArtist.HeaderText = "Artist";
+            this.ColumnArtist.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.ColumnArtist.LinkColor = System.Drawing.SystemColors.ControlText;
+            this.ColumnArtist.MinimumWidth = 50;
+            this.ColumnArtist.Name = "ColumnArtist";
+            this.ColumnArtist.ReadOnly = true;
+            this.ColumnArtist.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnArtist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnArtist.TrackVisitedState = false;
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 50;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnTime.Width = 60;
+            // 
+            // ColumnPopularity
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+            this.ColumnPopularity.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ColumnPopularity.HeaderText = "Popularity";
+            this.ColumnPopularity.MinimumWidth = 90;
+            this.ColumnPopularity.Name = "ColumnPopularity";
+            this.ColumnPopularity.ReadOnly = true;
+            this.ColumnPopularity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColumnPopularity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnPopularity.Width = 90;
+            // 
+            // ColumnAlbum
+            // 
+            this.ColumnAlbum.ActiveLinkColor = System.Drawing.SystemColors.ControlText;
+            this.ColumnAlbum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnAlbum.FillWeight = 25F;
+            this.ColumnAlbum.HeaderText = "Album";
+            this.ColumnAlbum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.ColumnAlbum.LinkColor = System.Drawing.SystemColors.ControlText;
+            this.ColumnAlbum.MinimumWidth = 50;
+            this.ColumnAlbum.Name = "ColumnAlbum";
+            this.ColumnAlbum.ReadOnly = true;
+            this.ColumnAlbum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnAlbum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnAlbum.TrackVisitedState = false;
             // 
             // contextMenuStripTracks
             // 
@@ -885,86 +965,6 @@
             this.HeaderName.HeaderText = "Name";
             this.HeaderName.Name = "HeaderName";
             this.HeaderName.ReadOnly = true;
-            // 
-            // ColumnEmpty
-            // 
-            this.ColumnEmpty.HeaderText = "";
-            this.ColumnEmpty.MinimumWidth = 20;
-            this.ColumnEmpty.Name = "ColumnEmpty";
-            this.ColumnEmpty.ReadOnly = true;
-            this.ColumnEmpty.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnEmpty.Width = 20;
-            // 
-            // ColumnTrackNo
-            // 
-            this.ColumnTrackNo.HeaderText = "#";
-            this.ColumnTrackNo.MinimumWidth = 25;
-            this.ColumnTrackNo.Name = "ColumnTrackNo";
-            this.ColumnTrackNo.ReadOnly = true;
-            this.ColumnTrackNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnTrackNo.Width = 25;
-            // 
-            // ColumnTrack
-            // 
-            this.ColumnTrack.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnTrack.FillWeight = 25F;
-            this.ColumnTrack.HeaderText = "Track";
-            this.ColumnTrack.MinimumWidth = 50;
-            this.ColumnTrack.Name = "ColumnTrack";
-            this.ColumnTrack.ReadOnly = true;
-            this.ColumnTrack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            // 
-            // ColumnArtist
-            // 
-            this.ColumnArtist.ActiveLinkColor = System.Drawing.SystemColors.ControlText;
-            this.ColumnArtist.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnArtist.FillWeight = 25F;
-            this.ColumnArtist.HeaderText = "Artist";
-            this.ColumnArtist.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.ColumnArtist.LinkColor = System.Drawing.SystemColors.ControlText;
-            this.ColumnArtist.MinimumWidth = 50;
-            this.ColumnArtist.Name = "ColumnArtist";
-            this.ColumnArtist.ReadOnly = true;
-            this.ColumnArtist.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnArtist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnArtist.TrackVisitedState = false;
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 50;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnTime.Width = 60;
-            // 
-            // ColumnPopularity
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
-            this.ColumnPopularity.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColumnPopularity.HeaderText = "Popularity";
-            this.ColumnPopularity.MinimumWidth = 90;
-            this.ColumnPopularity.Name = "ColumnPopularity";
-            this.ColumnPopularity.ReadOnly = true;
-            this.ColumnPopularity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnPopularity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnPopularity.Width = 90;
-            // 
-            // ColumnAlbum
-            // 
-            this.ColumnAlbum.ActiveLinkColor = System.Drawing.SystemColors.ControlText;
-            this.ColumnAlbum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnAlbum.FillWeight = 25F;
-            this.ColumnAlbum.HeaderText = "Album";
-            this.ColumnAlbum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.ColumnAlbum.LinkColor = System.Drawing.SystemColors.ControlText;
-            this.ColumnAlbum.MinimumWidth = 50;
-            this.ColumnAlbum.Name = "ColumnAlbum";
-            this.ColumnAlbum.ReadOnly = true;
-            this.ColumnAlbum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnAlbum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnAlbum.TrackVisitedState = false;
             // 
             // SpotConForm
             // 

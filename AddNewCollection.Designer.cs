@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddNewCollection));
             this.labelCollection = new System.Windows.Forms.Label();
             this.textBoxCollection = new System.Windows.Forms.TextBox();
             this.buttonOK = new System.Windows.Forms.Button();
@@ -85,8 +86,10 @@
             this.Controls.Add(this.textBoxCollection);
             this.Controls.Add(this.labelCollection);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AddNewCollection";
-            this.Text = "AddNewCollection";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Add New Collection";
             this.ResumeLayout(false);
             this.PerformLayout();
 

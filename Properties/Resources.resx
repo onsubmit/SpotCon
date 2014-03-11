@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AttemptingConnections" xml:space="preserve">
-    <value>Attempting connections to clients...</value>
-  </data>
   <data name="ClientConnected" xml:space="preserve">
     <value>Client {0} successfully connected</value>
   </data>
@@ -435,5 +432,8 @@
   </data>
   <data name="CollectionAlreadyExists" xml:space="preserve">
     <value>A collection named "{0}" already exists.</value>
+  </data>
+  <data name="LoadingCollection" xml:space="preserve">
+    <value>Loading collection...</value>
   </data>
 </root>

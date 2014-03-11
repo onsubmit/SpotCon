@@ -61,15 +61,6 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attempting connections to clients....
-        /// </summary>
-        internal static string AttemptingConnections {
-            get {
-                return ResourceManager.GetString("AttemptingConnections", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Back {
@@ -326,6 +317,15 @@ namespace SpotCon.Properties {
             get {
                 object obj = ResourceManager.GetObject("ImportPlaylist", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading collection....
+        /// </summary>
+        internal static string LoadingCollection {
+            get {
+                return ResourceManager.GetString("LoadingCollection", resourceCulture);
             }
         }
         

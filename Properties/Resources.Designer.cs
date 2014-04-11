@@ -130,15 +130,6 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A collection named &quot;{0}&quot; already exists..
-        /// </summary>
-        internal static string CollectionAlreadyExists {
-            get {
-                return ResourceManager.GetString("CollectionAlreadyExists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Computer {
@@ -317,15 +308,6 @@ namespace SpotCon.Properties {
             get {
                 object obj = ResourceManager.GetObject("ImportPlaylist", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Loading collection....
-        /// </summary>
-        internal static string LoadingCollection {
-            get {
-                return ResourceManager.GetString("LoadingCollection", resourceCulture);
             }
         }
         

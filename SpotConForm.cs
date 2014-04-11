@@ -194,11 +194,6 @@ namespace SpotCon
         private Dictionary<string, Action<string, string, string>> commands;
 
         /// <summary>
-        /// List of collections and their corresponding tracks
-        /// </summary>
-        private Dictionary<string, HashSet<string>> collections = new Dictionary<string, HashSet<string>>();
-
-        /// <summary>
         /// Maps artist name to a Spotify artist href
         /// </summary>
         /// <example>The Naked and Famous|||spotify:artist:0oeUpvxWsC8bWS6SnpU8b9</example>
@@ -301,11 +296,6 @@ namespace SpotCon
         /// Indicates if the form was previously maximized
         /// </summary>
         private bool wasMaximized = false;
-
-        /// <summary>
-        /// The relative width of the collections data grid
-        /// </summary>
-        private double collectionPercentage;
 
         /// <summary>
         /// The relative width of the album data grid
@@ -844,8 +834,6 @@ namespace SpotCon
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup", "Tracks"));
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup", "Albums"));
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Search"));
-            this.ReadCollections();
-            this.DisplayCollectionList();
             this.LoadImportPlugins();
             this.ReadArtistCache();
             this.ReadMisspelledArtistCache();
@@ -858,13 +846,11 @@ namespace SpotCon
                 BackColor = Color.FromArgb(232, 230, 226)
             };
 
-            this.dataGridViewCollections.AlternatingRowsDefaultCellStyle =
             this.dataGridViewArtists.AlternatingRowsDefaultCellStyle =
             this.dataGridViewAlbums.AlternatingRowsDefaultCellStyle =
             this.dataGridViewTracks.AlternatingRowsDefaultCellStyle =
             this.alternateStyle;
 
-            this.collectionPercentage = (double)this.dataGridViewCollections.Width / (double)this.dataGridViewTracks.Width;
             this.albumPercentage = (double)this.dataGridViewAlbums.Width / (double)this.dataGridViewTracks.Width;
 
             BackgroundWorker bw = new BackgroundWorker();
@@ -938,6 +924,9 @@ namespace SpotCon
 
             bw.RunWorkerCompleted += (bwSender, bwArgs) =>
             {
+                this.ClearStatus();
+                this.SetBusyState(false);
+
                 if (bwArgs.Result is Exception)
                 {
                     Exception ex = bwArgs.Result as Exception;
@@ -1006,140 +995,6 @@ namespace SpotCon
             };
 
             bw.RunWorkerAsync(bw);
-        }
-
-        /// <summary>
-        /// Displays all the tracks in the collection
-        /// </summary>
-        /// <param name="specificCollections">Specific collections to display</param>
-        private void DisplayCollectionTracks(List<string> specificCollections = null)
-        {
-            BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
-            var tracksToAdd = this.collections.Where(kvp => specificCollections == null || specificCollections.Contains(kvp.Key)).Select(kvp => kvp.Value);
-            int numTracks = tracksToAdd.Sum(h => h.Count);
-
-            bw.DoWork += (bwSender, bwArgs) =>
-            {
-                int i = 0;
-                List<Track> tracks = new List<Track>();
-                foreach (var hrefs in tracksToAdd)
-                {
-                    foreach (var href in hrefs)
-                    {
-                        bw.ReportProgress(0, ++i);
-                        Track track = null;
-                        if (cachedLookupTracks.ContainsKey(href))
-                        {
-                            track = cachedLookupTracks[href];
-                        }
-                        else
-                        {
-                            string path = Path.Combine(Application.UserAppDataPath, "Lookup", "Tracks", href + ".xml");
-                            if (File.Exists(path))
-                            {
-                                track = SpotifyService.Deserialize<Track>(File.ReadAllText(path));
-                            }
-                            else
-                            {
-                                track = lookup.Value.LookupTrack(href);
-                                SpotifyService.Serialize(track, path);
-                            }
-
-                            track.Href = "spotify:track:" + href;
-                            this.cachedLookupTracks[href] = track;
-                        }
-
-                        string albumHref = track.Album.Href.Replace("spotify:album:", string.Empty);
-                        string albumPath = Path.Combine(Application.UserAppDataPath, "Lookup", "Albums", albumHref + ".xml");
-
-                        Album album = null;
-                        if (this.cachedLookupAlbums.ContainsKey(albumHref))
-                        {
-                            album = this.cachedLookupAlbums[albumHref];
-                        }
-                        else if (File.Exists(albumPath))
-                        {
-                            album = SpotifyService.Deserialize<Album>(File.ReadAllText(albumPath));
-                        }
-                        else
-                        {
-                            album = lookup.Value.LookupAlbum(albumHref);
-                            SpotifyService.Serialize(album, albumPath);
-                        }
-
-                        track.Album.Released = album.Released.Value;
-
-                        tracks.Add(track);
-                    }
-                }
-
-                bwArgs.Result = tracks;
-            };
-
-            bw.ProgressChanged += (bwSender, bwArgs) =>
-            {
-                int count = (int)bwArgs.UserState;
-                this.SetProgressBar(count, numTracks);
-            };
-
-            bw.RunWorkerCompleted += (bwSender, bwArgs) =>
-            {
-                List<Track> tracks = bwArgs.Result as List<Track>;
-                foreach (Track track in tracks)
-                {
-                    DataGridViewRow row = new DataGridViewRow();
-                    row.CreateCells(this.dataGridViewTracks, null, track.TrackNumber, track.Name, track.Artist.Name, TimeSpan.FromSeconds((double)track.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(track.Popularity), track.Album.Name);
-                    row.Cells[(int)TrackColumns.Popularity].Tag = track.Popularity;
-                    row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
-                    row.Cells[(int)TrackColumns.Time].Tag = track.Length.Value;
-                    row.Tag = track;
-                    this.dataGridViewTracks.Rows.Add(row);
-                }
-
-                this.PopulateArtistsAndAlbumFilters(tracks);
-
-                this.ClearStatus();
-                this.HideProgressBar();
-                this.SetBusyState(false);
-            };
-
-            this.dataGridViewTracks.Rows.Clear();
-            this.dataGridViewArtists.Rows.Clear();
-            this.dataGridViewAlbums.Rows.Clear();
-
-            this.SetBusyState(true);
-            this.SetProgressBar(0, numTracks);
-            this.SetStatus(Properties.Resources.LoadingCollection);
-            bw.RunWorkerAsync();
-        }
-
-        /// <summary>
-        /// Displays the list of collections
-        /// </summary>
-        private void DisplayCollectionList()
-        {
-            if (this.collections.Any())
-            {
-                this.dataGridViewCollections.Rows.Add("(All)");
-                this.dataGridViewCollections.Rows.Add("(Search)");
-                addToCollectionToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
-
-                foreach (var kvp in this.collections)
-                {
-                    ToolStripMenuItem item = new ToolStripMenuItem(kvp.Key);
-                    item.Click += (sender, e) =>
-                    {
-                        this.AddTracksToCollection(kvp.Key);
-                    };
-
-                    this.dataGridViewCollections.Rows.Add(kvp.Key);
-                    this.addToCollectionToolStripMenuItem.DropDownItems.Add(item);
-                }
-            }
-            else
-            {
-                this.dataGridViewCollections.Rows.Add("(Search)");
-            }
         }
 
         /// <summary>
@@ -1822,18 +1677,6 @@ namespace SpotCon
         }
 
         /// <summary>
-        /// Reads the collections
-        /// </summary>
-        private void ReadCollections()
-        {
-            foreach (string collections in Properties.Settings.Default.Collections)
-            {
-                string[] split = collections.Split(new string[] { "|||" }, StringSplitOptions.None);
-                this.collections.Add(split[0], new HashSet<string>(split[1].Split(',').ToList()));
-            }
-        }
-
-        /// <summary>
         /// Saves the track cache
         /// </summary>
         private void SaveSearchTrackCache()
@@ -1841,17 +1684,6 @@ namespace SpotCon
             StringCollection sc = new StringCollection();
             sc.AddRange(this.cachedSearchTracks.Select(kvp => kvp.Key).ToArray());
             Properties.Settings.Default.CachedSearchTracks = sc;
-            Properties.Settings.Default.Save();
-        }
-
-        /// <summary>
-        /// Saves the collections
-        /// </summary>
-        private void SaveCollections()
-        {
-            StringCollection sc = new StringCollection();
-            sc.AddRange(this.collections.Select(kvp => string.Format("{0}|||{1}", kvp.Key, string.Join(",", kvp.Value))).ToArray());
-            Properties.Settings.Default.Collections = sc;
             Properties.Settings.Default.Save();
         }
 
@@ -2525,18 +2357,6 @@ namespace SpotCon
 
                     this.PopulateArtistsAndAlbumFilters(tracks);
 
-                    if (this.dataGridViewCollections.Rows.Count > 1)
-                    {
-                        this.dataGridViewCollections.Tag = false;
-                        foreach (DataGridViewRow row in this.dataGridViewCollections.Rows)
-                        {
-                            row.Selected = false;
-                        }
-
-                        this.dataGridViewCollections.Rows[1].Selected = true;
-                        this.dataGridViewCollections.Tag = true;
-                    }
-
                     this.SetBusyState(false);
                     this.SetStatus(string.Format(Properties.Resources.DisplayResults, tracks.Count, tracks.Count == 1 ? string.Empty : "s", query));
                 }
@@ -3196,7 +3016,6 @@ namespace SpotCon
         private void SpotConForm_ResizeBegin(object sender, EventArgs e)
         {
             this.panelFilter.SuspendLayout();
-            this.collectionPercentage = (double)this.dataGridViewCollections.Width / (double)this.dataGridViewTracks.Width;
             this.albumPercentage = (double)this.dataGridViewAlbums.Width / (double)this.dataGridViewTracks.Width;
         }
 
@@ -3208,7 +3027,6 @@ namespace SpotCon
         private void SpotConForm_ResizeEnd(object sender, EventArgs e)
         {
             this.panelFilter.ResumeLayout();
-            this.dataGridViewCollections.Width = (int)Math.Round(this.dataGridViewTracks.Width * this.collectionPercentage);
             this.dataGridViewAlbums.Width = (int)Math.Round(this.dataGridViewTracks.Width * this.albumPercentage);
         }
 
@@ -3222,9 +3040,8 @@ namespace SpotCon
             if (this.WindowState == FormWindowState.Maximized || (this.wasMaximized && this.WindowState == FormWindowState.Normal))
             {
                 this.wasMaximized = !this.wasMaximized;
-                this.dataGridViewCollections.Width = (int)Math.Round(this.dataGridViewTracks.Width * this.collectionPercentage);
                 this.dataGridViewAlbums.Width = (int)Math.Round(this.dataGridViewTracks.Width * this.albumPercentage);
-                this.dataGridViewCollections.Visible = this.dataGridViewArtists.Visible = this.dataGridViewAlbums.Visible = true;
+                this.dataGridViewArtists.Visible = this.dataGridViewAlbums.Visible = true;
             }
         }
 
@@ -3236,16 +3053,6 @@ namespace SpotCon
         private void splitterFilterRight_SplitterMoved(object sender, SplitterEventArgs e)
         {
             this.albumPercentage = (double)this.dataGridViewAlbums.Width / (double)this.dataGridViewTracks.Width;
-        }
-
-        /// <summary>
-        /// splitterFilterLeft SplitterMoved event
-        /// </summary>
-        /// <param name="sender">What raised the event</param>
-        /// <param name="e">Event arguments</param>
-        private void splitterFilterLeft_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            this.collectionPercentage = (double)this.dataGridViewCollections.Width / (double)this.dataGridViewTracks.Width;
         }
 
         /// <summary>
@@ -3594,69 +3401,12 @@ namespace SpotCon
         }
 
         /// <summary>
-        /// dataGridViewCollections SelectionChanged event
-        /// </summary>
-        /// <param name="sender">What raised the event</param>
-        /// <param name="e">Event arguments</param>
-        private void dataGridViewCollections_SelectionChanged(object sender, EventArgs e)
-        {
-            if (this.dataGridViewCollections.Tag != null && !(bool)this.dataGridViewCollections.Tag)
-            {
-                return;
-            }
-
-            if (this.dataGridViewCollections.SelectedRows.Count > 1 && this.dataGridViewCollections.Rows[1].Selected)
-            {
-                this.dataGridViewCollections.Rows[1].Selected = false;
-            }
-
-            if (this.dataGridViewCollections.Rows[0].Selected)
-            {
-                foreach (DataGridViewRow row in this.dataGridViewCollections.SelectedRows)
-                {
-                    if (row.Index != 0)
-                    {
-                        row.Selected = false;
-                    }
-                }
-
-                this.dataGridViewTracks.Rows.Clear();
-                this.DisplayCollectionTracks();
-            }
-            else
-            {
-                List<string> selectedColletions = new List<string>();
-                foreach (DataGridViewRow row in this.dataGridViewCollections.SelectedRows)
-                {
-                    selectedColletions.Add(row.Cells[0].Value.ToString());
-                }
-
-                this.DisplayCollectionTracks(selectedColletions);
-            }
-        }
-
-        /// <summary>
         /// dataGridViewArtists SelectionChanged event
         /// </summary>
         /// <param name="sender">What raised the event</param>
         /// <param name="e">Event arguments</param>
         private void dataGridViewArtists_SelectionChanged(object sender, EventArgs e)
         {
-            int visibleRows = 0;
-            foreach (DataGridViewRow row in this.dataGridViewArtists.Rows)
-            {
-                if (row.Visible)
-                {
-                    visibleRows++;
-                }
-            }
-
-            if (visibleRows == 2)
-            {
-                // If there's only one artist, switching between "All artists" and the artist will give the same results
-                return;
-            }
-
             if (this.dataGridViewArtists.Rows[0].Selected)
             {
                 foreach (DataGridViewRow row in this.dataGridViewArtists.SelectedRows)
@@ -3922,73 +3672,6 @@ namespace SpotCon
             {
                 this.SortTracklist((int)TrackColumns.TrackNumber, SortOrder.Ascending);
             }
-        }
-
-        /// <summary>
-        /// newCollectionToolStripMenuItem Click event
-        /// </summary>
-        /// <param name="sender">What raised the event</param>
-        /// <param name="e">Event arguments</param>
-        private void newCollectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddNewCollection anc = new AddNewCollection();
-            if (DialogResult.OK == anc.ShowDialog(this))
-            {
-                if (this.collections.ContainsKey(anc.CollectionName))
-                {
-                    MessageBox.Show(Properties.Resources.CollectionAlreadyExists, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    this.AddTracksToCollection(anc.CollectionName);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds the selected tracks to the given collection
-        /// </summary>
-        /// <param name="collectionName">Name of collection to add to</param>
-        private void AddTracksToCollection(string collectionName)
-        {
-            HashSet<string> hrefs = new HashSet<string>();
-            foreach (DataGridViewRow row in this.dataGridViewTracks.SelectedRows)
-            {
-                // DataGridView is stupid and selects hidden rows if you shift-click to select multiple rows
-                if (row.Visible)
-                {
-                    hrefs.Add(this.GetTrackHrefFromTag(row.Tag).Replace("spotify:track:", string.Empty));
-                }
-            }
-
-            if (!this.collections.Any())
-            {
-                this.dataGridViewCollections.Rows.Insert(0, "(All)");
-                this.addToCollectionToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
-            }
-
-            if (this.collections.ContainsKey(collectionName))
-            {
-                foreach (string href in hrefs)
-                {
-                    this.collections[collectionName].Add(href);
-                }
-            }
-            else
-            {
-                ToolStripMenuItem item = new ToolStripMenuItem(collectionName);
-                item.Click += (iSender, iArgs) =>
-                {
-                    this.AddTracksToCollection(collectionName);
-                };
-
-                this.addToCollectionToolStripMenuItem.DropDownItems.Add(item);
-
-                this.collections[collectionName] = hrefs;
-                this.dataGridViewCollections.Rows.Add(collectionName);
-            }
-
-            this.SaveCollections();
         }
 
         /// <summary>

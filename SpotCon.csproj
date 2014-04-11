@@ -101,12 +101,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddNewCollection.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AddNewCollection.Designer.cs">
-      <DependentUpon>AddNewCollection.cs</DependentUpon>
-    </Compile>
     <Compile Include="AlbumArtViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,9 +137,6 @@
     <Compile Include="UnknownTrack.designer.cs">
       <DependentUpon>UnknownTrack.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddNewCollection.resx">
-      <DependentUpon>AddNewCollection.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AlbumArtViewer.resx">
       <DependentUpon>AlbumArtViewer.cs</DependentUpon>
     </EmbeddedResource>

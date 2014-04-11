@@ -38,8 +38,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.panelFooter = new System.Windows.Forms.Panel();
             this.labelTime = new System.Windows.Forms.Label();
@@ -70,9 +68,6 @@
             this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
             this.contextMenuStripTracks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPlay = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.addToCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemImportPlaylist = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemFindDuplicates = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,12 +76,9 @@
             this.splitterFilterRight = new System.Windows.Forms.Splitter();
             this.dataGridViewArtists = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnArtist = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.splitterFilterLeft = new System.Windows.Forms.Splitter();
             this.dataGridViewAlbums = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnAlbum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnAlbumYear = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewCollections = new System.Windows.Forms.DataGridView();
-            this.ColumnCollection = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitterMain = new System.Windows.Forms.Splitter();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.panelPicture = new System.Windows.Forms.Panel();
@@ -110,7 +102,6 @@
             this.panelFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArtists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAlbums)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCollections)).BeginInit();
             this.panelLeft.SuspendLayout();
             this.panelPicture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -531,61 +522,37 @@
             // 
             this.contextMenuStripTracks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemPlay,
-            this.toolStripSeparator1,
-            this.addToCollectionToolStripMenuItem,
             this.toolStripSeparator2,
             this.toolStripMenuItemImportPlaylist,
             this.toolStripMenuItemFindDuplicates});
             this.contextMenuStripTracks.Name = "contextMenuStrip";
-            this.contextMenuStripTracks.Size = new System.Drawing.Size(171, 104);
+            this.contextMenuStripTracks.Size = new System.Drawing.Size(156, 76);
             // 
             // toolStripMenuItemPlay
             // 
             this.toolStripMenuItemPlay.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripMenuItemPlay.Name = "toolStripMenuItemPlay";
-            this.toolStripMenuItemPlay.Size = new System.Drawing.Size(170, 22);
+            this.toolStripMenuItemPlay.Size = new System.Drawing.Size(155, 22);
             this.toolStripMenuItemPlay.Text = "Play";
             this.toolStripMenuItemPlay.Click += new System.EventHandler(this.toolStripMenuItemPlay_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(167, 6);
-            // 
-            // addToCollectionToolStripMenuItem
-            // 
-            this.addToCollectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newCollectionToolStripMenuItem});
-            this.addToCollectionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addToCollectionToolStripMenuItem.Image")));
-            this.addToCollectionToolStripMenuItem.Name = "addToCollectionToolStripMenuItem";
-            this.addToCollectionToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-            this.addToCollectionToolStripMenuItem.Text = "Add To Collection";
-            // 
-            // newCollectionToolStripMenuItem
-            // 
-            this.newCollectionToolStripMenuItem.Image = global::SpotCon.Properties.Resources.CollectionAdd;
-            this.newCollectionToolStripMenuItem.Name = "newCollectionToolStripMenuItem";
-            this.newCollectionToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.newCollectionToolStripMenuItem.Text = "New Collection...";
-            this.newCollectionToolStripMenuItem.Click += new System.EventHandler(this.newCollectionToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(167, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(152, 6);
             // 
             // toolStripMenuItemImportPlaylist
             // 
             this.toolStripMenuItemImportPlaylist.Image = global::SpotCon.Properties.Resources.ImportPlaylist;
             this.toolStripMenuItemImportPlaylist.Name = "toolStripMenuItemImportPlaylist";
-            this.toolStripMenuItemImportPlaylist.Size = new System.Drawing.Size(170, 22);
+            this.toolStripMenuItemImportPlaylist.Size = new System.Drawing.Size(155, 22);
             this.toolStripMenuItemImportPlaylist.Text = "Import Playlist";
             // 
             // toolStripMenuItemFindDuplicates
             // 
             this.toolStripMenuItemFindDuplicates.Image = global::SpotCon.Properties.Resources.FindDuplicates;
             this.toolStripMenuItemFindDuplicates.Name = "toolStripMenuItemFindDuplicates";
-            this.toolStripMenuItemFindDuplicates.Size = new System.Drawing.Size(170, 22);
+            this.toolStripMenuItemFindDuplicates.Size = new System.Drawing.Size(155, 22);
             this.toolStripMenuItemFindDuplicates.Text = "Find Duplicates";
             this.toolStripMenuItemFindDuplicates.Click += new System.EventHandler(this.toolStripMenuItemFindDuplicates_Click);
             // 
@@ -609,9 +576,7 @@
             this.panelFilter.BackColor = System.Drawing.SystemColors.Control;
             this.panelFilter.Controls.Add(this.splitterFilterRight);
             this.panelFilter.Controls.Add(this.dataGridViewArtists);
-            this.panelFilter.Controls.Add(this.splitterFilterLeft);
             this.panelFilter.Controls.Add(this.dataGridViewAlbums);
-            this.panelFilter.Controls.Add(this.dataGridViewCollections);
             this.panelFilter.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelFilter.Location = new System.Drawing.Point(152, 0);
             this.panelFilter.Name = "panelFilter";
@@ -622,7 +587,7 @@
             // 
             this.splitterFilterRight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(213)))), ((int)(((byte)(213)))), ((int)(((byte)(213)))));
             this.splitterFilterRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitterFilterRight.Location = new System.Drawing.Point(554, 0);
+            this.splitterFilterRight.Location = new System.Drawing.Point(415, 0);
             this.splitterFilterRight.Name = "splitterFilterRight";
             this.splitterFilterRight.Size = new System.Drawing.Size(1, 125);
             this.splitterFilterRight.TabIndex = 19;
@@ -659,14 +624,14 @@
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewArtists.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewArtists.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewArtists.Location = new System.Drawing.Point(278, 0);
+            this.dataGridViewArtists.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewArtists.Margin = new System.Windows.Forms.Padding(0);
             this.dataGridViewArtists.Name = "dataGridViewArtists";
             this.dataGridViewArtists.ReadOnly = true;
             this.dataGridViewArtists.RowHeadersVisible = false;
             this.dataGridViewArtists.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewArtists.ShowEditingIcon = false;
-            this.dataGridViewArtists.Size = new System.Drawing.Size(277, 125);
+            this.dataGridViewArtists.Size = new System.Drawing.Size(416, 125);
             this.dataGridViewArtists.TabIndex = 16;
             this.dataGridViewArtists.SelectionChanged += new System.EventHandler(this.dataGridViewArtists_SelectionChanged);
             // 
@@ -676,16 +641,6 @@
             this.dataGridViewTextBoxColumnArtist.HeaderText = "Artist";
             this.dataGridViewTextBoxColumnArtist.Name = "dataGridViewTextBoxColumnArtist";
             this.dataGridViewTextBoxColumnArtist.ReadOnly = true;
-            // 
-            // splitterFilterLeft
-            // 
-            this.splitterFilterLeft.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(213)))), ((int)(((byte)(213)))), ((int)(((byte)(213)))));
-            this.splitterFilterLeft.Location = new System.Drawing.Point(277, 0);
-            this.splitterFilterLeft.Name = "splitterFilterLeft";
-            this.splitterFilterLeft.Size = new System.Drawing.Size(1, 125);
-            this.splitterFilterLeft.TabIndex = 18;
-            this.splitterFilterLeft.TabStop = false;
-            this.splitterFilterLeft.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterFilterLeft_SplitterMoved);
             // 
             // dataGridViewAlbums
             // 
@@ -718,14 +673,14 @@
             dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewAlbums.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewAlbums.Dock = System.Windows.Forms.DockStyle.Right;
-            this.dataGridViewAlbums.Location = new System.Drawing.Point(555, 0);
+            this.dataGridViewAlbums.Location = new System.Drawing.Point(416, 0);
             this.dataGridViewAlbums.Margin = new System.Windows.Forms.Padding(0);
             this.dataGridViewAlbums.Name = "dataGridViewAlbums";
             this.dataGridViewAlbums.ReadOnly = true;
             this.dataGridViewAlbums.RowHeadersVisible = false;
             this.dataGridViewAlbums.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewAlbums.ShowEditingIcon = false;
-            this.dataGridViewAlbums.Size = new System.Drawing.Size(277, 125);
+            this.dataGridViewAlbums.Size = new System.Drawing.Size(416, 125);
             this.dataGridViewAlbums.TabIndex = 17;
             this.dataGridViewAlbums.SelectionChanged += new System.EventHandler(this.dataGridViewAlbums_SelectionChanged);
             // 
@@ -745,54 +700,6 @@
             this.ColumnAlbumYear.MinimumWidth = 20;
             this.ColumnAlbumYear.Name = "ColumnAlbumYear";
             this.ColumnAlbumYear.ReadOnly = true;
-            // 
-            // dataGridViewCollections
-            // 
-            this.dataGridViewCollections.AllowDrop = true;
-            this.dataGridViewCollections.AllowUserToAddRows = false;
-            this.dataGridViewCollections.AllowUserToDeleteRows = false;
-            this.dataGridViewCollections.AllowUserToResizeRows = false;
-            this.dataGridViewCollections.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dataGridViewCollections.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridViewCollections.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.dataGridViewCollections.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewCollections.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
-            this.dataGridViewCollections.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewCollections.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnCollection});
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(253)))), ((int)(((byte)(251)))));
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(122)))), ((int)(((byte)(184)))), ((int)(((byte)(0)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewCollections.DefaultCellStyle = dataGridViewCellStyle9;
-            this.dataGridViewCollections.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGridViewCollections.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewCollections.Margin = new System.Windows.Forms.Padding(0);
-            this.dataGridViewCollections.Name = "dataGridViewCollections";
-            this.dataGridViewCollections.ReadOnly = true;
-            this.dataGridViewCollections.RowHeadersVisible = false;
-            this.dataGridViewCollections.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewCollections.ShowEditingIcon = false;
-            this.dataGridViewCollections.Size = new System.Drawing.Size(277, 125);
-            this.dataGridViewCollections.TabIndex = 15;
-            this.dataGridViewCollections.SelectionChanged += new System.EventHandler(this.dataGridViewCollections_SelectionChanged);
-            // 
-            // ColumnCollection
-            // 
-            this.ColumnCollection.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnCollection.HeaderText = "Collection";
-            this.ColumnCollection.Name = "ColumnCollection";
-            this.ColumnCollection.ReadOnly = true;
             // 
             // splitterMain
             // 
@@ -923,14 +830,14 @@
             this.HeaderConnected,
             this.HeaderConnectionStatus,
             this.HeaderName});
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(71)))), ((int)(((byte)(71)))));
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(221)))));
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(219)))), ((int)(((byte)(254)))));
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(56)))), ((int)(((byte)(68)))));
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewComputers.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(71)))), ((int)(((byte)(71)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(221)))));
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(219)))), ((int)(((byte)(254)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(56)))), ((int)(((byte)(68)))));
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewComputers.DefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridViewComputers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewComputers.GridColor = System.Drawing.Color.White;
             this.dataGridViewComputers.Location = new System.Drawing.Point(0, 0);
@@ -996,7 +903,6 @@
             this.panelFilter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewArtists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAlbums)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCollections)).EndInit();
             this.panelLeft.ResumeLayout(false);
             this.panelPicture.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -1046,21 +952,15 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTracks;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFindDuplicates;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlay;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImportPlaylist;
         private System.Windows.Forms.Splitter splitterFilterBottom;
         private System.Windows.Forms.Panel panelFilter;
-        private System.Windows.Forms.DataGridView dataGridViewCollections;
         private System.Windows.Forms.Splitter splitterFilterRight;
         private System.Windows.Forms.DataGridView dataGridViewArtists;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnArtist;
-        private System.Windows.Forms.Splitter splitterFilterLeft;
         private System.Windows.Forms.DataGridView dataGridViewAlbums;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCollection;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnAlbum;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAlbumYear;
-        private System.Windows.Forms.ToolStripMenuItem addToCollectionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newCollectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEmpty;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTrackNo;

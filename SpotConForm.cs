@@ -119,11 +119,6 @@ namespace SpotCon
         private readonly object receiveLock = new object();
 
         /// <summary>
-        /// Data grid alternate style
-        /// </summary>
-        private DataGridViewCellStyle alternateStyle;
-
-        /// <summary>
         /// The name of the current host
         /// </summary>
         private string currentHost;
@@ -182,11 +177,6 @@ namespace SpotCon
         /// Popularity images
         /// </summary>
         private ImageList popImages = new ImageList();
-
-        /// <summary>
-        /// Popularity images (selected)
-        /// </summary>
-        private ImageList popSelectedImages = new ImageList();
 
         /// <summary>
         /// List of commands that execute in response to client or server requests
@@ -477,11 +467,6 @@ namespace SpotCon
         /// </summary>
         public enum TrackColumns
         {
-            /// <summary>
-            /// Padding column
-            /// </summary>
-            Padding,
-
             /// <summary>
             /// Track number
             /// </summary>
@@ -806,31 +791,6 @@ namespace SpotCon
             this.popImages.Images.Add(Properties.Resources.pop21);
             this.popImages.Images.Add(Properties.Resources.pop22);
 
-            this.popSelectedImages.ImageSize = new Size(65, 8);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops00);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops01);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops02);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops03);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops04);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops05);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops06);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops07);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops08);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops09);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops10);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops11);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops12);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops13);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops14);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops15);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops16);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops17);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops18);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops19);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops20);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops21);
-            this.popSelectedImages.Images.Add(Properties.Resources.pops22);
-
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup", "Tracks"));
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup", "Albums"));
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Search"));
@@ -839,17 +799,6 @@ namespace SpotCon
             this.ReadMisspelledArtistCache();
             this.ReadMisspelledTrackCache();
             this.ReadCachedTracks();
-
-            this.alternateStyle = new DataGridViewCellStyle(this.dataGridViewTracks.DefaultCellStyle)
-            {
-                Font = null,
-                BackColor = Color.FromArgb(232, 230, 226)
-            };
-
-            this.dataGridViewArtists.AlternatingRowsDefaultCellStyle =
-            this.dataGridViewAlbums.AlternatingRowsDefaultCellStyle =
-            this.dataGridViewTracks.AlternatingRowsDefaultCellStyle =
-            this.alternateStyle;
 
             this.albumPercentage = (double)this.dataGridViewAlbums.Width / (double)this.dataGridViewTracks.Width;
 
@@ -942,7 +891,11 @@ namespace SpotCon
                         {
                             if (this.hostData.ContainsKey(name))
                             {
-                                int index = dataGridViewComputers.Rows.Add(name.Equals(this.currentHost, StringComparison.OrdinalIgnoreCase), hostImages.Images[(int)ClientConnectStatus.Disconnected], name);
+                                DataGridViewRow row = new DataGridViewRow();
+                                row.CreateCells(this.dataGridViewComputers, name.Equals(this.currentHost, StringComparison.OrdinalIgnoreCase), hostImages.Images[(int)ClientConnectStatus.Disconnected], name);
+                                row.Height = 28;
+                                
+                                int index = this.dataGridViewComputers.Rows.Add(row);
                                 this.hostData[name].Row = dataGridViewComputers.Rows[index];
                             }
                             else
@@ -1393,11 +1346,12 @@ namespace SpotCon
             }
 
             DataGridViewRow row = new DataGridViewRow();
-            row.CreateCells(this.dataGridViewTracks, null, trackNumber, trackName, artistName, TimeSpan.FromSeconds((double)length).ToString(@"m\:ss"), this.GetPopularityImage(popularity), albumName);
+            row.CreateCells(this.dataGridViewTracks, trackNumber, trackName, artistName, TimeSpan.FromSeconds((double)length).ToString(@"m\:ss"), this.GetPopularityImage(popularity), albumName);
             row.Cells[(int)TrackColumns.Popularity].Tag = popularity;
             row.Cells[(int)TrackColumns.Time].Tag = length;
             row.Tag = status.Track;
-
+            row.Height = 42;
+             
             this.dataGridViewTracks.Rows.Add(row);
         }
 
@@ -1549,7 +1503,7 @@ namespace SpotCon
         /// <param name="message">Message to set</param>
         private void SetStatusError(string message)
         {
-            this.SetStatus(message, Color.DarkRed);
+            this.SetStatus(message, Color.Red);
             this.SetBusyState(false);
         }
 
@@ -1569,7 +1523,7 @@ namespace SpotCon
         /// <param name="message">Message to set</param>
         private void SetStatus(string message)
         {
-            this.SetStatus(message, Color.FromKnownColor(KnownColor.ControlText));
+            this.SetStatus(message, Color.FromArgb(148, 149, 153));
         }
 
         /// <summary>
@@ -2052,7 +2006,6 @@ namespace SpotCon
                 for (int i = 0; i < dataGridViewComputers.Rows.Count; i++)
                 {
                     DataGridViewCellStyle style = dataGridViewComputers.Rows[i].InheritedStyle;
-                    style.Font = new Font(style.Font, i == selectedRowIndex ? FontStyle.Bold : FontStyle.Regular);
                     dataGridViewComputers.Rows[i].DefaultCellStyle = style;
                 }
 
@@ -2149,6 +2102,7 @@ namespace SpotCon
                 if (status.IsPrevEnabled)
                 {
                     this.panelPrevious.Enabled = true;
+                    this.panelPrevious.BackgroundImage = Properties.Resources.Previous;
                 }
                 else
                 {
@@ -2257,10 +2211,11 @@ namespace SpotCon
                 album.Tracks.ForEach(t =>
                 {
                     DataGridViewRow row = new DataGridViewRow();
-                    row.CreateCells(this.dataGridViewTracks, null, t.TrackNumber, t.Name, t.Artist.Name, TimeSpan.FromSeconds((double)t.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(t.Popularity), album.Name);
+                    row.CreateCells(this.dataGridViewTracks, t.TrackNumber, t.Name, t.Artist.Name, TimeSpan.FromSeconds((double)t.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(t.Popularity), album.Name);
                     row.Cells[(int)TrackColumns.Popularity].Tag = t.Popularity;
                     row.Cells[(int)TrackColumns.Time].Tag = t.Length.Value;
                     row.Tag = new Tuple<ArtistTrack, Album>(t, album);
+                    row.Height = 42;
 
                     this.dataGridViewTracks.Rows.Add(row);
                     row.Selected = t.Href == selectedTrackHref;
@@ -2347,10 +2302,11 @@ namespace SpotCon
                     tracks.ForEach(t =>
                     {
                         DataGridViewRow row = new DataGridViewRow();
-                        row.CreateCells(this.dataGridViewTracks, null, t.TrackNumber, t.Name, t.Artist.Name, TimeSpan.FromSeconds((double)t.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(t.Popularity), t.Album.Name);
+                        row.CreateCells(this.dataGridViewTracks, t.TrackNumber, t.Name, t.Artist.Name, TimeSpan.FromSeconds((double)t.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(t.Popularity), t.Album.Name);
                         row.Cells[(int)TrackColumns.Popularity].Tag = t.Popularity;
                         row.Cells[(int)TrackColumns.Time].Tag = t.Length.Value;
                         row.Tag = t;
+                        row.Height = 42;
 
                         this.dataGridViewTracks.Rows.Add(row);
                     });
@@ -2439,7 +2395,6 @@ namespace SpotCon
 
             if (distinctAlbums.Count() > 0)
             {
-                int count = 0;
                 this.dataGridViewAlbums.Rows.Add(string.Format("All ({0} album{1})", distinctAlbums.Count(), distinctAlbums.Count() == 1 ? string.Empty : "s"));
                 foreach (var distinctAlbum in distinctAlbums)
                 {
@@ -2447,7 +2402,6 @@ namespace SpotCon
                     DataGridViewRow row = new DataGridViewRow();
                     row.CreateCells(this.dataGridViewAlbums, track.Album.Name, track.Album.Released);
                     row.Tag = distinctAlbum.ToList();
-                    row.DefaultCellStyle = ++count % 2 == 0 ? this.dataGridViewAlbums.DefaultCellStyle : this.alternateStyle;
                     this.dataGridViewAlbums.Rows.Add(row);
                 }
             }
@@ -2464,7 +2418,6 @@ namespace SpotCon
                                   group t by t.Artist.Href into T
                                   select T;
 
-            int count = 0;
             DataGridViewRow row = null;
             this.dataGridViewArtists.Rows.Add(string.Format("All ({0} artist{1})", distinctArtists.Count(), distinctArtists.Count() == 1 ? string.Empty : "s"));
             foreach (var distinctArtist in distinctArtists)
@@ -2474,7 +2427,6 @@ namespace SpotCon
                 row.CreateCells(this.dataGridViewArtists, track.Artist.Name);
                 row.Tag = track;
                 this.dataGridViewArtists.Rows.Add(row);
-                row.DefaultCellStyle = count++ == 0 ? this.dataGridViewArtists.DefaultCellStyle : this.alternateStyle;
             }
 
             this.dataGridViewAlbums.Rows.Add("All (1 album)");
@@ -2489,14 +2441,12 @@ namespace SpotCon
         /// Gets the popularity image
         /// </summary>
         /// <param name="popularity">Track popularity value</param>
-        /// <param name="selected">True if the row is selected</param>
         /// <returns>Desired popularity image</returns>
-        private Image GetPopularityImage(double? popularity, bool selected = false)
+        private Image GetPopularityImage(double? popularity)
         {
-            ImageList imageList = selected ? this.popSelectedImages : this.popImages;
-            int numImages = imageList.Images.Count - 1;
+            int numImages = this.popImages.Images.Count - 1;
             int index = popularity.HasValue ? (int)((double)numImages * popularity) : 0;
-            return imageList.Images[index];
+            return popImages.Images[index];
         }
 
         /// <summary>
@@ -2633,13 +2583,8 @@ namespace SpotCon
             for (int i = 0; i < dataGridViewTracks.SelectedRows.Count; i++)
             {
                 DataGridViewRow row = dataGridViewTracks.SelectedRows[i];
-                ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Artist]).LinkColor = Color.FromKnownColor(KnownColor.HighlightText);
-                ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Artist]).ActiveLinkColor = Color.FromKnownColor(KnownColor.HighlightText);
-                ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Album]).LinkColor = Color.FromKnownColor(KnownColor.HighlightText);
-                ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Album]).ActiveLinkColor = Color.FromKnownColor(KnownColor.HighlightText);
-
                 DataGridViewImageCell pop = (DataGridViewImageCell)row.Cells[(int)TrackColumns.Popularity];
-                pop.Value = this.GetPopularityImage((double)pop.Tag, selected: true);
+                pop.Value = this.GetPopularityImage((double)pop.Tag);
 
                 newSelectedTrackRowIndices.Add(row.Index);
             }
@@ -2650,13 +2595,8 @@ namespace SpotCon
                 if (i < dataGridViewTracks.Rows.Count)
                 {
                     DataGridViewRow row = dataGridViewTracks.Rows[i];
-                    ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Artist]).LinkColor = Color.FromKnownColor(KnownColor.ControlText);
-                    ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Artist]).ActiveLinkColor = Color.FromKnownColor(KnownColor.ControlText);
-                    ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Album]).LinkColor = Color.FromKnownColor(KnownColor.ControlText);
-                    ((DataGridViewLinkCell)row.Cells[(int)TrackColumns.Album]).ActiveLinkColor = Color.FromKnownColor(KnownColor.ControlText);
-
                     DataGridViewImageCell pop = (DataGridViewImageCell)row.Cells[(int)TrackColumns.Popularity];
-                    pop.Value = this.GetPopularityImage((double)pop.Tag, selected: false);
+                    pop.Value = this.GetPopularityImage((double)pop.Tag);
                 }
             }
 
@@ -2672,13 +2612,8 @@ namespace SpotCon
         {
             if (e.RowIndex >= 0)
             {
-                ((DataGridViewLinkCell)dataGridViewTracks[(int)TrackColumns.Artist, e.RowIndex]).LinkColor = Color.FromKnownColor(KnownColor.ControlText);
-                ((DataGridViewLinkCell)dataGridViewTracks[(int)TrackColumns.Artist, e.RowIndex]).ActiveLinkColor = Color.FromKnownColor(KnownColor.ControlText);
-                ((DataGridViewLinkCell)dataGridViewTracks[(int)TrackColumns.Album, e.RowIndex]).LinkColor = Color.FromKnownColor(KnownColor.ControlText);
-                ((DataGridViewLinkCell)dataGridViewTracks[(int)TrackColumns.Album, e.RowIndex]).ActiveLinkColor = Color.FromKnownColor(KnownColor.ControlText);
-
                 DataGridViewImageCell pop = (DataGridViewImageCell)dataGridViewTracks[(int)TrackColumns.Popularity, e.RowIndex];
-                pop.Value = this.GetPopularityImage((double)pop.Tag, selected: false);
+                pop.Value = this.GetPopularityImage((double)pop.Tag);
             }
         }
 
@@ -2777,13 +2712,10 @@ namespace SpotCon
             dataGridViewTracks.Sort(new TrackRowComparer(column, sortOrder.Value, type));
             dataGridViewTracks.Columns[column].HeaderCell.SortGlyphDirection = sortOrder.Value;
 
-            int count = 0;
-            dataGridViewTracks.AlternatingRowsDefaultCellStyle = null;
             foreach (DataGridViewRow row in this.dataGridViewTracks.Rows)
             {
                 if (row.Visible)
                 {
-                    row.DefaultCellStyle = count++ % 2 == 0 ? dataGridViewTracks.DefaultCellStyle : this.alternateStyle;
                     row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
                 }
             }
@@ -2817,14 +2749,6 @@ namespace SpotCon
         private void panelPlayPause_MouseDown(object sender, MouseEventArgs e)
         {
             this.panelPlayPause.Capture = true;
-            if (this.currentStatus.Playing)
-            {
-                this.panelPlayPause.BackgroundImage = Properties.Resources.PausePressed;
-            }
-            else
-            {
-                this.panelPlayPause.BackgroundImage = Properties.Resources.PlayPressed;
-            }
         }
 
         /// <summary>
@@ -2853,7 +2777,6 @@ namespace SpotCon
         private void panelPrevious_MouseDown(object sender, MouseEventArgs e)
         {
             this.panelPrevious.Capture = true;
-            this.panelPrevious.BackgroundImage = Properties.Resources.PreviousPressed;
         }
 
         /// <summary>
@@ -2864,7 +2787,6 @@ namespace SpotCon
         private void panelPrevious_MouseUp(object sender, MouseEventArgs e)
         {
             this.panelPrevious.Capture = false;
-            this.panelPrevious.BackgroundImage = Properties.Resources.Previous;
         }
 
         /// <summary>
@@ -2875,7 +2797,6 @@ namespace SpotCon
         private void panelNext_MouseDown(object sender, MouseEventArgs e)
         {
             this.panelNext.Capture = true;
-            this.panelNext.BackgroundImage = Properties.Resources.NextPressed;
         }
 
         /// <summary>
@@ -2886,7 +2807,6 @@ namespace SpotCon
         private void panelNext_MouseUp(object sender, MouseEventArgs e)
         {
             this.panelNext.Capture = false;
-            this.panelNext.BackgroundImage = Properties.Resources.Next;
         }
 
         /// <summary>
@@ -2947,7 +2867,6 @@ namespace SpotCon
         /// <param name="e">Event arguments</param>
         private void textBoxSearch_Enter(object sender, EventArgs e)
         {
-            this.panelSearch.BackgroundImage = Properties.Resources.SearchFocused;
             if (this.textBoxSearch.Text == "Search")
             {
                 this.textBoxSearch.Text = string.Empty;
@@ -3382,6 +3301,8 @@ namespace SpotCon
                     row.Cells[(int)TrackColumns.Popularity].Tag = t.Popularity;
                     row.Cells[(int)TrackColumns.Time].Tag = t.Length.Value;
                     row.Tag = t;
+                    row.Height = 42;
+
                     this.dataGridViewTracks.Rows.Add(row);
                 }
             };
@@ -3421,7 +3342,6 @@ namespace SpotCon
                 foreach (DataGridViewRow row in this.dataGridViewAlbums.Rows)
                 {
                     row.Visible = true;
-                    row.DefaultCellStyle = count++ % 2 == 0 ? dataGridViewAlbums.DefaultCellStyle : this.alternateStyle;
                 }
 
                 if (count > 0)
@@ -3436,7 +3356,6 @@ namespace SpotCon
                 foreach (DataGridViewRow row in this.dataGridViewTracks.Rows)
                 {
                     row.Visible = true;
-                    row.DefaultCellStyle = count++ % 2 == 0 ? this.dataGridViewTracks.DefaultCellStyle : this.alternateStyle;
                     row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
                 }
             }
@@ -3460,7 +3379,6 @@ namespace SpotCon
                 }
 
                 int visibleCount = 0;
-                this.dataGridViewAlbums.AlternatingRowsDefaultCellStyle = null;
                 foreach (DataGridViewRow row in this.dataGridViewAlbums.Rows)
                 {
                     if (row.Index == 0)
@@ -3489,14 +3407,11 @@ namespace SpotCon
                     {
                         visibleCount++;
                     }
-
-                    row.DefaultCellStyle = visibleCount % 2 == 0 ? this.dataGridViewAlbums.DefaultCellStyle : this.alternateStyle;
                 }
 
                 this.dataGridViewAlbums.Rows[0].SetValues(string.Format("All ({0} album{1})", visibleCount, visibleCount == 1 ? string.Empty : "s"));
 
                 visibleCount = 0;
-                this.dataGridViewTracks.AlternatingRowsDefaultCellStyle = null;
                 foreach (DataGridViewRow row in this.dataGridViewTracks.Rows)
                 {
                     string artistHref = string.Empty;
@@ -3521,7 +3436,6 @@ namespace SpotCon
                         visibleCount++;
                     }
 
-                    row.DefaultCellStyle = visibleCount % 2 == 1 ? this.dataGridViewTracks.DefaultCellStyle : this.alternateStyle;
                     row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
                 }
             }
@@ -3631,7 +3545,6 @@ namespace SpotCon
             }
 
             int visibleCount = 0;
-            this.dataGridViewTracks.AlternatingRowsDefaultCellStyle = null;
             foreach (DataGridViewRow row in this.dataGridViewTracks.Rows)
             {
                 string albumHref = string.Empty;
@@ -3660,7 +3573,6 @@ namespace SpotCon
                     visibleCount++;
                 }
 
-                row.DefaultCellStyle = visibleCount % 2 == 1 ? this.dataGridViewTracks.DefaultCellStyle : this.alternateStyle;
                 row.Cells[(int)TrackColumns.Popularity].Style = new DataGridViewCellStyle(row.DefaultCellStyle) { Alignment = DataGridViewContentAlignment.MiddleCenter };
             }
 
@@ -3846,6 +3758,90 @@ namespace SpotCon
             /// Gets or sets the timer used to update the Spotify status
             /// </summary>
             public Timer Timer { get; set; }
+        }
+
+        private void dataGridViewTracks_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewTracks.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
+                }
+            }
+        }
+
+        private void dataGridViewTracks_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewTracks.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = this.dataGridViewTracks.DefaultCellStyle.BackColor;
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
+                }
+            }
+        }
+
+        private void dataGridViewArtists_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewArtists.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewArtists.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
+                }
+            }
+        }
+
+        private void dataGridViewArtists_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewArtists.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = this.dataGridViewArtists.DefaultCellStyle.BackColor;
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
+                }
+            }
+        }
+
+        private void dataGridViewAlbums_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewAlbums.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewAlbums.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
+                }
+            }
+        }
+
+        private void dataGridViewAlbums_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewAlbums.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewAlbums.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = this.dataGridViewArtists.DefaultCellStyle.BackColor;
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
+                }
+            }
         }
     }
 }

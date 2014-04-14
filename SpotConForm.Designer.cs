@@ -41,13 +41,22 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.panelFooter = new System.Windows.Forms.Panel();
-            this.labelTime = new System.Windows.Forms.Label();
+            this.panelTrackKnob = new System.Windows.Forms.Panel();
+            this.panelTrackRight = new System.Windows.Forms.Panel();
+            this.panelTrackRightEnd = new System.Windows.Forms.Panel();
+            this.panelTrackLeft = new System.Windows.Forms.Panel();
+            this.panelTrackLeftEnd = new System.Windows.Forms.Panel();
+            this.labelTrackTime = new System.Windows.Forms.Label();
+            this.panelVolumeKnob = new System.Windows.Forms.Panel();
+            this.panelVolumeRightEnd = new System.Windows.Forms.Panel();
+            this.panelVolumeRight = new System.Windows.Forms.Panel();
+            this.panelVolumeLeft = new System.Windows.Forms.Panel();
+            this.panelVolumeLeftEnd = new System.Windows.Forms.Panel();
+            this.labelTrackLength = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelShuffle = new System.Windows.Forms.Panel();
             this.panelSpacer = new System.Windows.Forms.Panel();
             this.panelRepeat = new System.Windows.Forms.Panel();
-            this.panelVolume = new System.Windows.Forms.Panel();
-            this.panelVolumeKnob = new System.Windows.Forms.Panel();
             this.panelNext = new System.Windows.Forms.Panel();
             this.panelPlayPause = new System.Windows.Forms.Panel();
             this.panelPrevious = new System.Windows.Forms.Panel();
@@ -88,12 +97,11 @@
             this.linkLabelTrack = new System.Windows.Forms.LinkLabel();
             this.panelComputers = new System.Windows.Forms.Panel();
             this.dataGridViewComputers = new System.Windows.Forms.DataGridView();
-            this.HeaderConnected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.HeaderConnected = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelFooter.SuspendLayout();
-            this.panelVolume.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panelSearch.SuspendLayout();
             this.panelMain.SuspendLayout();
@@ -132,12 +140,22 @@
             // panelFooter
             // 
             this.panelFooter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
-            this.panelFooter.Controls.Add(this.labelTime);
+            this.panelFooter.Controls.Add(this.panelTrackKnob);
+            this.panelFooter.Controls.Add(this.panelTrackRight);
+            this.panelFooter.Controls.Add(this.panelTrackRightEnd);
+            this.panelFooter.Controls.Add(this.panelTrackLeft);
+            this.panelFooter.Controls.Add(this.panelTrackLeftEnd);
+            this.panelFooter.Controls.Add(this.labelTrackTime);
+            this.panelFooter.Controls.Add(this.panelVolumeKnob);
+            this.panelFooter.Controls.Add(this.panelVolumeRightEnd);
+            this.panelFooter.Controls.Add(this.panelVolumeRight);
+            this.panelFooter.Controls.Add(this.panelVolumeLeft);
+            this.panelFooter.Controls.Add(this.panelVolumeLeftEnd);
+            this.panelFooter.Controls.Add(this.labelTrackLength);
             this.panelFooter.Controls.Add(this.panel2);
             this.panelFooter.Controls.Add(this.panelShuffle);
             this.panelFooter.Controls.Add(this.panelSpacer);
             this.panelFooter.Controls.Add(this.panelRepeat);
-            this.panelFooter.Controls.Add(this.panelVolume);
             this.panelFooter.Controls.Add(this.panelNext);
             this.panelFooter.Controls.Add(this.panelPlayPause);
             this.panelFooter.Controls.Add(this.panelPrevious);
@@ -149,20 +167,124 @@
             this.panelFooter.Size = new System.Drawing.Size(984, 40);
             this.panelFooter.TabIndex = 0;
             // 
-            // labelTime
+            // panelTrackKnob
             // 
-            this.labelTime.BackColor = System.Drawing.Color.Transparent;
-            this.labelTime.Dock = System.Windows.Forms.DockStyle.Right;
-            this.labelTime.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTime.ForeColor = System.Drawing.Color.White;
-            this.labelTime.Location = new System.Drawing.Point(837, 0);
-            this.labelTime.Margin = new System.Windows.Forms.Padding(0);
-            this.labelTime.Name = "labelTime";
-            this.labelTime.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.labelTime.Size = new System.Drawing.Size(44, 40);
-            this.labelTime.TabIndex = 5;
-            this.labelTime.Text = "0:00/0:00";
-            this.labelTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.panelTrackKnob.BackgroundImage = global::SpotCon.Properties.Resources.VolumeKnob;
+            this.panelTrackKnob.Location = new System.Drawing.Point(271, 12);
+            this.panelTrackKnob.Name = "panelTrackKnob";
+            this.panelTrackKnob.Size = new System.Drawing.Size(15, 15);
+            this.panelTrackKnob.TabIndex = 14;
+            // 
+            // panelTrackRight
+            // 
+            this.panelTrackRight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            this.panelTrackRight.BackgroundImage = global::SpotCon.Properties.Resources.VolumeRight;
+            this.panelTrackRight.Location = new System.Drawing.Point(272, 18);
+            this.panelTrackRight.Name = "panelTrackRight";
+            this.panelTrackRight.Size = new System.Drawing.Size(565, 3);
+            this.panelTrackRight.TabIndex = 17;
+            // 
+            // panelTrackRightEnd
+            // 
+            this.panelTrackRightEnd.BackgroundImage = global::SpotCon.Properties.Resources.VolumeRightEnd;
+            this.panelTrackRightEnd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.panelTrackRightEnd.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelTrackRightEnd.Location = new System.Drawing.Point(837, 0);
+            this.panelTrackRightEnd.Name = "panelTrackRightEnd";
+            this.panelTrackRightEnd.Size = new System.Drawing.Size(1, 40);
+            this.panelTrackRightEnd.TabIndex = 18;
+            // 
+            // panelTrackLeft
+            // 
+            this.panelTrackLeft.BackgroundImage = global::SpotCon.Properties.Resources.TrackLeft;
+            this.panelTrackLeft.Location = new System.Drawing.Point(272, 18);
+            this.panelTrackLeft.Name = "panelTrackLeft";
+            this.panelTrackLeft.Size = new System.Drawing.Size(0, 3);
+            this.panelTrackLeft.TabIndex = 16;
+            // 
+            // panelTrackLeftEnd
+            // 
+            this.panelTrackLeftEnd.BackColor = System.Drawing.Color.Transparent;
+            this.panelTrackLeftEnd.BackgroundImage = global::SpotCon.Properties.Resources.TrackLeftEnd;
+            this.panelTrackLeftEnd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelTrackLeftEnd.Location = new System.Drawing.Point(271, 18);
+            this.panelTrackLeftEnd.Name = "panelTrackLeftEnd";
+            this.panelTrackLeftEnd.Size = new System.Drawing.Size(1, 3);
+            this.panelTrackLeftEnd.TabIndex = 15;
+            // 
+            // labelTrackTime
+            // 
+            this.labelTrackTime.BackColor = System.Drawing.Color.Transparent;
+            this.labelTrackTime.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.labelTrackTime.ForeColor = System.Drawing.Color.White;
+            this.labelTrackTime.Location = new System.Drawing.Point(226, 0);
+            this.labelTrackTime.Margin = new System.Windows.Forms.Padding(0);
+            this.labelTrackTime.Name = "labelTrackTime";
+            this.labelTrackTime.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.labelTrackTime.Size = new System.Drawing.Size(31, 40);
+            this.labelTrackTime.TabIndex = 13;
+            this.labelTrackTime.Text = "0:00";
+            this.labelTrackTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // panelVolumeKnob
+            // 
+            this.panelVolumeKnob.BackgroundImage = global::SpotCon.Properties.Resources.VolumeKnob;
+            this.panelVolumeKnob.Location = new System.Drawing.Point(200, 12);
+            this.panelVolumeKnob.Name = "panelVolumeKnob";
+            this.panelVolumeKnob.Size = new System.Drawing.Size(15, 15);
+            this.panelVolumeKnob.TabIndex = 0;
+            this.panelVolumeKnob.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob2_MouseDown);
+            this.panelVolumeKnob.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob2_MouseMove);
+            this.panelVolumeKnob.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob2_MouseUp);
+            // 
+            // panelVolumeRightEnd
+            // 
+            this.panelVolumeRightEnd.BackgroundImage = global::SpotCon.Properties.Resources.VolumeRightEnd;
+            this.panelVolumeRightEnd.Location = new System.Drawing.Point(206, 18);
+            this.panelVolumeRightEnd.Name = "panelVolumeRightEnd";
+            this.panelVolumeRightEnd.Size = new System.Drawing.Size(1, 3);
+            this.panelVolumeRightEnd.TabIndex = 12;
+            // 
+            // panelVolumeRight
+            // 
+            this.panelVolumeRight.BackgroundImage = global::SpotCon.Properties.Resources.VolumeRight;
+            this.panelVolumeRight.Location = new System.Drawing.Point(206, 18);
+            this.panelVolumeRight.Name = "panelVolumeRight";
+            this.panelVolumeRight.Size = new System.Drawing.Size(1, 3);
+            this.panelVolumeRight.TabIndex = 11;
+            // 
+            // panelVolumeLeft
+            // 
+            this.panelVolumeLeft.BackgroundImage = global::SpotCon.Properties.Resources.VolumeLeft;
+            this.panelVolumeLeft.Location = new System.Drawing.Point(115, 18);
+            this.panelVolumeLeft.Name = "panelVolumeLeft";
+            this.panelVolumeLeft.Size = new System.Drawing.Size(90, 3);
+            this.panelVolumeLeft.TabIndex = 10;
+            // 
+            // panelVolumeLeftEnd
+            // 
+            this.panelVolumeLeftEnd.BackColor = System.Drawing.Color.Transparent;
+            this.panelVolumeLeftEnd.BackgroundImage = global::SpotCon.Properties.Resources.VolumeLeftEnd;
+            this.panelVolumeLeftEnd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelVolumeLeftEnd.Location = new System.Drawing.Point(114, 18);
+            this.panelVolumeLeftEnd.Name = "panelVolumeLeftEnd";
+            this.panelVolumeLeftEnd.Size = new System.Drawing.Size(1, 3);
+            this.panelVolumeLeftEnd.TabIndex = 5;
+            // 
+            // labelTrackLength
+            // 
+            this.labelTrackLength.BackColor = System.Drawing.Color.Transparent;
+            this.labelTrackLength.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelTrackLength.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.labelTrackLength.ForeColor = System.Drawing.Color.White;
+            this.labelTrackLength.Location = new System.Drawing.Point(838, 0);
+            this.labelTrackLength.Margin = new System.Windows.Forms.Padding(0);
+            this.labelTrackLength.Name = "labelTrackLength";
+            this.labelTrackLength.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.labelTrackLength.Size = new System.Drawing.Size(43, 40);
+            this.labelTrackLength.TabIndex = 5;
+            this.labelTrackLength.Text = "0:00";
+            this.labelTrackLength.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // panel2
             // 
@@ -207,30 +329,6 @@
             this.panelRepeat.Name = "panelRepeat";
             this.panelRepeat.Size = new System.Drawing.Size(16, 40);
             this.panelRepeat.TabIndex = 6;
-            // 
-            // panelVolume
-            // 
-            this.panelVolume.BackColor = System.Drawing.Color.Transparent;
-            this.panelVolume.BackgroundImage = global::SpotCon.Properties.Resources.VolumeLeft;
-            this.panelVolume.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.panelVolume.Controls.Add(this.panelVolumeKnob);
-            this.panelVolume.Location = new System.Drawing.Point(111, 7);
-            this.panelVolume.Name = "panelVolume";
-            this.panelVolume.Size = new System.Drawing.Size(91, 26);
-            this.panelVolume.TabIndex = 4;
-            this.panelVolume.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelVolume_MouseDown);
-            this.panelVolume.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelVolume_MouseUp);
-            // 
-            // panelVolumeKnob
-            // 
-            this.panelVolumeKnob.BackgroundImage = global::SpotCon.Properties.Resources.VolumeKnob;
-            this.panelVolumeKnob.Location = new System.Drawing.Point(56, 0);
-            this.panelVolumeKnob.Name = "panelVolumeKnob";
-            this.panelVolumeKnob.Size = new System.Drawing.Size(9, 26);
-            this.panelVolumeKnob.TabIndex = 0;
-            this.panelVolumeKnob.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob_MouseDown);
-            this.panelVolumeKnob.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob_MouseMove);
-            this.panelVolumeKnob.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob_MouseUp);
             // 
             // panelNext
             // 
@@ -860,6 +958,7 @@
             this.dataGridViewComputers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewComputers.Size = new System.Drawing.Size(151, 240);
             this.dataGridViewComputers.TabIndex = 9;
+            this.dataGridViewComputers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComputers_CellClick);
             this.dataGridViewComputers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComputers_CellValueChanged);
             this.dataGridViewComputers.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewComputers_CurrentCellDirtyStateChanged);
             this.dataGridViewComputers.SelectionChanged += new System.EventHandler(this.dataGridViewComputers_SelectionChanged);
@@ -867,15 +966,18 @@
             // HeaderConnected
             // 
             this.HeaderConnected.HeaderText = "Connected";
+            this.HeaderConnected.MinimumWidth = 16;
             this.HeaderConnected.Name = "HeaderConnected";
-            this.HeaderConnected.Width = 5;
+            this.HeaderConnected.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.HeaderConnected.Width = 16;
             // 
             // HeaderConnectionStatus
             // 
             this.HeaderConnectionStatus.HeaderText = "Connection Status";
+            this.HeaderConnectionStatus.MinimumWidth = 16;
             this.HeaderConnectionStatus.Name = "HeaderConnectionStatus";
             this.HeaderConnectionStatus.ReadOnly = true;
-            this.HeaderConnectionStatus.Width = 5;
+            this.HeaderConnectionStatus.Width = 16;
             // 
             // HeaderName
             // 
@@ -892,7 +994,7 @@
             this.Controls.Add(this.tableLayoutPanelMain);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(500, 410);
+            this.MinimumSize = new System.Drawing.Size(600, 410);
             this.Name = "SpotConForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "SpotCon";
@@ -904,7 +1006,6 @@
             this.Resize += new System.EventHandler(this.SpotConForm_Resize);
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.panelFooter.ResumeLayout(false);
-            this.panelVolume.ResumeLayout(false);
             this.panelHeader.ResumeLayout(false);
             this.panelSearch.ResumeLayout(false);
             this.panelSearch.PerformLayout();
@@ -933,9 +1034,6 @@
         private System.Windows.Forms.Panel panelTrack;
         private System.Windows.Forms.LinkLabel linkLabelArtist;
         private System.Windows.Forms.LinkLabel linkLabelTrack;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn HeaderConnected;
-        private System.Windows.Forms.DataGridViewImageColumn HeaderConnectionStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn HeaderName;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
         private System.Windows.Forms.Panel panelFooter;
         private System.Windows.Forms.Panel panelNext;
@@ -949,9 +1047,7 @@
         private System.Windows.Forms.Panel panelPicture;
         private System.Windows.Forms.Splitter splitterMain;
         private System.Windows.Forms.Panel panelComputers;
-        private System.Windows.Forms.Panel panelVolume;
-        private System.Windows.Forms.Panel panelVolumeKnob;
-        private System.Windows.Forms.Label labelTime;
+        private System.Windows.Forms.Label labelTrackLength;
         private System.Windows.Forms.Panel panelRepeat;
         private System.Windows.Forms.Panel panelShuffle;
         private System.Windows.Forms.Label labelStatus;
@@ -979,6 +1075,20 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewImageColumn ColumnPopularity;
         private System.Windows.Forms.DataGridViewLinkColumn ColumnAlbum;
+        private System.Windows.Forms.Panel panelVolumeKnob;
+        private System.Windows.Forms.Panel panelVolumeLeftEnd;
+        private System.Windows.Forms.Panel panelVolumeLeft;
+        private System.Windows.Forms.Panel panelVolumeRightEnd;
+        private System.Windows.Forms.Panel panelVolumeRight;
+        private System.Windows.Forms.Label labelTrackTime;
+        private System.Windows.Forms.Panel panelTrackKnob;
+        private System.Windows.Forms.Panel panelTrackRightEnd;
+        private System.Windows.Forms.Panel panelTrackRight;
+        private System.Windows.Forms.Panel panelTrackLeft;
+        private System.Windows.Forms.Panel panelTrackLeftEnd;
+        private System.Windows.Forms.DataGridViewImageColumn HeaderConnected;
+        private System.Windows.Forms.DataGridViewImageColumn HeaderConnectionStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HeaderName;
 
     }
 }

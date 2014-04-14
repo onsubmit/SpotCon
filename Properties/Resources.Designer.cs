@@ -101,6 +101,26 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Checkbox {
+            get {
+                object obj = ResourceManager.GetObject("Checkbox", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CheckboxChecked {
+            get {
+                object obj = ResourceManager.GetObject("CheckboxChecked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client {0} successfully connected.
         /// </summary>
         internal static string ClientConnected {
@@ -637,16 +657,6 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap SendTo {
-            get {
-                object obj = ResourceManager.GetObject("SendTo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Send to {0}.
         /// </summary>
         internal static string SendToServer {
@@ -733,6 +743,26 @@ namespace SpotCon.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap TrackLeft {
+            get {
+                object obj = ResourceManager.GetObject("TrackLeft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TrackLeftEnd {
+            get {
+                object obj = ResourceManager.GetObject("TrackLeftEnd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap VolumeKnob {
             get {
                 object obj = ResourceManager.GetObject("VolumeKnob", resourceCulture);
@@ -743,9 +773,49 @@ namespace SpotCon.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap VolumeKnobClicked {
+            get {
+                object obj = ResourceManager.GetObject("VolumeKnobClicked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap VolumeLeft {
             get {
                 object obj = ResourceManager.GetObject("VolumeLeft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VolumeLeftEnd {
+            get {
+                object obj = ResourceManager.GetObject("VolumeLeftEnd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VolumeRight {
+            get {
+                object obj = ResourceManager.GetObject("VolumeRight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VolumeRightEnd {
+            get {
+                object obj = ResourceManager.GetObject("VolumeRightEnd", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

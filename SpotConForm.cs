@@ -892,7 +892,10 @@ namespace SpotCon
                             if (this.hostData.ContainsKey(name))
                             {
                                 DataGridViewRow row = new DataGridViewRow();
-                                row.CreateCells(this.dataGridViewComputers, name.Equals(this.currentHost, StringComparison.OrdinalIgnoreCase), hostImages.Images[(int)ClientConnectStatus.Disconnected], name);
+                                bool connected = name.Equals(this.currentHost, StringComparison.OrdinalIgnoreCase);
+                                Bitmap connectedImage = connected ? Properties.Resources.CheckboxChecked : Properties.Resources.Checkbox;
+                                row.CreateCells(this.dataGridViewComputers, connectedImage, hostImages.Images[(int)ClientConnectStatus.Disconnected], name);
+                                row.Cells[(int)HostColumns.Checkbox].Tag = connected;
                                 row.Height = 28;
                                 
                                 int index = this.dataGridViewComputers.Rows.Add(row);
@@ -1671,37 +1674,13 @@ namespace SpotCon
         }
 
         /// <summary>
-        /// toolStripButtonPrevious Click event
-        /// </summary>
-        /// <param name="sender">What raised the event</param>
-        /// <param name="e">Event arguments</param>
-        private void toolStripButtonPrevious_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.SendToServer("|Previous");
-            }
-            catch (SocketException se)
-            {
-                MessageBox.Show(se.Message);
-            }
-        }
-
-        /// <summary>
         /// toolStripButtonPlayPause Click event
         /// </summary>
         /// <param name="sender">What raised the event</param>
         /// <param name="e">Event arguments</param>
         private void toolStripButtonPlayPause_Click(object sender, EventArgs e)
         {
-            try
-            {
-                this.SendToServer("|Pause");
-            }
-            catch (SocketException se)
-            {
-                MessageBox.Show(se.Message);
-            }
+
         }
 
         /// <summary>
@@ -1821,7 +1800,7 @@ namespace SpotCon
                 return;
             }
 
-            bool isChecked = (bool)dataGridViewComputers[e.ColumnIndex, e.RowIndex].Value;
+            bool isChecked = (bool)dataGridViewComputers[e.ColumnIndex, e.RowIndex].Tag;
             string host = dataGridViewComputers[(int)HostColumns.Name, e.RowIndex].Value.ToString();
 
             if (!isChecked)
@@ -1959,7 +1938,8 @@ namespace SpotCon
 
                         case ClientConnectStatus.ConnectionFailure:
                             this.SetStatusError(string.Format(success ? Properties.Resources.ConnectingToClientUnknown : Properties.Resources.ConnectingToClientError, server));
-                            dataGridViewComputers[colIndex, rowIndex].Value = false;
+                            dataGridViewComputers[colIndex, rowIndex].Value = Properties.Resources.Checkbox;
+                            dataGridViewComputers[colIndex, rowIndex].Tag = false;
                             break;
 
                         case ClientConnectStatus.Disconnected:
@@ -2118,17 +2098,35 @@ namespace SpotCon
 
             if (!this.panelVolumeKnob.Capture)
             {
-                this.panelVolumeKnob.Left = (int)((this.panelVolume.Width - this.panelVolumeKnob.Width) * status.Volume / 1.0);
+                this.panelVolumeKnob.Left = this.panelVolumeLeftEnd.Left + (int)((this.panelVolumeRightEnd.Right - this.panelVolumeLeftEnd.Left - this.panelVolumeKnob.Width / 2) * status.Volume / 1.0);
+                ResizeVolumePanels();
             }
 
-            string position = TimeSpan.FromSeconds(status.PlayingPosition).ToString(@"m\:ss");
-            string end = TimeSpan.FromSeconds((double)status.Track.Length).ToString(@"m\:ss");
-            this.labelTime.Text = string.Format("{0}/{1}", position, end);
+            if (status.Playing || this.panelTrackKnob.Tag == null)
+            {
+                string position = TimeSpan.FromSeconds(Math.Ceiling(status.PlayingPosition)).ToString(@"m\:ss");
+                string end = TimeSpan.FromSeconds((double)status.Track.Length).ToString(@"m\:ss");
+                this.labelTrackTime.Text = position;
+                this.labelTrackLength.Text = end;
+
+                this.MoveTrackKnob(status);
+            }
 
             this.panelShuffle.BackgroundImage = status.Shuffle ? Properties.Resources.ShuffleGreen : Properties.Resources.Shuffle;
             this.panelRepeat.BackgroundImage = status.Repeat ? Properties.Resources.RepeatGreen : Properties.Resources.Repeat;
 
             return true;
+        }
+
+        private void MoveTrackKnob(Responses.Status status)
+        {
+            int trackPosWidth = this.panelTrackRightEnd.Right - this.panelTrackLeftEnd.Left;
+            this.panelTrackKnob.Left = this.panelTrackLeftEnd.Left + (int)(trackPosWidth * (status.PlayingPosition / status.Track.Length));
+            this.panelTrackKnob.Tag = status.PlayingPosition;
+
+            this.panelTrackLeft.Width = this.panelTrackKnob.Left - this.panelTrackLeft.Left + this.panelTrackKnob.Width / 2;
+            this.panelTrackRight.Left = this.panelTrackLeft.Right;
+            this.panelTrackRight.Width = this.labelTrackLength.Left - this.panelTrackLeft.Right - 1;
         }
 
         /// <summary>
@@ -2923,9 +2921,33 @@ namespace SpotCon
         /// <param name="e">Event arguments</param>
         private void SpotConForm_Resize(object sender, EventArgs e)
         {
+            if (this.Width == this.startFormWidth)
+            {
+                return;
+            }
+
             this.panelRepeat.Location = new Point(this.Width - 40, this.panelRepeat.Location.Y);
             this.panelShuffle.Location = new Point(this.panelRepeat.Location.X - 1, this.panelShuffle.Location.Y);
+
+            //int delta = (this.Width - this.startFormWidth) / 2;
+            //int delta2 = this.Width - this.startFormWidth - delta;
+            //int newLeftWidth = this.trackLeftWidth + delta;
+            //this.panelTrackLeft.Width = Math.Max(0, this.panelTrackLeft.Width == 0 ? 0 : newLeftWidth);
+
+            //this.panelTrackRight.Left = this.panelTrackLeft.Right;
+
+            //int newRightWidth = this.trackRightWidth + delta2 + newLeftWidth - this.panelTrackLeft.Width;
+            //this.panelTrackRight.Width = Math.Max(0, newRightWidth);
+            //this.panelTrackRightEnd.Left = this.panelTrackRight.Right;
+
+            //this.panelTrackKnob.Left = Math.Max(this.panelTrackLeftEnd.Left, (double)this.panelTrackKnob.Tag == 0 ? this.panelTrackLeftEnd.Left : (double)this.panelTrackKnob.Tag == 1 ? this.panelTrackRightEnd.Right : this.panelTrackLeft.Right);
+            this.MoveTrackKnob(this.currentStatus);
         }
+
+        int startFormWidth;
+        int trackLeftWidth;
+        int trackRightWidth;
+        int trackKnobLeft;
 
         /// <summary>
         /// SpotConForm ResizeBegin event
@@ -2936,6 +2958,12 @@ namespace SpotCon
         {
             this.panelFilter.SuspendLayout();
             this.albumPercentage = (double)this.dataGridViewAlbums.Width / (double)this.dataGridViewTracks.Width;
+
+
+            this.startFormWidth = this.Width;
+            this.trackLeftWidth = this.panelTrackLeft.Width;
+            this.trackRightWidth = this.panelTrackRight.Width;
+            this.trackKnobLeft = this.panelTrackKnob.Left;
         }
 
         /// <summary>
@@ -3012,7 +3040,7 @@ namespace SpotCon
         /// </summary>
         private void ChangeVolume()
         {
-            double level = (double)this.panelVolumeKnob.Left / (double)(this.panelVolume.Width - this.panelVolumeKnob.Width);
+            double level = (double)((this.panelVolumeKnob.Left + this.panelVolumeKnob.Width / 2) - this.panelVolumeLeftEnd.Left) / (double)(this.panelVolumeRightEnd.Right - this.panelVolumeLeftEnd.Left);
             this.SendToServer(level + ":" + this.currentStatus.Volume + "|SetVolume");
         }
 
@@ -3035,7 +3063,23 @@ namespace SpotCon
         /// <param name="x">Coordinate to which to move the volume knob</param>
         private void MoveVolumeKnob(int x)
         {
-            panelVolumeKnob.Left = Math.Min(Math.Max(0, x + this.panelVolumeKnob.Left - (this.panelVolumeKnob.Width / 2)), this.panelVolume.Width - this.panelVolumeKnob.Width);
+            int halfKnob = this.panelVolumeKnob.Width / 2;
+            panelVolumeKnob.Left = Math.Min(Math.Max(this.panelVolumeLeftEnd.Left - halfKnob, x + this.panelVolumeKnob.Left - halfKnob), this.panelVolumeRightEnd.Right - halfKnob);
+            ResizeVolumePanels();
+        }
+
+        private void ResizeVolumePanels()
+        {
+            this.panelVolumeLeft.Width = panelVolumeKnob.Left - this.panelVolumeLeftEnd.Right;
+            this.panelVolumeRight.Left = panelVolumeKnob.Right;
+            this.panelVolumeRight.Width = this.panelVolumeRightEnd.Left - this.panelVolumeRight.Left;
+        }
+
+        private void ResizeTrackPanels()
+        {
+            this.panelTrackLeft.Width = panelTrackKnob.Left - this.panelTrackLeftEnd.Right;
+            this.panelTrackRight.Left = panelTrackLeft.Right;
+            this.panelTrackRight.Width = this.panelTrackRightEnd.Left - this.panelTrackRight.Left;
         }
 
         /// <summary>
@@ -3840,6 +3884,46 @@ namespace SpotCon
                 if (row.Selected)
                 {
                     row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
+                }
+            }
+        }
+
+        private void panelVolumeKnob2_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.panelVolumeKnob.Tag = e.X;
+            this.panelVolumeKnob.Capture = true;
+            this.panelVolumeKnob.BackgroundImage = Properties.Resources.VolumeKnobClicked;
+        }
+
+        private void panelVolumeKnob2_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.panelVolumeKnob.Capture)
+            {
+                this.MoveVolumeKnob(e.X);
+            }
+        }
+
+        private void panelVolumeKnob2_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.panelVolumeKnob.Capture = false;
+            this.panelVolumeKnob.BackgroundImage = Properties.Resources.VolumeKnob;
+            this.ChangeVolume();
+        }
+
+        private void dataGridViewComputers_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == (int)HostColumns.Checkbox)
+            {
+                bool isChecked = (bool)dataGridViewComputers[(int)HostColumns.Checkbox, e.RowIndex].Tag;
+                this.dataGridViewComputers[e.ColumnIndex, e.RowIndex].Tag = !isChecked;
+
+                if (isChecked)
+                {
+                    dataGridViewComputers[e.ColumnIndex, e.RowIndex].Value = Properties.Resources.Checkbox;
+                }
+                else
+                {
+                    dataGridViewComputers[e.ColumnIndex, e.RowIndex].Value = Properties.Resources.CheckboxChecked;
                 }
             }
         }

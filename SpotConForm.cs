@@ -1674,16 +1674,6 @@ namespace SpotCon
         }
 
         /// <summary>
-        /// toolStripButtonPlayPause Click event
-        /// </summary>
-        /// <param name="sender">What raised the event</param>
-        /// <param name="e">Event arguments</param>
-        private void toolStripButtonPlayPause_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        /// <summary>
         /// toolStripButtonNext Click event
         /// </summary>
         /// <param name="sender">What raised the event</param>
@@ -1785,6 +1775,29 @@ namespace SpotCon
             catch (SocketException se)
             {
                 MessageBox.Show(se.Message);
+            }
+        }
+
+        /// <summary>
+        /// dataGridViewComputers CellClick event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewComputers_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == (int)HostColumns.Checkbox)
+            {
+                bool isChecked = (bool)dataGridViewComputers[(int)HostColumns.Checkbox, e.RowIndex].Tag;
+                this.dataGridViewComputers[e.ColumnIndex, e.RowIndex].Tag = !isChecked;
+
+                if (isChecked)
+                {
+                    dataGridViewComputers[e.ColumnIndex, e.RowIndex].Value = Properties.Resources.Checkbox;
+                }
+                else
+                {
+                    dataGridViewComputers[e.ColumnIndex, e.RowIndex].Value = Properties.Resources.CheckboxChecked;
+                }
             }
         }
 
@@ -2098,8 +2111,8 @@ namespace SpotCon
 
             if (!this.panelVolumeKnob.Capture)
             {
-                this.panelVolumeKnob.Left = this.panelVolumeLeftEnd.Left + (int)((this.panelVolumeRightEnd.Right - this.panelVolumeLeftEnd.Left - this.panelVolumeKnob.Width / 2) * status.Volume / 1.0);
-                ResizeVolumePanels();
+                this.panelVolumeKnob.Left = this.panelVolumeLeftEnd.Left + (int)((this.panelVolumeRightEnd.Right - this.panelVolumeLeftEnd.Left - (this.panelVolumeKnob.Width / 2)) * status.Volume / 1.0);
+                this.ResizeVolumePanels();
             }
 
             if (status.Playing || this.panelTrackKnob.Tag == null)
@@ -2118,13 +2131,17 @@ namespace SpotCon
             return true;
         }
 
+        /// <summary>
+        /// Positions the track nob based on the current play position
+        /// </summary>
+        /// <param name="status">Current play status</param>
         private void MoveTrackKnob(Responses.Status status)
         {
             int trackPosWidth = this.panelTrackRightEnd.Right - this.panelTrackLeftEnd.Left;
             this.panelTrackKnob.Left = this.panelTrackLeftEnd.Left + (int)(trackPosWidth * (status.PlayingPosition / status.Track.Length));
             this.panelTrackKnob.Tag = status.PlayingPosition;
 
-            this.panelTrackLeft.Width = this.panelTrackKnob.Left - this.panelTrackLeft.Left + this.panelTrackKnob.Width / 2;
+            this.panelTrackLeft.Width = this.panelTrackKnob.Left - this.panelTrackLeft.Left + (this.panelTrackKnob.Width / 2);
             this.panelTrackRight.Left = this.panelTrackLeft.Right;
             this.panelTrackRight.Width = this.labelTrackLength.Left - this.panelTrackLeft.Right - 1;
         }
@@ -2444,7 +2461,7 @@ namespace SpotCon
         {
             int numImages = this.popImages.Images.Count - 1;
             int index = popularity.HasValue ? (int)((double)numImages * popularity) : 0;
-            return popImages.Images[index];
+            return this.popImages.Images[index];
         }
 
         /// <summary>
@@ -2633,6 +2650,44 @@ namespace SpotCon
                     string uri = this.GetAlbumUriFromTag(this.dataGridViewTracks.Rows[e.RowIndex].Tag);
                     string name = this.dataGridViewTracks[(int)TrackColumns.Track, e.RowIndex].Value.ToString();
                     this.LookupAlbum(uri, this.GetTrackHrefFromTag(this.dataGridViewTracks.Rows[e.RowIndex].Tag), name);
+                }
+            }
+        }
+
+        /// <summary>
+        /// dataGridViewTracks CellMouseEnter event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewTracks_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewTracks.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
+                }
+            }
+        }
+
+        /// <summary>
+        /// dataGridViewTracks CellMouseLeave event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewTracks_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewTracks.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = this.dataGridViewTracks.DefaultCellStyle.BackColor;
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
                 }
             }
         }
@@ -2921,33 +2976,9 @@ namespace SpotCon
         /// <param name="e">Event arguments</param>
         private void SpotConForm_Resize(object sender, EventArgs e)
         {
-            if (this.Width == this.startFormWidth)
-            {
-                return;
-            }
-
             this.panelRepeat.Location = new Point(this.Width - 40, this.panelRepeat.Location.Y);
             this.panelShuffle.Location = new Point(this.panelRepeat.Location.X - 1, this.panelShuffle.Location.Y);
-
-            //int delta = (this.Width - this.startFormWidth) / 2;
-            //int delta2 = this.Width - this.startFormWidth - delta;
-            //int newLeftWidth = this.trackLeftWidth + delta;
-            //this.panelTrackLeft.Width = Math.Max(0, this.panelTrackLeft.Width == 0 ? 0 : newLeftWidth);
-
-            //this.panelTrackRight.Left = this.panelTrackLeft.Right;
-
-            //int newRightWidth = this.trackRightWidth + delta2 + newLeftWidth - this.panelTrackLeft.Width;
-            //this.panelTrackRight.Width = Math.Max(0, newRightWidth);
-            //this.panelTrackRightEnd.Left = this.panelTrackRight.Right;
-
-            //this.panelTrackKnob.Left = Math.Max(this.panelTrackLeftEnd.Left, (double)this.panelTrackKnob.Tag == 0 ? this.panelTrackLeftEnd.Left : (double)this.panelTrackKnob.Tag == 1 ? this.panelTrackRightEnd.Right : this.panelTrackLeft.Right);
-            this.MoveTrackKnob(this.currentStatus);
         }
-
-        int startFormWidth;
-        int trackLeftWidth;
-        int trackRightWidth;
-        int trackKnobLeft;
 
         /// <summary>
         /// SpotConForm ResizeBegin event
@@ -2958,12 +2989,6 @@ namespace SpotCon
         {
             this.panelFilter.SuspendLayout();
             this.albumPercentage = (double)this.dataGridViewAlbums.Width / (double)this.dataGridViewTracks.Width;
-
-
-            this.startFormWidth = this.Width;
-            this.trackLeftWidth = this.panelTrackLeft.Width;
-            this.trackRightWidth = this.panelTrackRight.Width;
-            this.trackKnobLeft = this.panelTrackKnob.Left;
         }
 
         /// <summary>
@@ -3021,6 +3046,7 @@ namespace SpotCon
         {
             this.panelVolumeKnob.Tag = e.X;
             this.panelVolumeKnob.Capture = true;
+            this.panelVolumeKnob.BackgroundImage = Properties.Resources.VolumeKnobClicked;
         }
 
         /// <summary>
@@ -3031,7 +3057,7 @@ namespace SpotCon
         private void panelVolumeKnob_MouseUp(object sender, MouseEventArgs e)
         {
             this.panelVolumeKnob.Capture = false;
-
+            this.panelVolumeKnob.BackgroundImage = Properties.Resources.VolumeKnob;
             this.ChangeVolume();
         }
 
@@ -3040,7 +3066,7 @@ namespace SpotCon
         /// </summary>
         private void ChangeVolume()
         {
-            double level = (double)((this.panelVolumeKnob.Left + this.panelVolumeKnob.Width / 2) - this.panelVolumeLeftEnd.Left) / (double)(this.panelVolumeRightEnd.Right - this.panelVolumeLeftEnd.Left);
+            double level = (double)((this.panelVolumeKnob.Left + (this.panelVolumeKnob.Width / 2)) - this.panelVolumeLeftEnd.Left) / (double)(this.panelVolumeRightEnd.Right - this.panelVolumeLeftEnd.Left);
             this.SendToServer(level + ":" + this.currentStatus.Volume + "|SetVolume");
         }
 
@@ -3065,21 +3091,17 @@ namespace SpotCon
         {
             int halfKnob = this.panelVolumeKnob.Width / 2;
             panelVolumeKnob.Left = Math.Min(Math.Max(this.panelVolumeLeftEnd.Left - halfKnob, x + this.panelVolumeKnob.Left - halfKnob), this.panelVolumeRightEnd.Right - halfKnob);
-            ResizeVolumePanels();
+            this.ResizeVolumePanels();
         }
 
+        /// <summary>
+        /// Resizes the volume panels based on the positions of the volume knob
+        /// </summary>
         private void ResizeVolumePanels()
         {
             this.panelVolumeLeft.Width = panelVolumeKnob.Left - this.panelVolumeLeftEnd.Right;
             this.panelVolumeRight.Left = panelVolumeKnob.Right;
             this.panelVolumeRight.Width = this.panelVolumeRightEnd.Left - this.panelVolumeRight.Left;
-        }
-
-        private void ResizeTrackPanels()
-        {
-            this.panelTrackLeft.Width = panelTrackKnob.Left - this.panelTrackLeftEnd.Right;
-            this.panelTrackRight.Left = panelTrackLeft.Right;
-            this.panelTrackRight.Width = this.panelTrackRightEnd.Left - this.panelTrackRight.Left;
         }
 
         /// <summary>
@@ -3366,6 +3388,44 @@ namespace SpotCon
         }
 
         /// <summary>
+        /// dataGridViewArtists CellMouseEnter event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewArtists_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewArtists.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewArtists.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
+                }
+            }
+        }
+
+        /// <summary>
+        /// dataGridViewArtists CellMouseLeave event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewArtists_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewArtists.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = this.dataGridViewArtists.DefaultCellStyle.BackColor;
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
+                }
+            }
+        }
+
+        /// <summary>
         /// dataGridViewArtists SelectionChanged event
         /// </summary>
         /// <param name="sender">What raised the event</param>
@@ -3489,6 +3549,44 @@ namespace SpotCon
             if (this.dataGridViewAlbums.Rows.Count > 0)
             {
                 this.dataGridViewAlbums.Rows[0].Selected = true;
+            }
+        }
+
+        /// <summary>
+        /// dataGridViewAlbums CellMouseEnter event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewAlbums_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewAlbums.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewAlbums.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
+                }
+            }
+        }
+
+        /// <summary>
+        /// dataGridViewAlbums CellMouseLeave event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void dataGridViewAlbums_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewAlbums.Rows.Count)
+            {
+                DataGridViewRow row = this.dataGridViewAlbums.Rows[e.RowIndex];
+                row.DefaultCellStyle.BackColor = this.dataGridViewArtists.DefaultCellStyle.BackColor;
+
+                if (row.Selected)
+                {
+                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
+                }
             }
         }
 
@@ -3802,130 +3900,6 @@ namespace SpotCon
             /// Gets or sets the timer used to update the Spotify status
             /// </summary>
             public Timer Timer { get; set; }
-        }
-
-        private void dataGridViewTracks_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
-            {
-                DataGridViewRow row = this.dataGridViewTracks.Rows[e.RowIndex];
-                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
-
-                if (row.Selected)
-                {
-                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
-                }
-            }
-        }
-
-        private void dataGridViewTracks_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
-            {
-                DataGridViewRow row = this.dataGridViewTracks.Rows[e.RowIndex];
-                row.DefaultCellStyle.BackColor = this.dataGridViewTracks.DefaultCellStyle.BackColor;
-
-                if (row.Selected)
-                {
-                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
-                }
-            }
-        }
-
-        private void dataGridViewArtists_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewArtists.Rows.Count)
-            {
-                DataGridViewRow row = this.dataGridViewArtists.Rows[e.RowIndex];
-                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
-
-                if (row.Selected)
-                {
-                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
-                }
-            }
-        }
-
-        private void dataGridViewArtists_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewTracks.Rows.Count)
-            {
-                DataGridViewRow row = this.dataGridViewArtists.Rows[e.RowIndex];
-                row.DefaultCellStyle.BackColor = this.dataGridViewArtists.DefaultCellStyle.BackColor;
-
-                if (row.Selected)
-                {
-                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
-                }
-            }
-        }
-
-        private void dataGridViewAlbums_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewAlbums.Rows.Count)
-            {
-                DataGridViewRow row = this.dataGridViewAlbums.Rows[e.RowIndex];
-                row.DefaultCellStyle.BackColor = Color.FromArgb(28, 28, 31);
-
-                if (row.Selected)
-                {
-                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(28, 28, 31);
-                }
-            }
-        }
-
-        private void dataGridViewAlbums_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < this.dataGridViewAlbums.Rows.Count)
-            {
-                DataGridViewRow row = this.dataGridViewAlbums.Rows[e.RowIndex];
-                row.DefaultCellStyle.BackColor = this.dataGridViewArtists.DefaultCellStyle.BackColor;
-
-                if (row.Selected)
-                {
-                    row.DefaultCellStyle.SelectionBackColor = this.dataGridViewTracks.DefaultCellStyle.SelectionBackColor;
-                }
-            }
-        }
-
-        private void panelVolumeKnob2_MouseDown(object sender, MouseEventArgs e)
-        {
-            this.panelVolumeKnob.Tag = e.X;
-            this.panelVolumeKnob.Capture = true;
-            this.panelVolumeKnob.BackgroundImage = Properties.Resources.VolumeKnobClicked;
-        }
-
-        private void panelVolumeKnob2_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (this.panelVolumeKnob.Capture)
-            {
-                this.MoveVolumeKnob(e.X);
-            }
-        }
-
-        private void panelVolumeKnob2_MouseUp(object sender, MouseEventArgs e)
-        {
-            this.panelVolumeKnob.Capture = false;
-            this.panelVolumeKnob.BackgroundImage = Properties.Resources.VolumeKnob;
-            this.ChangeVolume();
-        }
-
-        private void dataGridViewComputers_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == (int)HostColumns.Checkbox)
-            {
-                bool isChecked = (bool)dataGridViewComputers[(int)HostColumns.Checkbox, e.RowIndex].Tag;
-                this.dataGridViewComputers[e.ColumnIndex, e.RowIndex].Tag = !isChecked;
-
-                if (isChecked)
-                {
-                    dataGridViewComputers[e.ColumnIndex, e.RowIndex].Value = Properties.Resources.Checkbox;
-                }
-                else
-                {
-                    dataGridViewComputers[e.ColumnIndex, e.RowIndex].Value = Properties.Resources.CheckboxChecked;
-                }
-            }
         }
     }
 }

@@ -233,9 +233,9 @@
             this.panelVolumeKnob.Name = "panelVolumeKnob";
             this.panelVolumeKnob.Size = new System.Drawing.Size(15, 15);
             this.panelVolumeKnob.TabIndex = 0;
-            this.panelVolumeKnob.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob2_MouseDown);
-            this.panelVolumeKnob.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob2_MouseMove);
-            this.panelVolumeKnob.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob2_MouseUp);
+            this.panelVolumeKnob.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob_MouseDown);
+            this.panelVolumeKnob.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob_MouseMove);
+            this.panelVolumeKnob.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelVolumeKnob_MouseUp);
             // 
             // panelVolumeRightEnd
             // 

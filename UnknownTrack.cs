@@ -76,7 +76,7 @@ namespace SpotCon
         /// <summary>
         /// Gets the track the user selected
         /// </summary>
-        public object SelectedTrack { get; private set; }
+        public TrackEx SelectedTrack { get; private set; }
 
         /// <summary>
         /// ButtonLookup Click event handler
@@ -93,7 +93,7 @@ namespace SpotCon
                 value = match.Groups["HREF"].Value;
                 Track track = this.lookup.LookupTrack(value);
                 track.Href = "spotify:track:" + value;
-                this.SelectedTrack = track;
+                this.SelectedTrack = new TrackEx(track);
                 this.ButtonOk_Click(null, null);
             }
             else
@@ -119,7 +119,7 @@ namespace SpotCon
         {
             if (this.SelectedTrack == null)
             {
-                this.SelectedTrack = this.suggestions[this.listBoxSuggestions.SelectedIndex];
+                this.SelectedTrack = new TrackEx(this.suggestions[this.listBoxSuggestions.SelectedIndex]);
             }
 
             this.DialogResult = DialogResult.OK;

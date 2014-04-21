@@ -657,6 +657,15 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seaching for &quot;{0}&quot; (page {1})....
+        /// </summary>
+        internal static string SearchingPage {
+            get {
+                return ResourceManager.GetString("SearchingPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send to {0}.
         /// </summary>
         internal static string SendToServer {

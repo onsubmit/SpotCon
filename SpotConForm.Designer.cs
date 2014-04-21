@@ -30,15 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpotConForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpotConForm));
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.panelFooter = new System.Windows.Forms.Panel();
             this.panelTrackKnob = new System.Windows.Forms.Panel();
@@ -69,12 +70,6 @@
             this.labelStatus = new System.Windows.Forms.Label();
             this.panelMain = new System.Windows.Forms.Panel();
             this.dataGridViewTracks = new System.Windows.Forms.DataGridView();
-            this.ColumnTrackNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnTrack = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnArtist = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPopularity = new System.Windows.Forms.DataGridViewImageColumn();
-            this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
             this.contextMenuStripTracks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -86,7 +81,8 @@
             this.dataGridViewArtists = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnArtist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewAlbums = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumnAlbum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnAlbumName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnAlbumTracks = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnAlbumYear = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitterMain = new System.Windows.Forms.Splitter();
             this.panelLeft = new System.Windows.Forms.Panel();
@@ -100,6 +96,13 @@
             this.HeaderConnected = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDisc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTrackNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTrack = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnArtist = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPopularity = new System.Windows.Forms.DataGridViewImageColumn();
+            this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelFooter.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -502,6 +505,7 @@
             this.dataGridViewTracks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewTracks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTracks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnDisc,
             this.ColumnTrackNo,
             this.ColumnTrack,
             this.ColumnArtist,
@@ -509,15 +513,15 @@
             this.ColumnPopularity,
             this.ColumnAlbum});
             this.dataGridViewTracks.ContextMenuStrip = this.contextMenuStripTracks;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 10F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTracks.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTracks.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTracks.EnableHeadersVisualStyles = false;
             this.dataGridViewTracks.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
@@ -536,82 +540,10 @@
             this.dataGridViewTracks.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTracks_CellMouseLeave);
             this.dataGridViewTracks.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTracks_ColumnHeaderMouseClick);
             this.dataGridViewTracks.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTracks_RowLeave);
+            this.dataGridViewTracks.Scroll += new System.Windows.Forms.ScrollEventHandler(this.dataGridViewTracks_Scroll);
             this.dataGridViewTracks.SelectionChanged += new System.EventHandler(this.dataGridViewTracks_SelectionChanged);
-            this.dataGridViewTracks.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTracks_SortCompare);
             this.dataGridViewTracks.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragDrop);
             this.dataGridViewTracks.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragEnter);
-            // 
-            // ColumnTrackNo
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.ColumnTrackNo.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColumnTrackNo.HeaderText = "#";
-            this.ColumnTrackNo.MinimumWidth = 35;
-            this.ColumnTrackNo.Name = "ColumnTrackNo";
-            this.ColumnTrackNo.ReadOnly = true;
-            this.ColumnTrackNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnTrackNo.Width = 35;
-            // 
-            // ColumnTrack
-            // 
-            this.ColumnTrack.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnTrack.FillWeight = 25F;
-            this.ColumnTrack.HeaderText = "TRACK";
-            this.ColumnTrack.MinimumWidth = 50;
-            this.ColumnTrack.Name = "ColumnTrack";
-            this.ColumnTrack.ReadOnly = true;
-            this.ColumnTrack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            // 
-            // ColumnArtist
-            // 
-            this.ColumnArtist.ActiveLinkColor = System.Drawing.Color.White;
-            this.ColumnArtist.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnArtist.FillWeight = 25F;
-            this.ColumnArtist.HeaderText = "ARTIST";
-            this.ColumnArtist.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.ColumnArtist.LinkColor = System.Drawing.Color.White;
-            this.ColumnArtist.MinimumWidth = 50;
-            this.ColumnArtist.Name = "ColumnArtist";
-            this.ColumnArtist.ReadOnly = true;
-            this.ColumnArtist.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnArtist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnArtist.TrackVisitedState = false;
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "TIME";
-            this.ColumnTime.MinimumWidth = 50;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnTime.Width = 60;
-            // 
-            // ColumnPopularity
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle3.NullValue")));
-            this.ColumnPopularity.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ColumnPopularity.HeaderText = "POPULARITY";
-            this.ColumnPopularity.MinimumWidth = 100;
-            this.ColumnPopularity.Name = "ColumnPopularity";
-            this.ColumnPopularity.ReadOnly = true;
-            this.ColumnPopularity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnPopularity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            // 
-            // ColumnAlbum
-            // 
-            this.ColumnAlbum.ActiveLinkColor = System.Drawing.Color.White;
-            this.ColumnAlbum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnAlbum.FillWeight = 25F;
-            this.ColumnAlbum.HeaderText = "ALBUM";
-            this.ColumnAlbum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.ColumnAlbum.LinkColor = System.Drawing.Color.White;
-            this.ColumnAlbum.MinimumWidth = 50;
-            this.ColumnAlbum.Name = "ColumnAlbum";
-            this.ColumnAlbum.ReadOnly = true;
-            this.ColumnAlbum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnAlbum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnAlbum.TrackVisitedState = false;
             // 
             // contextMenuStripTracks
             // 
@@ -698,27 +630,27 @@
             this.dataGridViewArtists.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewArtists.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dataGridViewArtists.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewArtists.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
-            this.dataGridViewArtists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewArtists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumnArtist});
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewArtists.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewArtists.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            this.dataGridViewArtists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewArtists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumnArtist});
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewArtists.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewArtists.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewArtists.EnableHeadersVisualStyles = false;
             this.dataGridViewArtists.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
@@ -734,6 +666,7 @@
             this.dataGridViewArtists.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewArtists_CellMouseEnter);
             this.dataGridViewArtists.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewArtists_CellMouseLeave);
             this.dataGridViewArtists.SelectionChanged += new System.EventHandler(this.dataGridViewArtists_SelectionChanged);
+            this.dataGridViewArtists.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewArtists_SortCompare);
             // 
             // dataGridViewTextBoxColumnArtist
             // 
@@ -752,28 +685,29 @@
             this.dataGridViewAlbums.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewAlbums.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dataGridViewAlbums.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewAlbums.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            this.dataGridViewAlbums.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewAlbums.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumnAlbum,
-            this.ColumnAlbumYear});
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F);
             dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewAlbums.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewAlbums.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            this.dataGridViewAlbums.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewAlbums.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnAlbumName,
+            this.ColumnAlbumTracks,
+            this.ColumnAlbumYear});
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewAlbums.DefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewAlbums.Dock = System.Windows.Forms.DockStyle.Right;
             this.dataGridViewAlbums.EnableHeadersVisualStyles = false;
             this.dataGridViewAlbums.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
@@ -789,19 +723,29 @@
             this.dataGridViewAlbums.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAlbums_CellMouseEnter);
             this.dataGridViewAlbums.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAlbums_CellMouseLeave);
             this.dataGridViewAlbums.SelectionChanged += new System.EventHandler(this.dataGridViewAlbums_SelectionChanged);
+            this.dataGridViewAlbums.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewAlbums_SortCompare);
             // 
-            // dataGridViewTextBoxColumnAlbum
+            // ColumnAlbumName
             // 
-            this.dataGridViewTextBoxColumnAlbum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumnAlbum.FillWeight = 159.3909F;
-            this.dataGridViewTextBoxColumnAlbum.HeaderText = "ALBUM";
-            this.dataGridViewTextBoxColumnAlbum.Name = "dataGridViewTextBoxColumnAlbum";
-            this.dataGridViewTextBoxColumnAlbum.ReadOnly = true;
+            this.ColumnAlbumName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnAlbumName.FillWeight = 60F;
+            this.ColumnAlbumName.HeaderText = "ALBUM";
+            this.ColumnAlbumName.Name = "ColumnAlbumName";
+            this.ColumnAlbumName.ReadOnly = true;
+            // 
+            // ColumnAlbumTracks
+            // 
+            this.ColumnAlbumTracks.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnAlbumTracks.FillWeight = 20F;
+            this.ColumnAlbumTracks.HeaderText = "TRACKS";
+            this.ColumnAlbumTracks.MinimumWidth = 20;
+            this.ColumnAlbumTracks.Name = "ColumnAlbumTracks";
+            this.ColumnAlbumTracks.ReadOnly = true;
             // 
             // ColumnAlbumYear
             // 
             this.ColumnAlbumYear.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnAlbumYear.FillWeight = 40.60914F;
+            this.ColumnAlbumYear.FillWeight = 20F;
             this.ColumnAlbumYear.HeaderText = "YEAR";
             this.ColumnAlbumYear.MinimumWidth = 20;
             this.ColumnAlbumYear.Name = "ColumnAlbumYear";
@@ -939,14 +883,14 @@
             this.HeaderConnected,
             this.HeaderConnectionStatus,
             this.HeaderName});
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(47)))), ((int)(((byte)(51)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewComputers.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(47)))), ((int)(((byte)(51)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewComputers.DefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridViewComputers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewComputers.GridColor = System.Drawing.Color.White;
             this.dataGridViewComputers.Location = new System.Drawing.Point(0, 0);
@@ -985,6 +929,91 @@
             this.HeaderName.HeaderText = "Name";
             this.HeaderName.Name = "HeaderName";
             this.HeaderName.ReadOnly = true;
+            // 
+            // ColumnDisc
+            // 
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            this.ColumnDisc.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ColumnDisc.HeaderText = "D";
+            this.ColumnDisc.MinimumWidth = 35;
+            this.ColumnDisc.Name = "ColumnDisc";
+            this.ColumnDisc.ReadOnly = true;
+            this.ColumnDisc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnDisc.Visible = false;
+            this.ColumnDisc.Width = 35;
+            // 
+            // ColumnTrackNo
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            this.ColumnTrackNo.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ColumnTrackNo.HeaderText = "#";
+            this.ColumnTrackNo.MinimumWidth = 35;
+            this.ColumnTrackNo.Name = "ColumnTrackNo";
+            this.ColumnTrackNo.ReadOnly = true;
+            this.ColumnTrackNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnTrackNo.Width = 35;
+            // 
+            // ColumnTrack
+            // 
+            this.ColumnTrack.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnTrack.FillWeight = 25F;
+            this.ColumnTrack.HeaderText = "TRACK";
+            this.ColumnTrack.MinimumWidth = 50;
+            this.ColumnTrack.Name = "ColumnTrack";
+            this.ColumnTrack.ReadOnly = true;
+            this.ColumnTrack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // ColumnArtist
+            // 
+            this.ColumnArtist.ActiveLinkColor = System.Drawing.Color.White;
+            this.ColumnArtist.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnArtist.FillWeight = 25F;
+            this.ColumnArtist.HeaderText = "ARTIST";
+            this.ColumnArtist.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.ColumnArtist.LinkColor = System.Drawing.Color.White;
+            this.ColumnArtist.MinimumWidth = 50;
+            this.ColumnArtist.Name = "ColumnArtist";
+            this.ColumnArtist.ReadOnly = true;
+            this.ColumnArtist.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnArtist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnArtist.TrackVisitedState = false;
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "TIME";
+            this.ColumnTime.MinimumWidth = 50;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnTime.Width = 60;
+            // 
+            // ColumnPopularity
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle4.NullValue")));
+            this.ColumnPopularity.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ColumnPopularity.HeaderText = "POPULARITY";
+            this.ColumnPopularity.MinimumWidth = 100;
+            this.ColumnPopularity.Name = "ColumnPopularity";
+            this.ColumnPopularity.ReadOnly = true;
+            this.ColumnPopularity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColumnPopularity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // ColumnAlbum
+            // 
+            this.ColumnAlbum.ActiveLinkColor = System.Drawing.Color.White;
+            this.ColumnAlbum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnAlbum.FillWeight = 25F;
+            this.ColumnAlbum.HeaderText = "ALBUM";
+            this.ColumnAlbum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.ColumnAlbum.LinkColor = System.Drawing.Color.White;
+            this.ColumnAlbum.MinimumWidth = 50;
+            this.ColumnAlbum.Name = "ColumnAlbum";
+            this.ColumnAlbum.ReadOnly = true;
+            this.ColumnAlbum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnAlbum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnAlbum.TrackVisitedState = false;
             // 
             // SpotConForm
             // 
@@ -1067,14 +1096,6 @@
         private System.Windows.Forms.DataGridView dataGridViewAlbums;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnArtist;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnAlbum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAlbumYear;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTrackNo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTrack;
-        private System.Windows.Forms.DataGridViewLinkColumn ColumnArtist;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewImageColumn ColumnPopularity;
-        private System.Windows.Forms.DataGridViewLinkColumn ColumnAlbum;
         private System.Windows.Forms.Panel panelVolumeKnob;
         private System.Windows.Forms.Panel panelVolumeLeftEnd;
         private System.Windows.Forms.Panel panelVolumeLeft;
@@ -1089,6 +1110,16 @@
         private System.Windows.Forms.DataGridViewImageColumn HeaderConnected;
         private System.Windows.Forms.DataGridViewImageColumn HeaderConnectionStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn HeaderName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAlbumName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAlbumTracks;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAlbumYear;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDisc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTrackNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTrack;
+        private System.Windows.Forms.DataGridViewLinkColumn ColumnArtist;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewImageColumn ColumnPopularity;
+        private System.Windows.Forms.DataGridViewLinkColumn ColumnAlbum;
 
     }
 }

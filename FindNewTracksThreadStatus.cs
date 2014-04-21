@@ -61,9 +61,9 @@ using SpotifyWebSharp.SpotifyResponses.Search;
         public SearchArtist Artist { get; set; }
 
         /// <summary>
-        /// Gets or sets the Track (could be either SearchTrack or LookupTrack)
+        /// Gets or sets the Track
         /// </summary>
-        public object Track { get; set; }
+        public TrackEx Track { get; set; }
 
         /// <summary>
         /// Gets or sets the thread status

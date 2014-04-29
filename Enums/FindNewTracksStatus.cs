@@ -3,7 +3,7 @@
 //     Copyright (c) Andy Young. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace SpotCon
+namespace SpotCon.Enums
 {
     using System.Diagnostics.CodeAnalysis;
 

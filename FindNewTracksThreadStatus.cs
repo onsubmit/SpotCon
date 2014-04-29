@@ -6,8 +6,8 @@
 namespace SpotCon
 {
     using System.Diagnostics.CodeAnalysis;
-using SpotifyWebSharp.SpotifyResponses.Lookup;
-using SpotifyWebSharp.SpotifyResponses.Search;
+    using SpotCon.Enums;
+    using SpotifyWebSharp.SpotifyResponses.Search;
 
     /// <summary>
     /// Status of FindNewTracks background thread

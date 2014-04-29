@@ -107,18 +107,22 @@
     <Compile Include="AlbumArtViewer.Designer.cs">
       <DependentUpon>AlbumArtViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="AlbumColumns.cs" />
     <Compile Include="AlbumEx.cs" />
     <Compile Include="AppCommands.cs" />
     <Compile Include="ArtistEx.cs" />
+    <Compile Include="Enums\ClientConnectStatus.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FindNewTracksStatus.cs" />
+    <Compile Include="Enums\FindNewTracksStatus.cs" />
     <Compile Include="FindNewTracksThreadStatus.cs" />
     <Compile Include="GlobalMouseHandler.cs" />
+    <Compile Include="Enums\HostColumns.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Enums\SearchType.cs" />
     <Compile Include="SpotConForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +131,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Enums\TrackColumns.cs" />
     <Compile Include="TrackComparer.cs" />
     <Compile Include="DataGridViewRowComparer.cs" />
     <Compile Include="TrackEx.cs" />

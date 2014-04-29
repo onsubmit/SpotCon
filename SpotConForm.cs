@@ -24,6 +24,7 @@ namespace SpotCon
     using System.Web;
     using System.Windows.Forms;
     using System.Xml.Linq;
+    using SpotCon.Enums;
     using SpotCon.PlaylistImporter;
     using SpotifyWebHelperSharp;
     using SpotifyWebSharp.SpotifyResponses.Lookup;
@@ -377,131 +378,6 @@ namespace SpotCon
                     })
                 }
             };
-        }
-
-        /// <summary>
-        /// Represents the connect status of the client
-        /// </summary>
-        public enum ClientConnectStatus
-        {
-            /// <summary>
-            /// Client is disconnected
-            /// </summary>
-            Disconnected,
-
-            /// <summary>
-            /// Client is connected
-            /// </summary>
-            Connected,
-
-            /// <summary>
-            /// Client couldn't connect
-            /// </summary>
-            ConnectionFailure
-        }
-
-        /// <summary>
-        /// Represents a column in the host data grid
-        /// </summary>
-        public enum HostColumns
-        {
-            /// <summary>
-            /// Checkbox column
-            /// </summary>
-            Checkbox,
-
-            /// <summary>
-            /// Connection status column
-            /// </summary>
-            ConnectionStatus,
-
-            /// <summary>
-            /// Name column
-            /// </summary>
-            Name
-        }
-
-        /// <summary>
-        /// Represents a column in the albums data grid
-        /// </summary>
-        public enum AlbumColumns
-        {
-            /// <summary>
-            /// Album name
-            /// </summary>
-            Name,
-
-            /// <summary>
-            /// Number of tracks
-            /// </summary>
-            NumberOfTracks,
-
-            /// <summary>
-            /// Album release year
-            /// </summary>
-            Year,
-        }
-
-        /// <summary>
-        /// Represents a column in the tracks data grid
-        /// </summary>
-        public enum TrackColumns
-        {
-            /// <summary>
-            /// Disc number
-            /// </summary>
-            Disc,
-
-            /// <summary>
-            /// Track number
-            /// </summary>
-            TrackNumber,
-
-            /// <summary>
-            /// Track column
-            /// </summary>
-            Track,
-
-            /// <summary>
-            /// Artist column
-            /// </summary>
-            Artist,
-
-            /// <summary>
-            /// Time column
-            /// </summary>
-            Time,
-
-            /// <summary>
-            /// Popularity column
-            /// </summary>
-            Popularity,
-
-            /// <summary>
-            /// Album column
-            /// </summary>
-            Album
-        }
-
-        /// <summary>
-        /// Represents the type of search that is occurring
-        /// </summary>
-        public enum SearchType
-        {
-            /// <summary>
-            /// Artist search
-            /// </summary>
-            Artist,
-
-            /// <summary>
-            /// Album search
-            /// </summary>
-            Album,
-
-            /// <summary>
-            /// Track search
-            /// </summary>
-            Track
         }
 
         /// <summary>

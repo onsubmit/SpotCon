@@ -31,15 +31,15 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpotConForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpotConForm));
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.panelFooter = new System.Windows.Forms.Panel();
             this.panelTrackKnob = new System.Windows.Forms.Panel();
@@ -70,8 +70,16 @@
             this.labelStatus = new System.Windows.Forms.Label();
             this.panelMain = new System.Windows.Forms.Panel();
             this.dataGridViewTracks = new System.Windows.Forms.DataGridView();
+            this.ColumnDisc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTrackNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTrack = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnArtist = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPopularity = new System.Windows.Forms.DataGridViewImageColumn();
+            this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
             this.contextMenuStripTracks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemPlaySelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemImportPlaylist = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemFindDuplicates = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,13 +104,6 @@
             this.HeaderConnected = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDisc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnTrackNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnTrack = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnArtist = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPopularity = new System.Windows.Forms.DataGridViewImageColumn();
-            this.ColumnAlbum = new System.Windows.Forms.DataGridViewLinkColumn();
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelFooter.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -525,14 +526,14 @@
             this.dataGridViewTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTracks.EnableHeadersVisualStyles = false;
             this.dataGridViewTracks.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
-            this.dataGridViewTracks.Location = new System.Drawing.Point(152, 136);
+            this.dataGridViewTracks.Location = new System.Drawing.Point(152, 139);
             this.dataGridViewTracks.Margin = new System.Windows.Forms.Padding(0);
             this.dataGridViewTracks.Name = "dataGridViewTracks";
             this.dataGridViewTracks.ReadOnly = true;
             this.dataGridViewTracks.RowHeadersVisible = false;
             this.dataGridViewTracks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewTracks.ShowEditingIcon = false;
-            this.dataGridViewTracks.Size = new System.Drawing.Size(832, 444);
+            this.dataGridViewTracks.Size = new System.Drawing.Size(832, 441);
             this.dataGridViewTracks.TabIndex = 6;
             this.dataGridViewTracks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTracks_CellContentClick);
             this.dataGridViewTracks.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTracks_CellDoubleClick);
@@ -545,15 +546,101 @@
             this.dataGridViewTracks.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragDrop);
             this.dataGridViewTracks.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridViewTracks_DragEnter);
             // 
+            // ColumnDisc
+            // 
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            this.ColumnDisc.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ColumnDisc.HeaderText = "D";
+            this.ColumnDisc.MinimumWidth = 35;
+            this.ColumnDisc.Name = "ColumnDisc";
+            this.ColumnDisc.ReadOnly = true;
+            this.ColumnDisc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnDisc.Visible = false;
+            this.ColumnDisc.Width = 35;
+            // 
+            // ColumnTrackNo
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            this.ColumnTrackNo.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ColumnTrackNo.HeaderText = "#";
+            this.ColumnTrackNo.MinimumWidth = 35;
+            this.ColumnTrackNo.Name = "ColumnTrackNo";
+            this.ColumnTrackNo.ReadOnly = true;
+            this.ColumnTrackNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnTrackNo.Width = 35;
+            // 
+            // ColumnTrack
+            // 
+            this.ColumnTrack.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnTrack.FillWeight = 25F;
+            this.ColumnTrack.HeaderText = "TRACK";
+            this.ColumnTrack.MinimumWidth = 50;
+            this.ColumnTrack.Name = "ColumnTrack";
+            this.ColumnTrack.ReadOnly = true;
+            this.ColumnTrack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // ColumnArtist
+            // 
+            this.ColumnArtist.ActiveLinkColor = System.Drawing.Color.White;
+            this.ColumnArtist.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnArtist.FillWeight = 25F;
+            this.ColumnArtist.HeaderText = "ARTIST";
+            this.ColumnArtist.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.ColumnArtist.LinkColor = System.Drawing.Color.White;
+            this.ColumnArtist.MinimumWidth = 50;
+            this.ColumnArtist.Name = "ColumnArtist";
+            this.ColumnArtist.ReadOnly = true;
+            this.ColumnArtist.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnArtist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnArtist.TrackVisitedState = false;
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "TIME";
+            this.ColumnTime.MinimumWidth = 50;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            this.ColumnTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnTime.Width = 60;
+            // 
+            // ColumnPopularity
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle4.NullValue")));
+            this.ColumnPopularity.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ColumnPopularity.HeaderText = "POPULARITY";
+            this.ColumnPopularity.MinimumWidth = 100;
+            this.ColumnPopularity.Name = "ColumnPopularity";
+            this.ColumnPopularity.ReadOnly = true;
+            this.ColumnPopularity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColumnPopularity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // ColumnAlbum
+            // 
+            this.ColumnAlbum.ActiveLinkColor = System.Drawing.Color.White;
+            this.ColumnAlbum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnAlbum.FillWeight = 25F;
+            this.ColumnAlbum.HeaderText = "ALBUM";
+            this.ColumnAlbum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.ColumnAlbum.LinkColor = System.Drawing.Color.White;
+            this.ColumnAlbum.MinimumWidth = 50;
+            this.ColumnAlbum.Name = "ColumnAlbum";
+            this.ColumnAlbum.ReadOnly = true;
+            this.ColumnAlbum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnAlbum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.ColumnAlbum.TrackVisitedState = false;
+            // 
             // contextMenuStripTracks
             // 
             this.contextMenuStripTracks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemPlay,
+            this.toolStripMenuItemPlaySelected,
             this.toolStripSeparator2,
             this.toolStripMenuItemImportPlaylist,
             this.toolStripMenuItemFindDuplicates});
             this.contextMenuStripTracks.Name = "contextMenuStrip";
-            this.contextMenuStripTracks.Size = new System.Drawing.Size(156, 76);
+            this.contextMenuStripTracks.Size = new System.Drawing.Size(156, 120);
             // 
             // toolStripMenuItemPlay
             // 
@@ -562,6 +649,14 @@
             this.toolStripMenuItemPlay.Size = new System.Drawing.Size(155, 22);
             this.toolStripMenuItemPlay.Text = "Play";
             this.toolStripMenuItemPlay.Click += new System.EventHandler(this.toolStripMenuItemPlay_Click);
+            // 
+            // toolStripMenuItemPlaySelected
+            // 
+            this.toolStripMenuItemPlaySelected.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItemPlaySelected.Name = "toolStripMenuItemPlaySelected";
+            this.toolStripMenuItemPlaySelected.Size = new System.Drawing.Size(155, 22);
+            this.toolStripMenuItemPlaySelected.Text = "Play Selected";
+            this.toolStripMenuItemPlaySelected.Click += new System.EventHandler(this.toolStripMenuItemPlaySelected_Click);
             // 
             // toolStripSeparator2
             // 
@@ -588,7 +683,7 @@
             this.splitterFilterBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(20)))));
             this.splitterFilterBottom.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.splitterFilterBottom.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitterFilterBottom.Location = new System.Drawing.Point(152, 135);
+            this.splitterFilterBottom.Location = new System.Drawing.Point(152, 138);
             this.splitterFilterBottom.Margin = new System.Windows.Forms.Padding(10);
             this.splitterFilterBottom.MinExtra = 100;
             this.splitterFilterBottom.MinSize = 100;
@@ -606,7 +701,7 @@
             this.panelFilter.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelFilter.Location = new System.Drawing.Point(152, 0);
             this.panelFilter.Name = "panelFilter";
-            this.panelFilter.Size = new System.Drawing.Size(832, 135);
+            this.panelFilter.Size = new System.Drawing.Size(832, 138);
             this.panelFilter.TabIndex = 16;
             // 
             // splitterFilterRight
@@ -615,7 +710,7 @@
             this.splitterFilterRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitterFilterRight.Location = new System.Drawing.Point(415, 0);
             this.splitterFilterRight.Name = "splitterFilterRight";
-            this.splitterFilterRight.Size = new System.Drawing.Size(1, 135);
+            this.splitterFilterRight.Size = new System.Drawing.Size(1, 138);
             this.splitterFilterRight.TabIndex = 19;
             this.splitterFilterRight.TabStop = false;
             this.splitterFilterRight.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterFilterRight_SplitterMoved);
@@ -661,7 +756,7 @@
             this.dataGridViewArtists.RowHeadersVisible = false;
             this.dataGridViewArtists.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewArtists.ShowEditingIcon = false;
-            this.dataGridViewArtists.Size = new System.Drawing.Size(416, 135);
+            this.dataGridViewArtists.Size = new System.Drawing.Size(416, 138);
             this.dataGridViewArtists.TabIndex = 16;
             this.dataGridViewArtists.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewArtists_CellMouseEnter);
             this.dataGridViewArtists.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewArtists_CellMouseLeave);
@@ -718,7 +813,7 @@
             this.dataGridViewAlbums.RowHeadersVisible = false;
             this.dataGridViewAlbums.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewAlbums.ShowEditingIcon = false;
-            this.dataGridViewAlbums.Size = new System.Drawing.Size(416, 135);
+            this.dataGridViewAlbums.Size = new System.Drawing.Size(416, 138);
             this.dataGridViewAlbums.TabIndex = 17;
             this.dataGridViewAlbums.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAlbums_CellMouseEnter);
             this.dataGridViewAlbums.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAlbums_CellMouseLeave);
@@ -930,91 +1025,6 @@
             this.HeaderName.Name = "HeaderName";
             this.HeaderName.ReadOnly = true;
             // 
-            // ColumnDisc
-            // 
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            this.ColumnDisc.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColumnDisc.HeaderText = "D";
-            this.ColumnDisc.MinimumWidth = 35;
-            this.ColumnDisc.Name = "ColumnDisc";
-            this.ColumnDisc.ReadOnly = true;
-            this.ColumnDisc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnDisc.Visible = false;
-            this.ColumnDisc.Width = 35;
-            // 
-            // ColumnTrackNo
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            this.ColumnTrackNo.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ColumnTrackNo.HeaderText = "#";
-            this.ColumnTrackNo.MinimumWidth = 35;
-            this.ColumnTrackNo.Name = "ColumnTrackNo";
-            this.ColumnTrackNo.ReadOnly = true;
-            this.ColumnTrackNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnTrackNo.Width = 35;
-            // 
-            // ColumnTrack
-            // 
-            this.ColumnTrack.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnTrack.FillWeight = 25F;
-            this.ColumnTrack.HeaderText = "TRACK";
-            this.ColumnTrack.MinimumWidth = 50;
-            this.ColumnTrack.Name = "ColumnTrack";
-            this.ColumnTrack.ReadOnly = true;
-            this.ColumnTrack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            // 
-            // ColumnArtist
-            // 
-            this.ColumnArtist.ActiveLinkColor = System.Drawing.Color.White;
-            this.ColumnArtist.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnArtist.FillWeight = 25F;
-            this.ColumnArtist.HeaderText = "ARTIST";
-            this.ColumnArtist.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.ColumnArtist.LinkColor = System.Drawing.Color.White;
-            this.ColumnArtist.MinimumWidth = 50;
-            this.ColumnArtist.Name = "ColumnArtist";
-            this.ColumnArtist.ReadOnly = true;
-            this.ColumnArtist.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnArtist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnArtist.TrackVisitedState = false;
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "TIME";
-            this.ColumnTime.MinimumWidth = 50;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            this.ColumnTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnTime.Width = 60;
-            // 
-            // ColumnPopularity
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle4.NullValue")));
-            this.ColumnPopularity.DefaultCellStyle = dataGridViewCellStyle4;
-            this.ColumnPopularity.HeaderText = "POPULARITY";
-            this.ColumnPopularity.MinimumWidth = 100;
-            this.ColumnPopularity.Name = "ColumnPopularity";
-            this.ColumnPopularity.ReadOnly = true;
-            this.ColumnPopularity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ColumnPopularity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            // 
-            // ColumnAlbum
-            // 
-            this.ColumnAlbum.ActiveLinkColor = System.Drawing.Color.White;
-            this.ColumnAlbum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnAlbum.FillWeight = 25F;
-            this.ColumnAlbum.HeaderText = "ALBUM";
-            this.ColumnAlbum.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.ColumnAlbum.LinkColor = System.Drawing.Color.White;
-            this.ColumnAlbum.MinimumWidth = 50;
-            this.ColumnAlbum.Name = "ColumnAlbum";
-            this.ColumnAlbum.ReadOnly = true;
-            this.ColumnAlbum.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnAlbum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.ColumnAlbum.TrackVisitedState = false;
-            // 
             // SpotConForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1087,7 +1097,7 @@
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTracks;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFindDuplicates;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlay;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlaySelected;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemImportPlaylist;
         private System.Windows.Forms.Splitter splitterFilterBottom;
         private System.Windows.Forms.Panel panelFilter;
@@ -1120,6 +1130,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewImageColumn ColumnPopularity;
         private System.Windows.Forms.DataGridViewLinkColumn ColumnAlbum;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlay;
 
     }
 }

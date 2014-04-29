@@ -284,19 +284,7 @@ namespace SpotCon
                     "|Play",
                     new Action<string, string, string>((dest, orig, s) =>
                     {
-                        if (s.StartsWith("http://open.spotify.com/trackset/Spotify/"))
-                        {
-                            Process p = Process.Start(s);
-                            if (p != null)
-                            {
-                                p.Close();
-                                p.WaitForExit();
-                            }
-                        }
-                        else
-                        {
-                            this.webHelper.Value.Play(s);
-                        }
+                        this.webHelper.Value.Play(s);
                     })
                 },
                 {
@@ -2383,8 +2371,23 @@ namespace SpotCon
                 return;
             }
 
-            string track = (this.dataGridViewTracks.Rows[e.RowIndex].Tag as TrackEx).Href;
-            this.SendToServer(track + "|Play");
+            this.PlayTrackset(e.RowIndex);
+        }
+
+        /// <summary>
+        /// Plays the set of tracks starting at the given index through the end of the search results
+        /// </summary>
+        /// <param name="startRowIndex">Starting row index</param>
+        private void PlayTrackset(int startRowIndex)
+        {
+            List<string> tracks = new List<string>();
+            for (int i = startRowIndex; i < this.dataGridViewTracks.Rows.Count; i++)
+            {
+                tracks.Add((this.dataGridViewTracks.Rows[i].Tag as TrackEx).Href.Replace("spotify:track:", string.Empty));
+            }
+
+            string trackset = "spotify:trackset:SpotCon:" + string.Join(",", tracks);
+            this.SendToServer(trackset + "|Play");
         }
 
         /// <summary>
@@ -3547,25 +3550,45 @@ namespace SpotCon
         /// <param name="e">Event arguments</param>
         private void toolStripMenuItemPlay_Click(object sender, EventArgs e)
         {
+            List<int> indices = new List<int>();
+            foreach (DataGridViewRow row in this.dataGridViewTracks.SelectedRows)
+            {
+                indices.Add(row.Index);
+            }
+
+            if (indices.Any())
+            {
+                this.PlayTrackset(indices.Min());
+            }
+        }
+
+        /// <summary>
+        /// toolStripMenuItemPlay Click event
+        /// </summary>
+        /// <param name="sender">What raised the event</param>
+        /// <param name="e">Event arguments</param>
+        private void toolStripMenuItemPlaySelected_Click(object sender, EventArgs e)
+        {
             if (this.dataGridViewTracks.SelectedRows.Count == 0)
             {
                 return;
             }
 
-            if (this.dataGridViewTracks.SelectedRows.Count == 1)
+            List<int> indices = new List<int>();
+            foreach (DataGridViewRow row in this.dataGridViewTracks.SelectedRows)
             {
-                string track = (this.dataGridViewTracks.SelectedRows[0].Tag as TrackEx).Href;
-                this.SendToServer(track + "|Play");
+                indices.Add(row.Index);
             }
-            else
-            {
-                List<string> tracks = new List<string>();
-                for (int i = this.dataGridViewTracks.SelectedRows.Count; i > 0; i--)
-                {
-                    tracks.Add((this.dataGridViewTracks.SelectedRows[i - 1].Tag as TrackEx).Href.Replace("spotify:track:", string.Empty));
-                }
 
-                string trackset = "http://open.spotify.com/trackset/Spotify/" + string.Join(",", tracks);
+            List<string> tracks = new List<string>();
+            foreach (int i in indices.OrderBy(i => i))
+            {
+                tracks.Add((this.dataGridViewTracks.Rows[i].Tag as TrackEx).Href.Replace("spotify:track:", string.Empty));
+            }
+
+            if (tracks.Any())
+            {
+                string trackset = "spotify:trackset:SpotCon:" + string.Join(",", tracks);
                 this.SendToServer(trackset + "|Play");
             }
         }

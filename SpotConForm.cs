@@ -23,6 +23,7 @@ namespace SpotCon
     using System.Text.RegularExpressions;
     using System.Web;
     using System.Windows.Forms;
+    using System.Windows.Threading;
     using System.Xml.Linq;
     using SpotCon.Enums;
     using SpotCon.PlaylistImporter;
@@ -284,7 +285,7 @@ namespace SpotCon
                     "|Play",
                     new Action<string, string, string>((dest, orig, s) =>
                     {
-                        this.webHelper.Value.Play(s);
+                        new BackgroundWorker().QuickStart(() => this.webHelper.Value.Play(s));
                     })
                 },
                 {
@@ -332,9 +333,12 @@ namespace SpotCon
                     "|GetStatusFromServer",
                     new Action<string, string, string>((dest, orig, s) =>
                     {
-                        string response = string.Empty;
-                        webHelper.Value.GetStatus(out response);
-                        this.SendToClient(response + "|ServerStatusReturned", orig);
+                        new BackgroundWorker().QuickStart(() =>
+                        {
+                            string response = string.Empty;
+                            webHelper.Value.GetStatus(out response);
+                            this.SendToClient(response + "|ServerStatusReturned", orig);
+                        });
                     })
                 },
                 {
@@ -3229,7 +3233,7 @@ namespace SpotCon
                 {
                     Track t = bwArgs.UserState as Track;
                     DataGridViewRow row = new DataGridViewRow();
-                    row.CreateCells(this.dataGridViewTracks, null, t.DiscNumber, t.TrackNumber, t.Name, t.Artist.Name, TimeSpan.FromSeconds((double)t.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(t.Popularity), t.Album.Name);
+                    row.CreateCells(this.dataGridViewTracks, t.DiscNumber, t.TrackNumber, t.Name, t.Artist.Name, TimeSpan.FromSeconds((double)t.Length.Value).ToString(@"m\:ss"), this.GetPopularityImage(t.Popularity), t.Album.Name);
                     row.Cells[(int)TrackColumns.Popularity].Tag = t.Popularity;
                     row.Cells[(int)TrackColumns.Time].Tag = t.Length.Value;
                     row.Tag = new TrackEx(t);

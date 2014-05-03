@@ -5,6 +5,8 @@
 //-----------------------------------------------------------------------
 namespace SpotCon
 {
+    using System;
+    using System.ComponentModel;
     using System.Windows.Forms;
 
     /// <summary>
@@ -21,6 +23,21 @@ namespace SpotCon
             dataGridView.Tag = false;
             dataGridView.Rows.Clear();
             dataGridView.Tag = true;
+        }
+
+        /// <summary>
+        /// Kicks off an action on a new thread
+        /// </summary>
+        /// <param name="bw">Background worker</param>
+        /// <param name="action">Action to invoke</param>
+        public static void QuickStart(this BackgroundWorker bw, Action action)
+        {
+            bw.DoWork += (bwSender, bwArgs) =>
+            {
+                action.Invoke();
+            };
+
+            bw.RunWorkerAsync();
         }
     }
 }

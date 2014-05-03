@@ -23,7 +23,6 @@ namespace SpotCon
     using System.Text.RegularExpressions;
     using System.Web;
     using System.Windows.Forms;
-    using System.Windows.Threading;
     using System.Xml.Linq;
     using SpotCon.Enums;
     using SpotCon.PlaylistImporter;

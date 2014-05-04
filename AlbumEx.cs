@@ -90,6 +90,14 @@ namespace SpotCon
         /// <summary>
         /// Initializes a new instance of the <see cref="AlbumEx"/> class
         /// </summary>
+        /// <param name="track">Single track</param>
+        public AlbumEx(TrackEx track) : this(new List<TrackEx>() { track })
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AlbumEx"/> class
+        /// </summary>
         /// <param name="tracks">List of tracks</param>
         public AlbumEx(List<TrackEx> tracks)
         {

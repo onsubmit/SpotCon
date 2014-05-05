@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyWebSharp", "..\Spoti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaylistImporter", "PlaylistImporter\PlaylistImporter.csproj", "{706F7202-F493-4DA9-B21A-EDFC6638255B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService", "WebService\WebService.csproj", "{A1EBDB36-37EF-4564-8D09-ED5B6A7643D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,21 +24,21 @@ Global
 		{D1B4C275-E49D-472F-802C-9C1550CC855E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1B4C275-E49D-472F-802C-9C1550CC855E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFFEB5D4-C931-4439-9B40-06E8F107AD55}.Release|Any CPU.Build.0 = Release|Any CPU
 		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{431760B9-DC3E-4460-9998-A1C81A1D8774}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC443CFE-CD39-475C-9C68-2D8AE8E85046}.Release|Any CPU.Build.0 = Release|Any CPU
 		{706F7202-F493-4DA9-B21A-EDFC6638255B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{706F7202-F493-4DA9-B21A-EDFC6638255B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{706F7202-F493-4DA9-B21A-EDFC6638255B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{706F7202-F493-4DA9-B21A-EDFC6638255B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1EBDB36-37EF-4564-8D09-ED5B6A7643D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1EBDB36-37EF-4564-8D09-ED5B6A7643D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1EBDB36-37EF-4564-8D09-ED5B6A7643D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1EBDB36-37EF-4564-8D09-ED5B6A7643D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

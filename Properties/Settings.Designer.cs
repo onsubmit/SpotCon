@@ -85,5 +85,16 @@ namespace SpotCon.Properties {
                 this["CachedMisspelledTracks"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Playlists {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Playlists"]));
+            }
+            set {
+                this["Playlists"] = value;
+            }
+        }
     }
 }

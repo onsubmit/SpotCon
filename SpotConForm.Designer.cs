@@ -40,6 +40,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.panelFooter = new System.Windows.Forms.Panel();
             this.panelTrackKnob = new System.Windows.Forms.Panel();
@@ -100,10 +102,13 @@
             this.linkLabelArtist = new System.Windows.Forms.LinkLabel();
             this.linkLabelTrack = new System.Windows.Forms.LinkLabel();
             this.panelComputers = new System.Windows.Forms.Panel();
+            this.dataGridViewPlaylists = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumnPlaylist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewComputers = new System.Windows.Forms.DataGridView();
             this.HeaderConnected = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelFooter.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -119,6 +124,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.panelTrack.SuspendLayout();
             this.panelComputers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -640,7 +646,7 @@
             this.toolStripMenuItemImportPlaylist,
             this.toolStripMenuItemFindDuplicates});
             this.contextMenuStripTracks.Name = "contextMenuStrip";
-            this.contextMenuStripTracks.Size = new System.Drawing.Size(156, 120);
+            this.contextMenuStripTracks.Size = new System.Drawing.Size(156, 98);
             // 
             // toolStripMenuItemPlay
             // 
@@ -915,14 +921,14 @@
             this.linkLabelArtist.BackColor = System.Drawing.Color.Transparent;
             this.linkLabelArtist.DisabledLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
             this.linkLabelArtist.Enabled = false;
-            this.linkLabelArtist.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelArtist.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelArtist.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
             this.linkLabelArtist.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelArtist.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(228)))), ((int)(((byte)(228)))));
             this.linkLabelArtist.Location = new System.Drawing.Point(7, 27);
             this.linkLabelArtist.MaximumSize = new System.Drawing.Size(150, 16);
             this.linkLabelArtist.Name = "linkLabelArtist";
-            this.linkLabelArtist.Size = new System.Drawing.Size(82, 13);
+            this.linkLabelArtist.Size = new System.Drawing.Size(86, 13);
             this.linkLabelArtist.TabIndex = 1;
             this.linkLabelArtist.TabStop = true;
             this.linkLabelArtist.Text = "Artist loading...";
@@ -937,14 +943,14 @@
             this.linkLabelTrack.BackColor = System.Drawing.Color.Transparent;
             this.linkLabelTrack.DisabledLinkColor = System.Drawing.Color.White;
             this.linkLabelTrack.Enabled = false;
-            this.linkLabelTrack.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelTrack.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabelTrack.ForeColor = System.Drawing.Color.White;
             this.linkLabelTrack.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelTrack.LinkColor = System.Drawing.Color.White;
             this.linkLabelTrack.Location = new System.Drawing.Point(7, 8);
             this.linkLabelTrack.MaximumSize = new System.Drawing.Size(150, 16);
             this.linkLabelTrack.Name = "linkLabelTrack";
-            this.linkLabelTrack.Size = new System.Drawing.Size(97, 16);
+            this.linkLabelTrack.Size = new System.Drawing.Size(96, 16);
             this.linkLabelTrack.TabIndex = 0;
             this.linkLabelTrack.TabStop = true;
             this.linkLabelTrack.Text = "Track loading...";
@@ -953,13 +959,71 @@
             // 
             // panelComputers
             // 
+            this.panelComputers.Controls.Add(this.dataGridViewPlaylists);
             this.panelComputers.Controls.Add(this.dataGridViewComputers);
             this.panelComputers.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelComputers.Location = new System.Drawing.Point(0, 0);
             this.panelComputers.MinimumSize = new System.Drawing.Size(0, 80);
             this.panelComputers.Name = "panelComputers";
-            this.panelComputers.Size = new System.Drawing.Size(151, 240);
+            this.panelComputers.Size = new System.Drawing.Size(151, 300);
             this.panelComputers.TabIndex = 13;
+            // 
+            // dataGridViewPlaylists
+            // 
+            this.dataGridViewPlaylists.AllowDrop = true;
+            this.dataGridViewPlaylists.AllowUserToAddRows = false;
+            this.dataGridViewPlaylists.AllowUserToDeleteRows = false;
+            this.dataGridViewPlaylists.AllowUserToResizeColumns = false;
+            this.dataGridViewPlaylists.AllowUserToResizeRows = false;
+            this.dataGridViewPlaylists.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            this.dataGridViewPlaylists.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridViewPlaylists.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dataGridViewPlaylists.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPlaylists.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            this.dataGridViewPlaylists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewPlaylists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumnPlaylist});
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(47)))), ((int)(((byte)(51)))));
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewPlaylists.DefaultCellStyle = dataGridViewCellStyle11;
+            this.dataGridViewPlaylists.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewPlaylists.EnableHeadersVisualStyles = false;
+            this.dataGridViewPlaylists.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            this.dataGridViewPlaylists.Location = new System.Drawing.Point(0, 120);
+            this.dataGridViewPlaylists.Margin = new System.Windows.Forms.Padding(0);
+            this.dataGridViewPlaylists.MultiSelect = false;
+            this.dataGridViewPlaylists.Name = "dataGridViewPlaylists";
+            this.dataGridViewPlaylists.ReadOnly = true;
+            this.dataGridViewPlaylists.RowHeadersVisible = false;
+            this.dataGridViewPlaylists.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewPlaylists.ShowEditingIcon = false;
+            this.dataGridViewPlaylists.Size = new System.Drawing.Size(151, 180);
+            this.dataGridViewPlaylists.TabIndex = 17;
+            this.dataGridViewPlaylists.SelectionChanged += new System.EventHandler(this.dataGridViewPlaylists_SelectionChanged);
+            this.dataGridViewPlaylists.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewPlaylists_DragDrop);
+            this.dataGridViewPlaylists.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridViewPlaylists_DragEnter);
+            // 
+            // dataGridViewTextBoxColumnPlaylist
+            // 
+            this.dataGridViewTextBoxColumnPlaylist.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumnPlaylist.HeaderText = "PLAYLISTS";
+            this.dataGridViewTextBoxColumnPlaylist.Name = "dataGridViewTextBoxColumnPlaylist";
+            this.dataGridViewTextBoxColumnPlaylist.ReadOnly = true;
+            this.dataGridViewTextBoxColumnPlaylist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // dataGridViewComputers
             // 
@@ -978,15 +1042,15 @@
             this.HeaderConnected,
             this.HeaderConnectionStatus,
             this.HeaderName});
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(47)))), ((int)(((byte)(51)))));
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewComputers.DefaultCellStyle = dataGridViewCellStyle10;
-            this.dataGridViewComputers.Dock = System.Windows.Forms.DockStyle.Fill;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(148)))), ((int)(((byte)(149)))), ((int)(((byte)(153)))));
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(47)))), ((int)(((byte)(51)))));
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewComputers.DefaultCellStyle = dataGridViewCellStyle12;
+            this.dataGridViewComputers.Dock = System.Windows.Forms.DockStyle.Top;
             this.dataGridViewComputers.GridColor = System.Drawing.Color.White;
             this.dataGridViewComputers.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewComputers.Margin = new System.Windows.Forms.Padding(0);
@@ -995,7 +1059,7 @@
             this.dataGridViewComputers.Name = "dataGridViewComputers";
             this.dataGridViewComputers.RowHeadersVisible = false;
             this.dataGridViewComputers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewComputers.Size = new System.Drawing.Size(151, 240);
+            this.dataGridViewComputers.Size = new System.Drawing.Size(151, 120);
             this.dataGridViewComputers.TabIndex = 9;
             this.dataGridViewComputers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComputers_CellClick);
             this.dataGridViewComputers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComputers_CellValueChanged);
@@ -1025,6 +1089,12 @@
             this.HeaderName.Name = "HeaderName";
             this.HeaderName.ReadOnly = true;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
             // SpotConForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1033,7 +1103,7 @@
             this.Controls.Add(this.tableLayoutPanelMain);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(600, 410);
+            this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "SpotConForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "SpotCon";
@@ -1060,6 +1130,7 @@
             this.panelTrack.ResumeLayout(false);
             this.panelTrack.PerformLayout();
             this.panelComputers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).EndInit();
             this.ResumeLayout(false);
 
@@ -1131,6 +1202,9 @@
         private System.Windows.Forms.DataGridViewImageColumn ColumnPopularity;
         private System.Windows.Forms.DataGridViewLinkColumn ColumnAlbum;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlay;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.DataGridView dataGridViewPlaylists;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnPlaylist;
 
     }
 }

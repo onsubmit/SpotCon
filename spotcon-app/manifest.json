@@ -1,0 +1,34 @@
+{
+	"AcceptedLinkTypes" : ["playlist"],
+	"AppDescription" : {
+		"en" : "SpotCon"
+	},
+	"AppIcon" : {
+		"36x18" : "spotcon.png"
+	},
+	"AppName" : {
+		"en" : "SpotCon"
+	},
+	"BundleIdentifier" : "spotcon-app",
+	"BundleType" : "Application",
+	"BundleVersion" : "0.1",
+	"DefaultTabs" : [{
+			"arguments" : "index",
+			"title" : {
+				"en" : "Home"
+			}
+		}
+	],
+	"Dependencies" : {
+		"api" : "1.0.0",
+		"views" : "1.0.0"
+	},
+	"RequiredInterface" : 1,
+	"RequiredPermissions" : [
+		"http://spotconws.com"
+	],
+	"SupportedLanguages" : [
+		"en"
+	],
+	"VendorIdentifier" : "co.mager"
+}

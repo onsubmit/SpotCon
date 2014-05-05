@@ -669,6 +669,7 @@ namespace SpotCon
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup", "Albums"));
             Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Search"));
             this.LoadImportPlugins();
+            this.LoadPlaylists();
             this.ReadArtistCache();
             this.ReadMisspelledArtistCache();
             this.ReadMisspelledTrackCache();
@@ -825,6 +826,28 @@ namespace SpotCon
             };
 
             bw.RunWorkerAsync(bw);
+        }
+
+        private void LoadPlaylists()
+        {
+            StringCollection sc = Properties.Settings.Default.Playlists;
+            if (sc != null)
+            {
+                this.dataGridViewPlaylists.SelectionChanged -= this.dataGridViewPlaylists_SelectionChanged;
+
+                string[] split = null;
+                Dictionary<string, string> playlists = sc.Cast<string>().ToDictionary(s => (split = s.Split(new[] { "|||" }, StringSplitOptions.None))[0], s => split[1]);
+                foreach (var p in playlists)
+                {
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewPlaylists, p.Value);
+                    row.Tag = new Tuple<string, List<string>>(p.Key, null);
+                    this.dataGridViewPlaylists.Rows.Add(row);
+                    row.Selected = false;
+                }
+
+                this.dataGridViewPlaylists.SelectionChanged += this.dataGridViewPlaylists_SelectionChanged;
+            }
         }
 
         /// <summary>
@@ -3305,6 +3328,11 @@ namespace SpotCon
             IEnumerable<string> trackList = contents.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             trackList = trackList.Where(l => l.StartsWith("http://open.spotify.com/track/")).Select(l => l.Replace("http://open.spotify.com/track/", string.Empty));
 
+            ImportTrackList(trackList);
+        }
+
+        private void ImportTrackList(IEnumerable<string> trackList)
+        {
             BackgroundWorker bw = new BackgroundWorker()
             {
                 WorkerReportsProgress = true,
@@ -3784,6 +3812,77 @@ namespace SpotCon
             /// Gets or sets the timer used to update the Spotify status
             /// </summary>
             public Timer Timer { get; set; }
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewPlaylists_DragDrop(object sender, DragEventArgs e)
+        {
+            string contents = e.Data.GetData(DataFormats.Text).ToString();
+
+            Match match = Regex.Match(contents, @"http://open.spotify.com/(?<PLAYLIST>user/(.+)/(.+))$");
+            if (match.Success)
+            {
+                string uri = "spotify:" + match.Groups["PLAYLIST"].Value.Replace('/', ':');
+                Dictionary<string, string> playlists = new Dictionary<string, string>();
+
+                string[] split = null;
+                StringCollection sc = Properties.Settings.Default.Playlists ?? new StringCollection();
+                playlists = sc.Cast<string>().ToDictionary(s => (split = s.Split(new[] { "|||" }, StringSplitOptions.None))[0], s => split[1]);
+
+                if (!playlists.ContainsKey(uri))
+                {
+                    Tuple<string, string[]> playlist = webHelper.Value.GetPlaylist(uri);
+
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(this.dataGridViewPlaylists, playlist.Item1);
+                    row.Tag = new Tuple<string, string[]>(uri, playlist.Item2);
+                    this.dataGridViewPlaylists.Rows.Add(row);
+                    row.Selected = true;
+
+                    sc.Add(string.Format("{0}|||{1}", uri, playlist.Item1));
+                    Properties.Settings.Default.Playlists = sc;
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+
+        private void dataGridViewPlaylists_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void dataGridViewPlaylists_SelectionChanged(object sender, EventArgs e)
+        {
+            DataGridViewRow row = this.dataGridViewPlaylists.SelectedRows[0];
+            Tuple<string, string[]> playlist = row.Tag as Tuple<string, string[]>;
+            if (playlist.Item2 == null)
+            {
+                this.SetBusyState(true);
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (bwSender, bwArgs) =>
+                {
+                    bwArgs.Result = webHelper.Value.GetPlaylist(playlist.Item1).Item2;
+                };
+
+                bw.RunWorkerCompleted += (bwSender, bwArgs) =>
+                {
+                    this.SetBusyState(false);
+                    string[] tracks = bwArgs.Result as string[];
+                    playlist = new Tuple<string, string[]>(playlist.Item1, tracks);
+                    row.Tag = playlist;
+                    ImportTrackList(playlist.Item2);
+                };
+
+                bw.RunWorkerAsync();
+            }
+            else
+            {
+                ImportTrackList(playlist.Item2);
+            }
         }
     }
 }

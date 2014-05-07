@@ -117,6 +117,7 @@
     <Compile Include="FindNewTracksThreadStatus.cs" />
     <Compile Include="GlobalMouseHandler.cs" />
     <Compile Include="Enums\HostColumns.cs" />
+    <Compile Include="PlaylistEx.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -173,6 +174,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="spotcon-app\manifest.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.config" />
@@ -303,7 +305,17 @@
   <ItemGroup>
     <None Include="Resources\checkbox.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="spotcon-app\index.html" />
+    <Content Include="spotcon-app\js\jquery.min.js" />
+    <Content Include="spotcon-app\js\spotcon.js" />
+    <Content Include="spotcon-app\spotcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "%25USERPROFILE%25\My Documents\spotify\spotcon
+xcopy /y /e "$(ProjectDir)spotcon-app\*.*" "%25USERPROFILE%25\My Documents\spotify\spotcon"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

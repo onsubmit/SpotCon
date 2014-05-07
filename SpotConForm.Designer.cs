@@ -108,7 +108,8 @@
             this.HeaderConnected = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStripPlaylists = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addPlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelFooter.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -126,6 +127,7 @@
             this.panelComputers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).BeginInit();
+            this.contextMenuStripPlaylists.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelMain
@@ -970,7 +972,6 @@
             // 
             // dataGridViewPlaylists
             // 
-            this.dataGridViewPlaylists.AllowDrop = true;
             this.dataGridViewPlaylists.AllowUserToAddRows = false;
             this.dataGridViewPlaylists.AllowUserToDeleteRows = false;
             this.dataGridViewPlaylists.AllowUserToResizeColumns = false;
@@ -991,6 +992,7 @@
             this.dataGridViewPlaylists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPlaylists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumnPlaylist});
+            this.dataGridViewPlaylists.ContextMenuStrip = this.contextMenuStripPlaylists;
             dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
             dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1014,8 +1016,6 @@
             this.dataGridViewPlaylists.Size = new System.Drawing.Size(151, 180);
             this.dataGridViewPlaylists.TabIndex = 17;
             this.dataGridViewPlaylists.SelectionChanged += new System.EventHandler(this.dataGridViewPlaylists_SelectionChanged);
-            this.dataGridViewPlaylists.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewPlaylists_DragDrop);
-            this.dataGridViewPlaylists.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridViewPlaylists_DragEnter);
             // 
             // dataGridViewTextBoxColumnPlaylist
             // 
@@ -1089,11 +1089,20 @@
             this.HeaderName.Name = "HeaderName";
             this.HeaderName.ReadOnly = true;
             // 
-            // contextMenuStrip1
+            // contextMenuStripPlaylists
             // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            this.contextMenuStripPlaylists.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addPlaylistToolStripMenuItem});
+            this.contextMenuStripPlaylists.Name = "contextMenuStrip1";
+            this.contextMenuStripPlaylists.Size = new System.Drawing.Size(137, 26);
+            // 
+            // addPlaylistToolStripMenuItem
+            // 
+            this.addPlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.ImportPlaylist;
+            this.addPlaylistToolStripMenuItem.Name = "addPlaylistToolStripMenuItem";
+            this.addPlaylistToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.addPlaylistToolStripMenuItem.Text = "Add Playlist";
+            this.addPlaylistToolStripMenuItem.Click += new System.EventHandler(this.addPlaylistToolStripMenuItem_Click);
             // 
             // SpotConForm
             // 
@@ -1132,6 +1141,7 @@
             this.panelComputers.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).EndInit();
+            this.contextMenuStripPlaylists.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1202,9 +1212,10 @@
         private System.Windows.Forms.DataGridViewImageColumn ColumnPopularity;
         private System.Windows.Forms.DataGridViewLinkColumn ColumnAlbum;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlay;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripPlaylists;
         private System.Windows.Forms.DataGridView dataGridViewPlaylists;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnPlaylist;
+        private System.Windows.Forms.ToolStripMenuItem addPlaylistToolStripMenuItem;
 
     }
 }

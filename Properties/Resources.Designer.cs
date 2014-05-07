@@ -61,6 +61,24 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please drag your playlist to the SpotCon app inside Spotify and press OK..
+        /// </summary>
+        internal static string AddPlaylist {
+            get {
+                return ResourceManager.GetString("AddPlaylist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add playlist.
+        /// </summary>
+        internal static string AddPlaylistCaption {
+            get {
+                return ResourceManager.GetString("AddPlaylistCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Back {

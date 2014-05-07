@@ -1,7 +1,8 @@
 {
 	"AcceptedLinkTypes" : ["playlist"],
+	"AcceptedViewDropTypes" : ["playlist"],
 	"AppDescription" : {
-		"en" : "SpotCon"
+		"en" : "An application used to communicate with the SpotCon client"
 	},
 	"AppIcon" : {
 		"36x18" : "spotcon.png"
@@ -9,9 +10,9 @@
 	"AppName" : {
 		"en" : "SpotCon"
 	},
-	"BundleIdentifier" : "spotcon-app",
+	"BundleIdentifier" : "spotcon",
 	"BundleType" : "Application",
-	"BundleVersion" : "0.1",
+	"BundleVersion" : "1.0",
 	"DefaultTabs" : [{
 			"arguments" : "index",
 			"title" : {
@@ -23,10 +24,7 @@
 		"api" : "1.0.0",
 		"views" : "1.0.0"
 	},
-	"RequiredInterface" : 1,
-	"RequiredPermissions" : [
-		"http://spotconws.com"
-	],
+	"SupportedDeviceClasses" : "desktop",
 	"SupportedLanguages" : [
 		"en"
 	],

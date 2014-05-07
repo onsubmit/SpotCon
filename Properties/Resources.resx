@@ -355,4 +355,10 @@
   <data name="SearchingPage" xml:space="preserve">
     <value>Seaching for "{0}" (page {1})...</value>
   </data>
+  <data name="AddPlaylist" xml:space="preserve">
+    <value>Please drag your playlist to the SpotCon app inside Spotify and press OK.</value>
+  </data>
+  <data name="AddPlaylistCaption" xml:space="preserve">
+    <value>Add playlist</value>
+  </data>
 </root>

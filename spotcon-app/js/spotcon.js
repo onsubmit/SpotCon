@@ -32,6 +32,10 @@ window.onload = function () {
             var playlist = models.Playlist.fromURI(uri);
             playlist.load('name', 'tracks').done(function (loaded) {
                 var name = loaded.name;
+                if (playlist.uri.endsWith('/starred')) {
+                    name = 'Starred';
+                }
+
                 loaded.tracks.snapshot().done(function (snapshot) {
                     var tracks = snapshot.toURIs();
 
@@ -40,7 +44,7 @@ window.onload = function () {
                         text += tracks[i].replace('spotify:track:', '') + ','
                     }
 
-                    $.post("http://localhost:8080/SpotConService.asmx/SetPlaylist", {
+                    $.post("http://localhost:17290/SpotConService.asmx/SetPlaylist", {
                         uri: uri,
                         name: name,
                         tracks: text
@@ -52,3 +56,7 @@ window.onload = function () {
         }, false);
 	});
 }
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};

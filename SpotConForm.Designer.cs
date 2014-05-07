@@ -104,12 +104,17 @@
             this.panelComputers = new System.Windows.Forms.Panel();
             this.dataGridViewPlaylists = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnPlaylist = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripPlaylists = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addPlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.refreshPlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshAllPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.removePlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewComputers = new System.Windows.Forms.DataGridView();
             this.HeaderConnected = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripPlaylists = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addPlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelMain.SuspendLayout();
             this.panelFooter.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -126,8 +131,8 @@
             this.panelTrack.SuspendLayout();
             this.panelComputers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).BeginInit();
             this.contextMenuStripPlaylists.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanelMain
@@ -673,7 +678,7 @@
             // 
             // toolStripMenuItemImportPlaylist
             // 
-            this.toolStripMenuItemImportPlaylist.Image = global::SpotCon.Properties.Resources.ImportPlaylist;
+            this.toolStripMenuItemImportPlaylist.Image = global::SpotCon.Properties.Resources.AddPlaylist;
             this.toolStripMenuItemImportPlaylist.Name = "toolStripMenuItemImportPlaylist";
             this.toolStripMenuItemImportPlaylist.Size = new System.Drawing.Size(155, 22);
             this.toolStripMenuItemImportPlaylist.Text = "Import Playlist";
@@ -1007,7 +1012,6 @@
             this.dataGridViewPlaylists.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
             this.dataGridViewPlaylists.Location = new System.Drawing.Point(0, 120);
             this.dataGridViewPlaylists.Margin = new System.Windows.Forms.Padding(0);
-            this.dataGridViewPlaylists.MultiSelect = false;
             this.dataGridViewPlaylists.Name = "dataGridViewPlaylists";
             this.dataGridViewPlaylists.ReadOnly = true;
             this.dataGridViewPlaylists.RowHeadersVisible = false;
@@ -1024,6 +1028,59 @@
             this.dataGridViewTextBoxColumnPlaylist.Name = "dataGridViewTextBoxColumnPlaylist";
             this.dataGridViewTextBoxColumnPlaylist.ReadOnly = true;
             this.dataGridViewTextBoxColumnPlaylist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // contextMenuStripPlaylists
+            // 
+            this.contextMenuStripPlaylists.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addPlaylistToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.refreshPlaylistToolStripMenuItem,
+            this.refreshAllPlaylistsToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.removePlaylistToolStripMenuItem});
+            this.contextMenuStripPlaylists.Name = "contextMenuStrip1";
+            this.contextMenuStripPlaylists.Size = new System.Drawing.Size(176, 126);
+            // 
+            // addPlaylistToolStripMenuItem
+            // 
+            this.addPlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.AddPlaylist;
+            this.addPlaylistToolStripMenuItem.Name = "addPlaylistToolStripMenuItem";
+            this.addPlaylistToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.addPlaylistToolStripMenuItem.Text = "Add Playlist";
+            this.addPlaylistToolStripMenuItem.Click += new System.EventHandler(this.addPlaylistToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(172, 6);
+            // 
+            // refreshPlaylistToolStripMenuItem
+            // 
+            this.refreshPlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.RefreshPlaylist;
+            this.refreshPlaylistToolStripMenuItem.Name = "refreshPlaylistToolStripMenuItem";
+            this.refreshPlaylistToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.refreshPlaylistToolStripMenuItem.Text = "Refresh Playlist(s)";
+            this.refreshPlaylistToolStripMenuItem.Click += new System.EventHandler(this.refreshPlaylistToolStripMenuItem_Click);
+            // 
+            // refreshAllPlaylistsToolStripMenuItem
+            // 
+            this.refreshAllPlaylistsToolStripMenuItem.Name = "refreshAllPlaylistsToolStripMenuItem";
+            this.refreshAllPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.refreshAllPlaylistsToolStripMenuItem.Text = "Refresh All Playlists";
+            this.refreshAllPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.refreshAllPlaylistsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(172, 6);
+            // 
+            // removePlaylistToolStripMenuItem
+            // 
+            this.removePlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.RemovePlaylist;
+            this.removePlaylistToolStripMenuItem.Name = "removePlaylistToolStripMenuItem";
+            this.removePlaylistToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.removePlaylistToolStripMenuItem.Text = "Remove Playlist(s)";
+            this.removePlaylistToolStripMenuItem.Click += new System.EventHandler(this.removePlaylistToolStripMenuItem_Click);
             // 
             // dataGridViewComputers
             // 
@@ -1089,21 +1146,6 @@
             this.HeaderName.Name = "HeaderName";
             this.HeaderName.ReadOnly = true;
             // 
-            // contextMenuStripPlaylists
-            // 
-            this.contextMenuStripPlaylists.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addPlaylistToolStripMenuItem});
-            this.contextMenuStripPlaylists.Name = "contextMenuStrip1";
-            this.contextMenuStripPlaylists.Size = new System.Drawing.Size(137, 26);
-            // 
-            // addPlaylistToolStripMenuItem
-            // 
-            this.addPlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.ImportPlaylist;
-            this.addPlaylistToolStripMenuItem.Name = "addPlaylistToolStripMenuItem";
-            this.addPlaylistToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.addPlaylistToolStripMenuItem.Text = "Add Playlist";
-            this.addPlaylistToolStripMenuItem.Click += new System.EventHandler(this.addPlaylistToolStripMenuItem_Click);
-            // 
             // SpotConForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1116,6 +1158,7 @@
             this.Name = "SpotConForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "SpotCon";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpotConForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SpotConForm_FormClosed);
             this.Load += new System.EventHandler(this.SpotConForm_Load);
             this.ResizeBegin += new System.EventHandler(this.SpotConForm_ResizeBegin);
@@ -1140,8 +1183,8 @@
             this.panelTrack.PerformLayout();
             this.panelComputers.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).EndInit();
             this.contextMenuStripPlaylists.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1216,6 +1259,11 @@
         private System.Windows.Forms.DataGridView dataGridViewPlaylists;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnPlaylist;
         private System.Windows.Forms.ToolStripMenuItem addPlaylistToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem refreshPlaylistToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshAllPlaylistsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem removePlaylistToolStripMenuItem;
 
     }
 }

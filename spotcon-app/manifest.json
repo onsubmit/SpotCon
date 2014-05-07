@@ -1,6 +1,5 @@
 {
 	"AcceptedLinkTypes" : ["playlist"],
-	"AcceptedViewDropTypes" : ["playlist"],
 	"AppDescription" : {
 		"en" : "An application used to communicate with the SpotCon client"
 	},
@@ -28,5 +27,5 @@
 	"SupportedLanguages" : [
 		"en"
 	],
-	"VendorIdentifier" : "co.mager"
+	"VendorIdentifier" : "co.spotcon"
 }

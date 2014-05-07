@@ -61,11 +61,12 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please drag your playlist to the SpotCon app inside Spotify and press OK..
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string AddPlaylist {
+        internal static System.Drawing.Bitmap AddPlaylist {
             get {
-                return ResourceManager.GetString("AddPlaylist", resourceCulture);
+                object obj = ResourceManager.GetObject("AddPlaylist", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -75,6 +76,15 @@ namespace SpotCon.Properties {
         internal static string AddPlaylistCaption {
             get {
                 return ResourceManager.GetString("AddPlaylistCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please drag your playlist to the SpotCon app inside Spotify and press OK..
+        /// </summary>
+        internal static string AddPlaylistMessage {
+            get {
+                return ResourceManager.GetString("AddPlaylistMessage", resourceCulture);
             }
         }
         
@@ -296,16 +306,6 @@ namespace SpotCon.Properties {
         internal static string GatheringTrackInfo {
             get {
                 return ResourceManager.GetString("GatheringTrackInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ImportPlaylist {
-            get {
-                object obj = ResourceManager.GetObject("ImportPlaylist", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -623,6 +623,44 @@ namespace SpotCon.Properties {
         internal static string PrivateSessionError {
             get {
                 return ResourceManager.GetString("PrivateSessionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RefreshPlaylist {
+            get {
+                object obj = ResourceManager.GetObject("RefreshPlaylist", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh playlist.
+        /// </summary>
+        internal static string RefreshPlaylistCaption {
+            get {
+                return ResourceManager.GetString("RefreshPlaylistCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please drag the &quot;{0}&quot; playlist to the SpotCon app inside Spotify and press OK..
+        /// </summary>
+        internal static string RefreshPlaylistMessage {
+            get {
+                return ResourceManager.GetString("RefreshPlaylistMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RemovePlaylist {
+            get {
+                object obj = ResourceManager.GetObject("RemovePlaylist", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

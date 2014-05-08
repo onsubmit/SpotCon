@@ -775,6 +775,7 @@
             this.dataGridViewArtists.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewArtists_CellMouseLeave);
             this.dataGridViewArtists.SelectionChanged += new System.EventHandler(this.dataGridViewArtists_SelectionChanged);
             this.dataGridViewArtists.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewArtists_SortCompare);
+            this.dataGridViewArtists.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewArtists_KeyPress);
             // 
             // dataGridViewTextBoxColumnArtist
             // 
@@ -832,6 +833,7 @@
             this.dataGridViewAlbums.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAlbums_CellMouseLeave);
             this.dataGridViewAlbums.SelectionChanged += new System.EventHandler(this.dataGridViewAlbums_SelectionChanged);
             this.dataGridViewAlbums.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewAlbums_SortCompare);
+            this.dataGridViewAlbums.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewAlbums_KeyPress);
             // 
             // ColumnAlbumName
             // 
@@ -1039,7 +1041,7 @@
             this.toolStripSeparator3,
             this.removePlaylistToolStripMenuItem});
             this.contextMenuStripPlaylists.Name = "contextMenuStrip1";
-            this.contextMenuStripPlaylists.Size = new System.Drawing.Size(176, 126);
+            this.contextMenuStripPlaylists.Size = new System.Drawing.Size(176, 104);
             // 
             // addPlaylistToolStripMenuItem
             // 

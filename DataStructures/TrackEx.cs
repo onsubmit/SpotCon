@@ -3,7 +3,7 @@
 //     Copyright (c) Andy Young. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace SpotCon
+namespace SpotCon.DataStructures
 {
     using SpotifyWebSharp.SpotifyResponses.Lookup;
     using SpotifyWebSharp.SpotifyResponses.Search;

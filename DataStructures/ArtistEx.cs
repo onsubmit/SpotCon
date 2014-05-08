@@ -3,7 +3,7 @@
 //     Copyright (c) Andy Young. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace SpotCon
+namespace SpotCon.DataStructures
 {
     /// <summary>
     /// Wrapper class for the different kinds of artists

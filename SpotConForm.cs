@@ -16,7 +16,6 @@ namespace SpotCon
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Net.NetworkInformation;
     using System.Net.Sockets;
     using System.Reflection;
     using System.Runtime.InteropServices;
@@ -24,8 +23,8 @@ namespace SpotCon
     using System.Text.RegularExpressions;
     using System.Web;
     using System.Windows.Forms;
-    using System.Xml;
     using System.Xml.Linq;
+    using SpotCon.DataStructures;
     using SpotCon.Enums;
     using SpotCon.PlaylistImporter;
     using SpotifyWebHelperSharp;

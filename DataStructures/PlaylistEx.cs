@@ -3,7 +3,7 @@
 //     Copyright (c) Andy Young. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
-namespace SpotCon
+namespace SpotCon.DataStructures
 {
     using System;
     using System.Collections.Generic;

@@ -11,6 +11,7 @@ namespace SpotCon
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
+    using SpotCon.DataStructures;
     using SpotifyWebSharp.SpotifyResponses.Lookup;
     using SpotifyWebSharp.SpotifyResponses.Search;
     using SpotifyWebSharp.SpotifyServices;

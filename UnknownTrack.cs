@@ -19,8 +19,6 @@ namespace SpotCon
     /// <summary>
     /// Unknown track form
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed.")]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Reviewed.")]
     public partial class UnknownTrack : Form
     {
         /// <summary>

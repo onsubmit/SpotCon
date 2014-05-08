@@ -20,9 +20,19 @@ namespace SpotCon.DataStructures
         public const int WM_APPCOMMAND = 0x0319;
 
         /// <summary>
+        /// GW_HWNDNEXT
+        /// </summary>
+        public const uint GW_HWNDNEXT = 2;
+
+        /// <summary>
         /// VK_CONTROL
         /// </summary>
         public const int VK_CONTROL = 0x11;
+
+        /// <summary>
+        /// WM_QUIT
+        /// </summary>
+        public const uint WM_QUIT = 0x12;
 
         /// <summary>
         /// VK_DOWN

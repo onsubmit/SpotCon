@@ -17,8 +17,6 @@ namespace SpotCon
     /// <summary>
     /// Unknown artist form
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed.")]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Reviewed.")]
     public partial class UnknownArtist : Form
     {
         /// <summary>

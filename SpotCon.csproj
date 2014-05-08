@@ -107,6 +107,8 @@
     <Compile Include="AlbumArtViewer.Designer.cs">
       <DependentUpon>AlbumArtViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataStructures\HostData.cs" />
+    <Compile Include="DataStructures\SocketPacket.cs" />
     <Compile Include="Enums\AlbumColumns.cs" />
     <Compile Include="DataStructures\AlbumEx.cs" />
     <Compile Include="DataStructures\AppCommands.cs" />
@@ -115,6 +117,54 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Enums\FindNewTracksStatus.cs" />
     <Compile Include="DataStructures\FindNewTracksThreadStatus.cs" />
+    <Compile Include="Functionality\Caching.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\DataGrids\Albums.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\DataGrids\Artists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\DataGrids\Computers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\DataGrids\Playlists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\DataGrids\Tracks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\History.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\ImportPlugins.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\PInvoke.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\Playback.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\Playlists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\Search.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\Server.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\Status.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\Tracks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Functionality\Volume.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GlobalMouseHandler.cs" />
     <Compile Include="Enums\HostColumns.cs" />
     <Compile Include="DataStructures\PlaylistEx.cs" />

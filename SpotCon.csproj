@@ -48,8 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -362,6 +361,7 @@
   <ItemGroup>
     <None Include="Resources\table_refresh.png" />
     <None Include="Resources\table_delete.png" />
+    <Content Include="icon.ico" />
     <Content Include="spotcon-app\index.html" />
     <Content Include="spotcon-app\js\jquery.min.js" />
     <Content Include="spotcon-app\js\spotcon.js" />

@@ -41,6 +41,11 @@ namespace SpotCon
         private static readonly string AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SpotCon");
 
         /// <summary>
+        /// Directory for SpotCon Spotify app
+        /// </summary>
+        private static readonly string SpotifyAppFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "spotify", "spotcon");
+
+        /// <summary>
         /// Handle to Spotify window
         /// </summary>
         private IntPtr spotifyHwnd = IntPtr.Zero;
@@ -62,6 +67,39 @@ namespace SpotCon
         {
             this.InitializeComponent();
             this.InitializeCommands();
+            this.InstallSpotifyApp();
+        }
+
+        /// <summary>
+        /// Installs the SpotCon Spotify app
+        /// </summary>
+        private void InstallSpotifyApp()
+        {
+            if (!Directory.Exists(SpotConForm.SpotifyAppFolder))
+            {
+                Directory.CreateDirectory(SpotConForm.SpotifyAppFolder);
+
+                string source = Path.Combine(Directory.GetCurrentDirectory(), "spotcon-app");
+                this.CopyFilesRecursively(new DirectoryInfo(source), new DirectoryInfo(SpotConForm.SpotifyAppFolder));
+            }
+        }
+
+        /// <summary>
+        /// Copies files recursively
+        /// </summary>
+        /// <param name="source">Source directory</param>
+        /// <param name="target">Destination directory</param>
+        private void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target)
+        {
+            foreach (DirectoryInfo dir in source.GetDirectories())
+            {
+                CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
+            }
+
+            foreach (FileInfo file in source.GetFiles())
+            {
+                file.CopyTo(Path.Combine(target.FullName, file.Name));
+            }
         }
 
         /// <summary>

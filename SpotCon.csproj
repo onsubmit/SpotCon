@@ -22,7 +22,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -232,7 +232,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="spotcon-app\manifest.json" />
+    <Content Include="spotcon-app\manifest.json" />
     <Content Include="WebService\Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -385,9 +385,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "%25USERPROFILE%25\My Documents\spotify\spotcon
-xcopy /y /e "$(ProjectDir)spotcon-app\*.*" "%25USERPROFILE%25\My Documents\spotify\spotcon"
-xcopy /y /e "$(ProjectDir)WebService\*.*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>mkdir "$(TargetDir)spotcon-app"
+mkdir "$(TargetDir)WebService"
+xcopy /y /e "$(ProjectDir)spotcon-app\*.*" "$(TargetDir)spotcon-app"
+xcopy /y /e "$(ProjectDir)WebService\*.*" "$(TargetDir)WebService"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

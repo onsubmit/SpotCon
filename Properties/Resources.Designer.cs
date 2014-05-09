@@ -310,6 +310,15 @@ namespace SpotCon.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not start IIS Express. Please ensure it is installed..
+        /// </summary>
+        internal static string IISError {
+            get {
+                return ResourceManager.GetString("IISError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Next {

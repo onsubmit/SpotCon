@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SpotCon")]
 [assembly: AssemblyDescription("A remote Spotify controller... and more!")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Andy Young")]
+[assembly: AssemblyCompany("SpotCon")]
 [assembly: AssemblyProduct("SpotCon")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]

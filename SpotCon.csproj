@@ -22,8 +22,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.1.0.0</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -87,9 +87,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -201,6 +203,9 @@
     <Compile Include="UnknownTrack.designer.cs">
       <DependentUpon>UnknownTrack.cs</DependentUpon>
     </Compile>
+    <None Include="WebService\SpotConService.asmx.cs">
+      <DependentUpon>SpotConService.asmx</DependentUpon>
+    </None>
     <EmbeddedResource Include="AlbumArtViewer.resx">
       <DependentUpon>AlbumArtViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -228,6 +233,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="spotcon-app\manifest.json" />
+    <Content Include="WebService\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.config" />
@@ -244,6 +250,10 @@
     <ProjectReference Include="PlaylistImporter\PlaylistImporter.csproj">
       <Project>{706f7202-f493-4da9-b21a-edfc6638255b}</Project>
       <Name>PlaylistImporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="WebService\WebService.csproj">
+      <Project>{a1ebdb36-37ef-4564-8d09-ed5b6a7643d4}</Project>
+      <Name>WebService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +324,11 @@
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="IIS 7.5 Express">
+      <Visible>False</Visible>
+      <ProductName>IIS 7.5 Express</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -359,6 +374,7 @@
     <None Include="Resources\checkbox.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WebService\SpotConService.asmx" />
     <None Include="Resources\table_refresh.png" />
     <None Include="Resources\table_delete.png" />
     <Content Include="icon.ico" />
@@ -370,7 +386,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "%25USERPROFILE%25\My Documents\spotify\spotcon
-xcopy /y /e "$(ProjectDir)spotcon-app\*.*" "%25USERPROFILE%25\My Documents\spotify\spotcon"</PostBuildEvent>
+xcopy /y /e "$(ProjectDir)spotcon-app\*.*" "%25USERPROFILE%25\My Documents\spotify\spotcon"
+xcopy /y /e "$(ProjectDir)WebService\*.*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

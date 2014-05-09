@@ -25,7 +25,7 @@ namespace SpotCon
         {
             Type pluginType = typeof(IPlaylistImporter);
             var plugins = new List<IPlaylistImporter>();
-            foreach (string filename in Directory.GetFiles(".\\Plugins", "*.dll"))
+            foreach (string filename in Directory.GetFiles(Path.Combine(SpotConForm.AppDataFolder, "Plugins"), "*.dll"))
             {
                 Assembly currentAssembly = Assembly.LoadFrom(filename);
                 foreach (Type type in currentAssembly.GetExportedTypes().Where(t => t.GetInterface(pluginType.FullName) != null))

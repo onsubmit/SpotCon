@@ -36,6 +36,11 @@ namespace SpotCon
     public partial class SpotConForm : Form
     {
         /// <summary>
+        /// Application directory
+        /// </summary>
+        private static readonly string AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SpotCon");
+
+        /// <summary>
         /// Handle to Spotify window
         /// </summary>
         private IntPtr spotifyHwnd = IntPtr.Zero;
@@ -57,7 +62,6 @@ namespace SpotCon
         {
             this.InitializeComponent();
             this.InitializeCommands();
-            this.StartIIS();
         }
 
         /// <summary>
@@ -151,9 +155,11 @@ namespace SpotCon
             this.popImages.Images.Add(Properties.Resources.pop21);
             this.popImages.Images.Add(Properties.Resources.pop22);
 
-            Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup", "Tracks"));
-            Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Lookup", "Albums"));
-            Directory.CreateDirectory(Path.Combine(Application.UserAppDataPath, "Search"));
+            Directory.CreateDirectory(Path.Combine(SpotConForm.AppDataFolder, "Lookup", "Tracks"));
+            Directory.CreateDirectory(Path.Combine(SpotConForm.AppDataFolder, "Lookup", "Albums"));
+            Directory.CreateDirectory(Path.Combine(SpotConForm.AppDataFolder, "Search"));
+            Directory.CreateDirectory(Path.Combine(SpotConForm.AppDataFolder, "Plugins"));
+            this.StartIIS();
             this.LoadImportPlugins();
             this.LoadPlaylists();
             this.ReadArtistCache();
@@ -431,16 +437,42 @@ namespace SpotCon
         /// </summary>
         private void StartIIS()
         {
+            bool success = false;
+            do
+            {
+                success = this.StartIISSafe();
+            }
+            while (!success && DialogResult.Retry == MessageBox.Show(this, Properties.Resources.IISError, this.Text, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error));
+        }
+
+        /// <summary>
+        /// Starts IIS safely
+        /// </summary>
+        /// <returns>True if successful</returns>
+        private bool StartIISSafe()
+        {
+            string filename = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "IIS Express", "iisexpress.exe");
+            if (!File.Exists(filename))
+            {
+                filename = Path.Combine(Environment.GetEnvironmentVariable("ProgramW6432"), "IIS Express", "iisexpress.exe");
+            }
+
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
+
             ProcessStartInfo start = new ProcessStartInfo()
             {
-                FileName = Path.Combine(Environment.GetEnvironmentVariable("ProgramW6432"), "IIS Express", "iisexpress.exe"),
-                Arguments = @"/config:WebService\applicationhost.config /systray:true",
+                FileName = filename,
+                Arguments = string.Format(@"/port:17290 /systray:false /path:""{0}""", Path.Combine(Directory.GetCurrentDirectory(), "WebService")),
                 WorkingDirectory = Directory.GetCurrentDirectory(),
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
 
             this.iisExpress = Process.Start(start);
+            return true;
         }
 
         /// <summary>

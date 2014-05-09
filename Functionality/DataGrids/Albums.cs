@@ -232,7 +232,13 @@ namespace SpotCon
 
                             TrackEx track = distinctAlbum.First();
                             DataGridViewRow row = new DataGridViewRow();
-                            row.CreateCells(this.dataGridViewAlbums, track.Album.Name, album.Tracks.Count, track.Album.Released);
+                            object released = track.Album.Released;
+                            if (track.Album.Released == 0)
+                            {
+                                released = null;
+                            }
+
+                            row.CreateCells(this.dataGridViewAlbums, track.Album.Name, album.Tracks.Count, released);
                             row.Tag = album;
                             this.dataGridViewAlbums.Rows.Add(row);
                         }

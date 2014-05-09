@@ -104,7 +104,7 @@ namespace SpotCon
                     }
                     else
                     {
-                        string path = Path.Combine(Application.UserAppDataPath, "Lookup", "Tracks", href + ".xml");
+                        string path = Path.Combine(SpotConForm.AppDataFolder, "Lookup", "Tracks", href + ".xml");
                         if (File.Exists(path))
                         {
                             track = SpotifyService.Deserialize<Track>(File.ReadAllText(path));
@@ -384,7 +384,7 @@ namespace SpotCon
                 query = query.Split(':')[2];
 
                 Album album = null;
-                string albumPath = Path.Combine(Application.UserAppDataPath, "Lookup", "Albums", query + ".xml");
+                string albumPath = Path.Combine(SpotConForm.AppDataFolder, "Lookup", "Albums", query + ".xml");
                 if (this.cachedLookupAlbums.ContainsKey(query))
                 {
                     album = this.cachedLookupAlbums[query];
@@ -466,7 +466,7 @@ namespace SpotCon
                     this.misspelledTracks[misspelledKey] = track.Name;
                     this.cachedLookupTracks.Add(track.Id.Value, track);
 
-                    string path = Path.Combine(Application.UserAppDataPath, "Lookup", "Tracks", track.Href.Replace("spotify:track:", string.Empty) + ".xml");
+                    string path = Path.Combine(SpotConForm.AppDataFolder, "Lookup", "Tracks", track.Href.Replace("spotify:track:", string.Empty) + ".xml");
                     SpotifyService.Serialize(track, path);
                 }
                 else if (unknownTrack.Track.Original is SearchTrack)
@@ -475,7 +475,7 @@ namespace SpotCon
                     SearchTrack track = unknownTrack.Track.Original as SearchTrack;
                     this.misspelledTracks[misspelledKey] = track.Name;
 
-                    string path = Path.Combine(Application.UserAppDataPath, "Search", unknownTrack.ArtistHref.Replace("spotify:artist:", string.Empty) + ".xml");
+                    string path = Path.Combine(SpotConForm.AppDataFolder, "Search", unknownTrack.ArtistHref.Replace("spotify:artist:", string.Empty) + ".xml");
 
                     XElement trackNode = new XElement(
                         "Track",
@@ -681,7 +681,7 @@ namespace SpotCon
             else
             {
                 XDocument doc = null;
-                string path = Path.Combine(Application.UserAppDataPath, "Search", status.ArtistHref.Replace("spotify:artist:", string.Empty) + ".xml");
+                string path = Path.Combine(SpotConForm.AppDataFolder, "Search", status.ArtistHref.Replace("spotify:artist:", string.Empty) + ".xml");
                 if (File.Exists(path))
                 {
                     doc = XDocument.Load(path);

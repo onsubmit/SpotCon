@@ -166,13 +166,9 @@ namespace SpotCon
                 }
 
                 DataGridViewRow newRow = new DataGridViewRow();
-                object released = track.Album.Released;
-                if (track.Album.Released == 0)
-                {
-                    released = null;
-                }
 
-                newRow.CreateCells(this.dataGridViewAlbums, track.Album.Name, album.Tracks.Count, released);
+                this.dataGridViewAlbums.Columns[(int)AlbumColumns.Year].Visible = track.Album.Released != 0;
+                newRow.CreateCells(this.dataGridViewAlbums, track.Album.Name, album.Tracks.Count, track.Album.Released);
                 newRow.Tag = album;
 
                 int index = 1;
@@ -223,6 +219,7 @@ namespace SpotCon
                     int totalAlbums = distinctAlbums.Sum(a => a.Count());
                     this.dataGridViewAlbums.Rows.Add(string.Format("All ({0} album{1})", totalAlbums, totalAlbums == 1 ? string.Empty : "s"));
 
+                    bool showYearColumn = false;
                     foreach (var group in distinctAlbums)
                     {
                         foreach (var distinctAlbum in group)
@@ -237,7 +234,12 @@ namespace SpotCon
                             {
                                 released = null;
                             }
+                            else
+                            {
+                                showYearColumn = true;
+                            }
 
+                            this.dataGridViewAlbums.Columns[(int)AlbumColumns.Year].Visible = showYearColumn;
                             row.CreateCells(this.dataGridViewAlbums, track.Album.Name, album.Tracks.Count, released);
                             row.Tag = album;
                             this.dataGridViewAlbums.Rows.Add(row);

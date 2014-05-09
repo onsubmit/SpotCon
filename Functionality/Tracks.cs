@@ -90,12 +90,18 @@ namespace SpotCon
                 int i = 0;
                 foreach (string href in trackList)
                 {
+                    bw.ReportProgress(0, new Tuple<int, int>(++i, trackList.Count()));
+
+                    if (!Regex.IsMatch(href, "^[A-Za-z0-9]+$"))
+                    {
+                        // Ignore local replacements e.g. spotify:local:Radiohead:Rainydayz:Faustz+%28Amp+Live+Remix%29:185
+                        continue;
+                    }
+
                     if (bw.CancellationPending)
                     {
                         return;
                     }
-
-                    bw.ReportProgress(0, new Tuple<int, int>(++i, trackList.Count()));
 
                     Track track = null;
                     if (cachedLookupTracks.ContainsKey(href))

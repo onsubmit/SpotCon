@@ -1,1 +1,0 @@
-﻿<%@ WebService Language="C#" CodeBehind="SpotConService.asmx.cs" Class="WebService.SpotConService" %>

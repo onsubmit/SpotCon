@@ -16,19 +16,10 @@ namespace SpotCon
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
-    using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Text.RegularExpressions;
-    using System.Web;
     using System.Windows.Forms;
-    using System.Xml.Linq;
     using SpotCon.DataStructures;
     using SpotCon.Enums;
-    using SpotCon.PlaylistImporter;
-    using SpotifyWebHelperSharp;
-    using SpotifyWebSharp.SpotifyResponses.Lookup;
-    using SpotifyWebSharp.SpotifyResponses.Search;
-    using SpotifyWebSharp.SpotifyServices;
 
     /// <summary>
     /// Main form
@@ -54,11 +45,6 @@ namespace SpotCon
         /// Indicates if the form was previously maximized
         /// </summary>
         private bool wasMaximized = false;
-
-        /// <summary>
-        /// IIS process
-        /// </summary>
-        private Process iisExpress;
 
         /// <summary>
         /// Initializes a new instance of the SpotConForm class
@@ -197,9 +183,7 @@ namespace SpotCon
             Directory.CreateDirectory(Path.Combine(SpotConForm.AppDataFolder, "Lookup", "Albums"));
             Directory.CreateDirectory(Path.Combine(SpotConForm.AppDataFolder, "Search"));
             Directory.CreateDirectory(Path.Combine(SpotConForm.AppDataFolder, "Plugins"));
-            this.StartIIS();
             this.LoadImportPlugins();
-            this.LoadPlaylists();
             this.ReadArtistCache();
             this.ReadMisspelledArtistCache();
             this.ReadMisspelledTrackCache();
@@ -388,31 +372,6 @@ namespace SpotCon
         }
 
         /// <summary>
-        /// SpotConForm FormClosing event
-        /// </summary>
-        /// <param name="sender">What raised the event</param>
-        /// <param name="e">Event arguments</param>
-        private void SpotConForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (this.iisExpress != null && !this.iisExpress.HasExited)
-            {
-                for (IntPtr pointer = GetTopWindow(IntPtr.Zero); pointer != IntPtr.Zero; pointer = SpotConForm.GetWindow(pointer, AppCommands.GW_HWNDNEXT))
-                {
-                    uint processId;
-                    SpotConForm.GetWindowThreadProcessId(pointer, out processId);
-
-                    if (this.iisExpress.Id == processId)
-                    {
-                        HandleRef handle = new HandleRef(null, pointer);
-                        SpotConForm.PostMessage(handle, AppCommands.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
-                        this.iisExpress.Close();
-                        return;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// SpotConForm Resize event
         /// </summary>
         /// <param name="sender">What raised the event</param>
@@ -468,64 +427,6 @@ namespace SpotCon
         private void splitterFilterRight_SplitterMoved(object sender, SplitterEventArgs e)
         {
             this.albumPercentage = (double)this.dataGridViewAlbums.Width / (double)this.dataGridViewTracks.Width;
-        }
-
-        /// <summary>
-        /// Starts the SpotCon web service in IIS Express
-        /// </summary>
-        private void StartIIS()
-        {
-            bool success = false;
-            do
-            {
-                success = this.StartIISSafe();
-            }
-            while (!success && DialogResult.Retry == MessageBox.Show(this, Properties.Resources.IISError, this.Text, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error));
-        }
-
-        /// <summary>
-        /// Starts IIS safely
-        /// </summary>
-        /// <returns>True if successful</returns>
-        private bool StartIISSafe()
-        {
-            string filename = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "IIS Express", "iisexpress.exe");
-            if (!File.Exists(filename))
-            {
-                filename = Path.Combine(Environment.GetEnvironmentVariable("ProgramW6432"), "IIS Express", "iisexpress.exe");
-            }
-
-            if (!File.Exists(filename))
-            {
-                return false;
-            }
-
-            ProcessStartInfo start = new ProcessStartInfo()
-            {
-                FileName = filename,
-                Arguments = string.Format(@"/port:17290 /systray:false /path:""{0}""", Path.Combine(Directory.GetCurrentDirectory(), "WebService")),
-                WorkingDirectory = Directory.GetCurrentDirectory(),
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            this.iisExpress = Process.Start(start);
-            return true;
-        }
-
-        /// <summary>
-        /// Opens the SpotCon app inside Spotify
-        /// </summary>
-        private void OpenSpotConApp()
-        {
-            SpotConForm.SetForegroundWindow(this.spotifyHwnd);
-            System.Threading.Thread.Sleep(100);
-            SendKeys.Send("^l");
-            System.Threading.Thread.Sleep(100);
-            SendKeys.Send("spotify:app:spotcon");
-            System.Threading.Thread.Sleep(100);
-            SendKeys.Send("{ENTER}");
-            SpotConForm.SetForegroundWindow(this.Handle);
         }
     }
 }

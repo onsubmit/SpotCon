@@ -30,38 +30,6 @@ namespace SpotCon.DataStructures
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlaylistEx"/> class
-        /// </summary>
-        /// <param name="doc">SOAP response from SpotCon webservice</param>
-        public PlaylistEx(XmlDocument doc)
-        {
-            if (doc == null)
-            {
-                return;
-            }
-
-            XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
-            ns.AddNamespace("x", "http://spotcon.com/");
-
-            XmlAttribute nil = doc.SelectSingleNode("x:Playlist", ns).Attributes["xsi:nil"];
-            bool isNull = nil != null && nil.InnerText.Equals("true", StringComparison.OrdinalIgnoreCase);
-
-            if (isNull)
-            {
-                return;
-            }
-
-            this.Uri = doc.SelectSingleNode("x:Playlist/x:Uri", ns).InnerText;
-            this.Name = doc.SelectSingleNode("x:Playlist/x:Name", ns).InnerText;
-
-            this.Tracks = new List<string>();
-            foreach (XmlNode node in doc.SelectNodes("x:Playlist/x:Tracks/x:string", ns))
-            {
-                this.Tracks.Add(node.InnerText);
-            }
-        }
-
-        /// <summary>
         /// Gets the playlist URI
         /// </summary>
         public string Uri { get; private set; }

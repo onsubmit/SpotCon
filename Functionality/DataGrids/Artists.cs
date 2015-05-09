@@ -187,6 +187,13 @@ namespace SpotCon
                 foreach (var distinctArtist in distinctArtists)
                 {
                     TrackEx track = distinctArtist.First();
+
+                    if (track.Artist.Href == null)
+                    {
+                        // Various artists.
+                        continue;
+                    }
+
                     distinctArtistTracks.Add(track.Artist.Href, track);
 
                     DataGridViewRow row = new DataGridViewRow();

@@ -104,13 +104,6 @@
             this.panelComputers = new System.Windows.Forms.Panel();
             this.dataGridViewPlaylists = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumnPlaylist = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripPlaylists = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addPlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.refreshPlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.refreshAllPlaylistsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.removePlaylistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewComputers = new System.Windows.Forms.DataGridView();
             this.HeaderConnected = new System.Windows.Forms.DataGridViewImageColumn();
             this.HeaderConnectionStatus = new System.Windows.Forms.DataGridViewImageColumn();
@@ -131,7 +124,6 @@
             this.panelTrack.SuspendLayout();
             this.panelComputers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).BeginInit();
-            this.contextMenuStripPlaylists.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -653,7 +645,7 @@
             this.toolStripMenuItemImportPlaylist,
             this.toolStripMenuItemFindDuplicates});
             this.contextMenuStripTracks.Name = "contextMenuStrip";
-            this.contextMenuStripTracks.Size = new System.Drawing.Size(156, 98);
+            this.contextMenuStripTracks.Size = new System.Drawing.Size(156, 120);
             // 
             // toolStripMenuItemPlay
             // 
@@ -999,7 +991,6 @@
             this.dataGridViewPlaylists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPlaylists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumnPlaylist});
-            this.dataGridViewPlaylists.ContextMenuStrip = this.contextMenuStripPlaylists;
             dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(35)))), ((int)(((byte)(38)))));
             dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1021,7 +1012,6 @@
             this.dataGridViewPlaylists.ShowEditingIcon = false;
             this.dataGridViewPlaylists.Size = new System.Drawing.Size(151, 180);
             this.dataGridViewPlaylists.TabIndex = 17;
-            this.dataGridViewPlaylists.SelectionChanged += new System.EventHandler(this.dataGridViewPlaylists_SelectionChanged);
             // 
             // dataGridViewTextBoxColumnPlaylist
             // 
@@ -1030,59 +1020,6 @@
             this.dataGridViewTextBoxColumnPlaylist.Name = "dataGridViewTextBoxColumnPlaylist";
             this.dataGridViewTextBoxColumnPlaylist.ReadOnly = true;
             this.dataGridViewTextBoxColumnPlaylist.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // contextMenuStripPlaylists
-            // 
-            this.contextMenuStripPlaylists.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addPlaylistToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.refreshPlaylistToolStripMenuItem,
-            this.refreshAllPlaylistsToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.removePlaylistToolStripMenuItem});
-            this.contextMenuStripPlaylists.Name = "contextMenuStrip1";
-            this.contextMenuStripPlaylists.Size = new System.Drawing.Size(176, 104);
-            // 
-            // addPlaylistToolStripMenuItem
-            // 
-            this.addPlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.AddPlaylist;
-            this.addPlaylistToolStripMenuItem.Name = "addPlaylistToolStripMenuItem";
-            this.addPlaylistToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.addPlaylistToolStripMenuItem.Text = "Add Playlist";
-            this.addPlaylistToolStripMenuItem.Click += new System.EventHandler(this.addPlaylistToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(172, 6);
-            // 
-            // refreshPlaylistToolStripMenuItem
-            // 
-            this.refreshPlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.RefreshPlaylist;
-            this.refreshPlaylistToolStripMenuItem.Name = "refreshPlaylistToolStripMenuItem";
-            this.refreshPlaylistToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.refreshPlaylistToolStripMenuItem.Text = "Refresh Playlist(s)";
-            this.refreshPlaylistToolStripMenuItem.Click += new System.EventHandler(this.refreshPlaylistToolStripMenuItem_Click);
-            // 
-            // refreshAllPlaylistsToolStripMenuItem
-            // 
-            this.refreshAllPlaylistsToolStripMenuItem.Name = "refreshAllPlaylistsToolStripMenuItem";
-            this.refreshAllPlaylistsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.refreshAllPlaylistsToolStripMenuItem.Text = "Refresh All Playlists";
-            this.refreshAllPlaylistsToolStripMenuItem.Click += new System.EventHandler(this.refreshAllPlaylistsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(172, 6);
-            // 
-            // removePlaylistToolStripMenuItem
-            // 
-            this.removePlaylistToolStripMenuItem.Image = global::SpotCon.Properties.Resources.RemovePlaylist;
-            this.removePlaylistToolStripMenuItem.Name = "removePlaylistToolStripMenuItem";
-            this.removePlaylistToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.removePlaylistToolStripMenuItem.Text = "Remove Playlist(s)";
-            this.removePlaylistToolStripMenuItem.Click += new System.EventHandler(this.removePlaylistToolStripMenuItem_Click);
             // 
             // dataGridViewComputers
             // 
@@ -1160,7 +1097,6 @@
             this.Name = "SpotConForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "SpotCon";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpotConForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SpotConForm_FormClosed);
             this.Load += new System.EventHandler(this.SpotConForm_Load);
             this.ResizeBegin += new System.EventHandler(this.SpotConForm_ResizeBegin);
@@ -1185,7 +1121,6 @@
             this.panelTrack.PerformLayout();
             this.panelComputers.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPlaylists)).EndInit();
-            this.contextMenuStripPlaylists.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComputers)).EndInit();
             this.ResumeLayout(false);
 
@@ -1257,15 +1192,8 @@
         private System.Windows.Forms.DataGridViewImageColumn ColumnPopularity;
         private System.Windows.Forms.DataGridViewLinkColumn ColumnAlbum;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPlay;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripPlaylists;
         private System.Windows.Forms.DataGridView dataGridViewPlaylists;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnPlaylist;
-        private System.Windows.Forms.ToolStripMenuItem addPlaylistToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem refreshPlaylistToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem refreshAllPlaylistsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem removePlaylistToolStripMenuItem;
 
     }
 }
